@@ -16,10 +16,7 @@ axiosHttp.interceptors.request.use(
 
 axiosHttp.interceptors.response.use(
   (response) => {
-    console.log(response)
-    console.log('res')
     return response;
-
   },
   (error) => {
     const { response } = error;
@@ -27,7 +24,6 @@ axiosHttp.interceptors.response.use(
       localStorage.removeItem('token');
     }
     return Promise.reject(error);
-    return error;
   }
 );
 

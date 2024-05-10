@@ -18,8 +18,9 @@ const DasbhoardLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  console.log(getSelectedDefault());
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical"></div>
         <Menu
@@ -39,6 +40,18 @@ const DasbhoardLayout = () => {
               key: "catalog",
               icon: <VideoCameraOutlined />,
               label: "Catalog",
+              children: [
+                {
+                  key: "/admin/catalog",
+                  icon: <VideoCameraOutlined />,
+                  label: "List Catalogs",
+                },
+                {
+                  key: "/admin/catalog/create",
+                  icon: <VideoCameraOutlined />,
+                  label: "Add Catalog",
+                },
+              ],
             },
             {
               key: "orders",
@@ -90,9 +103,6 @@ function getSelectedDefault() {
   const location = useLocation();
   const currentPath = location.pathname;
   const parts = currentPath.split("/");
-  if (parts.length > 2) {
-    return parts[2];
-  }
-  return "";
+  return currentPath;
 }
 export default DasbhoardLayout;

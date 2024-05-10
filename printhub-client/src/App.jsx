@@ -7,7 +7,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./provider/features/auth/AuthSlice";
 import DasbhoardLayout from "./layout/DashboardLayout";
-import Catalgo from "./view/catalog/Index";
+import CatalogIndex from "./view/catalog/CatalogIndex";
+import CatalogCreate from "./view/catalog/CatalogCreate";
 
 function App() {
   const { user, isError, isSuccess, isLoading, getuser, message } = useSelector(
@@ -27,8 +28,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="admin" element={<DasbhoardLayout />}>
-            <Route index element={<Catalgo />} />
-            <Route path="catalog" element={<Catalgo />} />
+            <Route path="catalog" element={<CatalogIndex />} />
+            <Route path="catalog/create" element={<CatalogCreate />} />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
