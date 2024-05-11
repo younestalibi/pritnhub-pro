@@ -1,6 +1,6 @@
 import axiosHttp from "../../../utils/axios-client";
 import config from '../../../utils/config'
-console.log(config)
+
 const getCatalogs = async () => {
   try {
     const response = await axiosHttp.get(`/catalog`);
@@ -25,12 +25,21 @@ const createCatalog = async (catalog) => {
     throw error.response.data;
   }
 };
+const updateCatalog = async ({id,catalog}) => {
+  try {
+    const response = await axiosHttp.put(`/catalog/update/${id}`,catalog,config);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 
 const catalogService = {
   getCatalogs,
   deleteCatalogById,
-  createCatalog
+  createCatalog,
+  updateCatalog
 };
 
 export default catalogService;

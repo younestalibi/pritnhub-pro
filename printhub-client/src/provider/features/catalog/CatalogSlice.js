@@ -16,7 +16,6 @@ export const createCatalog = createAsyncThunk(
   "catalog/create-one",
   async (catalog, thunkAPI) => {
     try {
-      console.log(catalog);
       return await catalogService.createCatalog(catalog);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -28,6 +27,16 @@ export const deleteCatalogById = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       return await catalogService.deleteCatalogById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const updateCatalog = createAsyncThunk(
+  "catalog/update-one",
+  async (catalog, thunkAPI) => {
+    try {
+      return await catalogService.updateCatalog(catalog);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -57,7 +66,8 @@ export const CatalogSlice = createSlice({
         state.getCatalogsState.isError = true;
         state.getCatalogsState.isLoading = false;
         state.getCatalogsState.isSuccess = false;
-        // state.message = action.payload.response.data.errors;
+        console.log(action)
+        state.getCatalogsState.message = action.payload.error;
       })
       // get-all-catalogs
       //   =========================================================================
@@ -71,19 +81,16 @@ export const CatalogSlice = createSlice({
         state.deleteCatalogByIdState.isLoading = false;
         state.deleteCatalogByIdState.isSuccess = true;
         state.deleteCatalogByIdState.message = action.payload.message;
-        console.log(action);
-        state.isDeleted = true;
         state.catalogs = state.catalogs.filter((catalog) => {
           return catalog.id != action.payload.id;
         });
       })
       .addCase(deleteCatalogById.rejected, (state, action) => {
-        console.log(action);
-        // state.message = action.payload.response.data.errors;
-
         state.deleteCatalogByIdState.isError = true;
         state.deleteCatalogByIdState.isLoading = false;
         state.deleteCatalogByIdState.isSuccess = false;
+        state.deleteCatalogByIdState.message = action.payload.error;
+
       })
       // delete-one-by-id
       //   =========================================================================
@@ -104,9 +111,32 @@ export const CatalogSlice = createSlice({
         state.createCatalogState.isError = true;
         state.createCatalogState.isLoading = false;
         state.createCatalogState.isSuccess = false;
-        state.createCatalogState.message = action.payload.message;
+        state.createCatalogState.message = action.payload.error;
       })
       // create-one
+      //   =========================================================================
+      // update-one
+      .addCase(updateCatalog.pending, (state) => {
+        resetCatalogState(state);
+        state.updateCatalogState.isLoading = true;
+      })
+      .addCase(updateCatalog.fulfilled, (state, action) => {
+        state.updateCatalogState.isError = false;
+        state.updateCatalogState.isLoading = false;
+        state.updateCatalogState.isSuccess = true;
+        state.updateCatalogState.message = action.payload.message;
+        const index = state.catalogs.findIndex(e => e.id === action.payload.catalog.id);
+        if (index !== -1) {
+          state.catalogs[index] = action.payload.catalog;
+        }
+      })
+      .addCase(updateCatalog.rejected, (state, action) => {
+        state.updateCatalogState.isError = true;
+        state.updateCatalogState.isLoading = false;
+        state.updateCatalogState.isSuccess = false;
+        state.updateCatalogState.message = action.payload.error;
+      })
+      // update-one
       //   =========================================================================
       //reset-state-catalog
       .addCase(resetStateCatalog, (state) => {

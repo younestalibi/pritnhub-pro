@@ -57,7 +57,6 @@ export const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(register.fulfilled, (state, action) => {
-        console.log(action)
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
@@ -66,7 +65,6 @@ export const authSlice = createSlice({
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(register.rejected, (state, action) => {
-        console.log(action)
         state.isError = true;
         state.isSuccess = false;
         // state.message = action.payload.response.data.errors;
@@ -97,7 +95,6 @@ export const authSlice = createSlice({
     // logout
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
-        console.log("loading");
       })
       .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
@@ -120,7 +117,6 @@ export const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        console.log(action)
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
@@ -129,7 +125,6 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(getUser.rejected, (state, action) => {
-        console.log(action)
         state.isError = true;
         state.isSuccess = false;
         // state.message = action.error;

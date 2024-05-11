@@ -1,40 +1,70 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Input, Modal, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
-import { createCatalog } from "../../provider/features/catalog/CatalogSlice";
+import {
+  createCatalog,
+  updateCatalog,
+} from "../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const CatalogCreate = (props) => {
-  const { open, setOpen } = props;
+const CatalogEdit = (props) => {
+  const { open, setOpen, id } = props;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
 
-  const { createCatalogState } = useSelector((state) => state.catalog);
+  const { updateCatalogState, catalogs } = useSelector(
+    (state) => state.catalog
+  );
+  const [catalog, setCatalog] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      const foundCatalog = catalogs.find((e) => e.id === id);
+      if (foundCatalog) {
+        setCatalog(foundCatalog);
+      }
+      if (catalog) {
+        formik.setFieldValue("name", catalog.name);
+        formik.setFieldValue("image", [
+          {
+            name: catalog.name,
+            status: "done",
+            originFileObj: null,
+            crossOrigin: import.meta.env.VITE_CLIENT_URL,
+            url: `${import.meta.env.VITE_SERVER_URL}/${catalog.image}`,
+          },
+        ]);
+        setPreviewImage(`${import.meta.env.VITE_SERVER_URL}/${catalog.image}`);
+        setPreviewTitle(catalog.name);
+      }
+    }
+  }, [open, catalog]);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (createCatalogState.isSuccess) {
+    if (updateCatalogState.isSuccess) {
       setOpen(false);
       notification.open({
-        description: createCatalogState.message,
+        description: updateCatalogState.message,
         duration: 3,
         type: "success",
       });
     }
-    if (createCatalogState.isError) {
+    if (updateCatalogState.isError) {
       setOpen(false);
       notification.open({
-        description: createCatalogState.message,
+        description: updateCatalogState.message,
         duration: 3,
         type: "error",
       });
+      formik.resetForm();
     }
-  }, [createCatalogState.isSuccess, createCatalogState.isError]);
+  }, [updateCatalogState.isSuccess, updateCatalogState.isError]);
 
-  // Formik setup
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -50,8 +80,7 @@ const CatalogCreate = (props) => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("image", values.image[0].originFileObj);
-      dispatch(createCatalog(formData));
-      formik.resetForm();
+      dispatch(updateCatalog({ id, catalog: formData }));
     },
   });
 
@@ -77,11 +106,11 @@ const CatalogCreate = (props) => {
 
   return (
     <Modal
-      title="Create New Catalog"
+      title="Edit Catalog"
       open={open}
       onOk={handleOk}
-      okText="CREATE"
-      confirmLoading={createCatalogState.isLoading}
+      okText="UPDATE"
+      confirmLoading={updateCatalogState.isLoading}
       onCancel={handleCancel}
     >
       <form onSubmit={formik.handleSubmit}>
@@ -110,13 +139,9 @@ const CatalogCreate = (props) => {
             }}
             listType="picture-card"
             maxCount={1}
-            // onRemove={() => {
-            //   formik.setFieldValue("image", []);
-            //   console.log(formik.getFieldProps("image").value);
-            // }}
             fileList={formik.getFieldProps("image").value}
             onPreview={handlePreview}
-            onChange={({ fileList:newFileList }) => {
+            onChange={({ fileList: newFileList }) => {
               formik.setFieldValue("image", newFileList);
             }}
           >
@@ -128,7 +153,6 @@ const CatalogCreate = (props) => {
         </div>
       </form>
 
-      {/* Image preview modal */}
       <Modal
         open={previewOpen}
         title={previewTitle}
@@ -136,7 +160,7 @@ const CatalogCreate = (props) => {
         onCancel={handleCancelPreview}
       >
         <img
-          alt="example"
+          alt={previewTitle}
           className="preview-image-creation"
           src={previewImage}
         />
@@ -144,7 +168,7 @@ const CatalogCreate = (props) => {
     </Modal>
   );
 };
-export default CatalogCreate;
+export default CatalogEdit;
 
 const uploadButton = (
   <div>

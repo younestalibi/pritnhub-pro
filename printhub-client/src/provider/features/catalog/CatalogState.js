@@ -18,6 +18,12 @@ export const initialState = {
     isSuccess: false,
     message: "",
   },
+  updateCatalogState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
 };
 export const resetCatalogState = (state) => {
   state.getCatalogsState={
@@ -38,5 +44,10 @@ export const resetCatalogState = (state) => {
     isSuccess: false,
     message: "",
   }
-  console.log('rest catalog state')
+  state.updateCatalogState={
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  }
 };

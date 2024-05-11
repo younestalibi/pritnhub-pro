@@ -1,22 +1,24 @@
 import { Modal } from "antd";
 
 const Confirmation = (props) => {
-  const { open, setOpen, performAction, title, loading } = props;
+  const { open, setOpen, performAction, title,description, loading ,okType,okText} = props;
   const hideModal = () => {
     setOpen(false);
   };
   return (
     <Modal
-      title="Confirmation"
+      okType={okType}
+      title={title}
       open={loading ? loading : open}
       onOk={performAction}
       onCancel={hideModal}
-      okText="Ok"
+      okText={okText}
+      
       cancelText="Cancel"
       confirmLoading={loading}
       destroyOnClose={false}
     >
-      <p>{title}</p>
+      <p>{description}</p>
     </Modal>
   );
 };
