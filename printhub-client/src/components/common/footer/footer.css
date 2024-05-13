@@ -1,0 +1,91 @@
+/* 
+footer
+------
+*/
+.ant-layout-footer {
+    background: #111 !important;
+    color: #fff !important;
+    padding: 60px 0 !important;
+  
+}
+  
+.footer .logo {
+    font-size: 25px;   
+   
+}
+.logo{
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
+
+  
+
+  
+  .footer .logo a {
+    color: #fff;
+  }
+  
+  .footer .socials {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    margin:auto;
+    font-size: 24px;
+    padding: 0;
+ 
+  }
+  
+  .footer .socials li {
+    margin: 0 20px;
+  }
+  
+  .footer .socials a {
+    color: #fff;
+    
+  }
+  
+  .footer .socials a:hover {
+    color: #1890ff;
+  }
+.footer .menu{
+    font-size: 21px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    height: auto;
+} 
+.menu h5{
+  font-size: 25px;
+  margin :0 10px 0 0;
+  padding : 0 10px 10px 0;
+}
+.sitemap  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    
+}
+.sitemap ul{
+  list-style: none;
+  font-weight: bold;
+  margin:0;
+}
+.sitemap ul li{
+  margin-bottom: 10px;
+}
+
+  
+.footer .goTop:hover {
+    opacity: 0.7;
+}
+
+.copyright{
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+}
+  
+  
