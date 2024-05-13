@@ -40,23 +40,11 @@ const DasbhoardLayout = () => {
               key: "catalog",
               icon: <VideoCameraOutlined />,
               label: "Catalog",
-              children: [
-                {
-                  key: "/admin/catalog",
-                  icon: <VideoCameraOutlined />,
-                  label: "List Catalogs",
-                },
-                {
-                  key: "/admin/catalog/create",
-                  icon: <VideoCameraOutlined />,
-                  label: "Add Catalog",
-                },
-              ],
             },
             {
-              key: "orders",
+              key: "product",
               icon: <UploadOutlined />,
-              label: "Orders",
+              label: "Product",
             },
           ]}
         />

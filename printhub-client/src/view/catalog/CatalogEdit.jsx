@@ -3,6 +3,7 @@ import { Input, Modal, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   createCatalog,
+  resetStateCatalog,
   updateCatalog,
 } from "../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,6 +63,8 @@ const CatalogEdit = (props) => {
         type: "error",
       });
       formik.resetForm();
+      dispatch(resetStateCatalog());
+
     }
   }, [updateCatalogState.isSuccess, updateCatalogState.isError]);
 

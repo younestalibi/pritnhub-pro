@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./provider/features/auth/AuthSlice";
 import DasbhoardLayout from "./layout/DashboardLayout";
 import CatalogIndex from "./view/catalog/CatalogIndex";
+import ProductIndex from "./view/product/ProductIndex";
 
 function App() {
   const { user, isError, isSuccess, isLoading, getuser, message } = useSelector(
@@ -28,7 +29,9 @@ function App() {
         <Routes>
           <Route path="admin" element={<DasbhoardLayout />}>
             <Route path="catalog" element={<CatalogIndex />} />
+            <Route path="product" element={<ProductIndex />} />
           </Route>
+
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

@@ -1,7 +1,10 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Input, Modal, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
-import { createCatalog } from "../../provider/features/catalog/CatalogSlice";
+import {
+  createCatalog,
+  resetStateCatalog,
+} from "../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -32,6 +35,8 @@ const CatalogCreate = (props) => {
         type: "error",
       });
     }
+    formik.resetForm();
+    dispatch(resetStateCatalog());
   }, [createCatalogState.isSuccess, createCatalogState.isError]);
 
   // Formik setup
@@ -51,7 +56,6 @@ const CatalogCreate = (props) => {
       formData.append("name", values.name);
       formData.append("image", values.image[0].originFileObj);
       dispatch(createCatalog(formData));
-      formik.resetForm();
     },
   });
 
@@ -116,7 +120,7 @@ const CatalogCreate = (props) => {
             // }}
             fileList={formik.getFieldProps("image").value}
             onPreview={handlePreview}
-            onChange={({ fileList:newFileList }) => {
+            onChange={({ fileList: newFileList }) => {
               formik.setFieldValue("image", newFileList);
             }}
           >
@@ -128,7 +132,6 @@ const CatalogCreate = (props) => {
         </div>
       </form>
 
-      {/* Image preview modal */}
       <Modal
         open={previewOpen}
         title={previewTitle}
@@ -136,7 +139,7 @@ const CatalogCreate = (props) => {
         onCancel={handleCancelPreview}
       >
         <img
-          alt="example"
+          alt={previewTitle}
           className="preview-image-creation"
           src={previewImage}
         />
