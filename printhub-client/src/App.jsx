@@ -1,8 +1,11 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import "./components/common/footer/footer.css";
+import "./components/common/header/header.css";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./view/home/Home";
 import Register from "./view/auth/Register";
 import Login from "./view/auth/Login";
+import ProductList from "./components/products/products"; 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./provider/features/auth/AuthSlice";
@@ -12,6 +15,7 @@ import CatalogIndex from "./view/catalog/CatalogIndex";
 function App() {
   const { user, isError, isSuccess, isLoading, getuser, message } = useSelector(
     (state) => state.auth
+
   );
 
   const dispatch = useDispatch();
@@ -30,6 +34,7 @@ function App() {
             <Route path="catalog" element={<CatalogIndex />} />
           </Route>
           <Route path="/" element={<Home />} />
+           <Route path="/products/:category" element={<ProductList/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
