@@ -50,9 +50,7 @@ function Register() {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            onChange={(e) => setPassword(e.target.value)} required/>
         </div>
         <button type="submit">Register</button>
       </form>
