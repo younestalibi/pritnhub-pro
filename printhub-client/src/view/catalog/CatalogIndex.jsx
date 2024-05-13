@@ -138,6 +138,7 @@ const CatalogIndex = () => {
         columns={columns}
         dataSource={data}
         loading={getCatalogsState.isLoading}
+        scroll={{ x: 1000}}
       />
       <Confirmation
         setOpen={setOpen}
