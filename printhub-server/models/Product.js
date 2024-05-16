@@ -9,16 +9,32 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: "CASCADE",
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    }, 
+    price: {
+      type: DataTypes.DECIMAL(10, 2), 
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    image: { 
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    customization_options: {
+    options: {
       type: DataTypes.JSON,
       allowNull: true,
     },
   });
-
+ 
   Product.associate = (models) => {
     Product.belongsTo(models.Catalog, {
       foreignKey: "catalog_id",

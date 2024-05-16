@@ -14,10 +14,20 @@ const registerValidation = [
             return true;
         }),
     check('password')
-        .isLength({ min: 4 }).withMessage('Password must be at least 4 characters long')
+        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ];
 
 const loginValidation = [
+    check('email')
+        .isEmail().withMessage('Invalid email address')
+        .custom(async (value) => {
+            const user = await User.findOne({ where: { email: value } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+            return true;
+        }),
+
     check('email')
         .isEmail().withMessage('Invalid email address')
         .notEmpty().withMessage('Email is required'),
