@@ -1,28 +1,27 @@
 import { Card , Carousel, Col,Row} from "antd";
 import { Link } from "react-router-dom";
-import image1 from "../../assets/images/t-shirt.avif";
+import image1 from "../../../assets/images/t-shirt.avif";
 
 const {Meta} = Card
 
 
 const items = [
     {
-        key: '1',
-        title: 'category1',
-        image: image1,
-        path: 'category1'
+        key: "business-cards",
+        title: 'Business Cards',
+        image: image1
     },
     {
-        key: '2',
-        title: 'category2',
-        image: image1,
-        path: 'category2'
+        key: "flyers-brochures",
+        title: 'Flyers & Brochures',
+        image: image1
+
     },
     {
-        key: '3',
-        title: 'category3',
-        image: image1,
-        path: 'category3'
+        key: "banners-signs",
+        title: 'Banners Signs',
+        image: image1
+      
     },
 
 ];
@@ -35,9 +34,8 @@ export default function AppCategory(){
     for (let i = 0; i < items.length; i += chunkSize) {
         chunkedItems.push(items.slice(i, i + chunkSize));
     }
-
         return (
-            <div className="block featureBlock bgGray">
+            <div className="block bgGray">
             <div className="container-fluid">
             <div className="titleHolder">
                 <h1>Our categries</h1>
@@ -48,19 +46,15 @@ export default function AppCategory(){
                             <Row gutter={[16, 16]} >
                                 {chunk.map(item => (
                                     <Col span={8} key={item.key} >
-                                         <Link to={`products/${item.path}`}>
+                                         <Link to={`category/${item.key}`}>
                                             <Card
                                                 hoverable
                                                 style={{ width: 240 }}
                                                 cover={<img alt="example" src={item.image} />}
                                             >
-                                            
-                                                <Meta title={item.title} />
-                                                
+                                                <Meta title={item.title} />    
                                             </Card>
-                                        </Link>
-                                        
-                                       
+                                        </Link>                                
                                     </Col>
                                 ))}
                             </Row>
@@ -70,7 +64,6 @@ export default function AppCategory(){
         </div>
         </div>
         );
-
 }
 
 

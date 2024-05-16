@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import image1 from '../../assets/images/about.jpg';
+import image1 from '../../../assets/images/about.jpg';
 
 export default function AppAbout(){
 
