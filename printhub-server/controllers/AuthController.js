@@ -8,7 +8,6 @@ const { validationResult } = require("express-validator");
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors.array());
     return res.status(422).json({ error: errors.array() });
   }
   try {
@@ -34,7 +33,6 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors.array());
     return res.status(422).json({ error: errors.array() });
   }
   try {
