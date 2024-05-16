@@ -1,4 +1,5 @@
 import { FloatButton, Row, Col } from "antd";
+import "./footer.css";
 
 export default function AppFooter() {
   return (

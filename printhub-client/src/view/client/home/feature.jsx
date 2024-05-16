@@ -1,5 +1,5 @@
 import { Card , Row, Col} from "antd";
-import image1 from "../../assets/images/t-shirt.avif";
+import image1 from "../../../assets/images/t-shirt.avif";
 const {Meta} = Card
 const items = [
     {

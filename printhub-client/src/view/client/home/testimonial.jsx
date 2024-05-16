@@ -1,6 +1,6 @@
 
 import { Col,Row, Carousel} from "antd";
-import image1 from "../../assets/images/avatar.png";
+import image1 from "../../../assets/images/avatar.png";
 
 const items = [
     {
