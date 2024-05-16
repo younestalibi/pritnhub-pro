@@ -1,5 +1,5 @@
-import { Menu } from "antd";
-import { Input } from "antd";
+import { Menu,Input } from "antd";
+import "./header.css";
 const { Search } = Input;
 import { useNavigate } from "react-router-dom";
 

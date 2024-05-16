@@ -3,10 +3,18 @@ footer
 ------
 */
 .ant-layout-footer {
+    /* 
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%; */
+    padding: 60px 0 !important;
     background: #111 !important;
     color: #fff !important;
-    padding: 60px 0 !important;
-  
+    min-height:49vh; 
+    display:flex; 
+    flex-direction:column; 
+    justify-content:space-between;
 }
   
 .footer .logo {

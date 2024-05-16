@@ -1,0 +1,63 @@
+/* 
+how it works
+------------
+*/
+.worksBlock {
+    background: url('../../../assets/images/category-bg.webp') no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+    background-attachment: fixed;
+    color: #fff;
+    position: relative;
+  }
+  
+  .worksBlock:before {
+    content: '';
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .worksBlock h2 {
+    color: #fff;
+  }
+  
+  .worksBlock .contentHolder {
+    text-align: center;
+  }
+  
+  .worksBlock .contentHolder button {
+    font-size: 40px;
+    line-height: 1;
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 30px;
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+}
+
+.container{
+    margin: 0;
+    max-width: 100%; 
+    padding: 3rem 3rem;
+    width: 100%; 
+    
+}
+.no-data{
+    padding : 4.5rem 0;
+   
+}
+.card-content{
+  display: flex;
+  justify-content: flex-start;
+}
+#icon{
+  padding-top: 10px;
+  align-self: flex-start;
+}
+  
