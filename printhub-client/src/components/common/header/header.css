@@ -8,32 +8,73 @@ header
     z-index: 999;
   }
   
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.header {
+    flex-direction: column;
     gap: 5;
     width:100%;
-    margin-top: 10px;
-    
-  }
+    margin-top: 10px;  
+    padding:0;  
+}
+
+.headerMain{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navBar { 
+  padding-top: 2rem;
+  width: 100%;
+ 
+}
+.navBar ul {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  padding:0;
+  margin: 0;
+  padding-bottom: 10px !important;
+  border-bottom: 2px solid #ccc !important; 
+}
+/* .ant-menu-horizontal {
+
+} */
+
+.header-user-actions{
+  display: flex;
+  align-items: center;
+}
+
+.header-user-actions > * {
+  margin-right: 30px; 
+}
+
+.header-user-actions > *:last-child {
+  margin-right: 0; 
+}
+
+.headset-icon {
+  font-size: 25px;
+}
   
 .header .logo {
     font-size: 35px;
-    font-weight: 500; 
+    font-weight: 500;
+    margin:0;
+     
+}
+ 
+.header .logo strong span {
+   color :#1890ff;
 }
   
-  .header .logo strong span {
-   color :#1890ff;
-  }
-  
-  .header .logo a {
+.header .logo a {
     color: #333;
-  }
+}
   
-  .header .ant-anchor-wrapper {
+.header .ant-anchor-wrapper {
     background: none;
-  }
+}
   
   .header .ant-anchor {
     display: flex;
@@ -81,11 +122,11 @@ header
 
   /* search input */
 .SearchInput{
-  width: 300px;
+  width: 400px;
 }
   
   /* ant menu */
-  .header .ant-menu {
+.header .ant-menu {
     border: 0;
     background: none !important;
     /* margin-left: auto; */
