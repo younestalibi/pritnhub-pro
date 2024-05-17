@@ -200,7 +200,7 @@ const ProductDetail = () => {
       align={"stretch"}
       style={{ marginTop: "40px" }}
     >
-      <Col lg={{ span: 10 }} md={{ span: 20 }}>
+      <Col md={{ span: 10 }} sm={{ span: 20 }}>
         <BreadCrumb titles={["home", "categories", "products", product.name]} />
         <div style={{ position: "sticky", top: "-175px" }}>
           <ImageGallery
@@ -222,7 +222,7 @@ const ProductDetail = () => {
           />
         </div>
       </Col>
-      <Col lg={{ span: 10 }} md={{ span: 20 }}>
+      <Col md={{ span: 10 }} sm={{ span: 20 }}>
         <div>
           <Title level={3}>{product.name}</Title>
           <Paragraph
