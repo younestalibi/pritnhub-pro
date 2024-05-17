@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import BreadCrumb from "../../components/BreadCrumb/BreadCrum";
+import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -9,11 +9,11 @@ import {
   deleteCatalogById,
   getCatalogs,
   resetStateCatalog,
-} from "../../provider/features/catalog/CatalogSlice";
+} from "../../../provider/features/catalog/CatalogSlice";
 import { Button, Table, notification } from "antd";
 import { Image } from "antd";
 import { Link } from "react-router-dom";
-import Confirmation from "../../components/CustomAlert/Confirmation";
+import Confirmation from "../../../components/CustomAlert/Confirmation";
 import CatalogCreate from "./CatalogCreate";
 import { icons } from "antd/es/image/PreviewGroup";
 import CatalogEdit from "./CatalogEdit";

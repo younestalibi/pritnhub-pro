@@ -1,20 +1,19 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./view/client/home/Home";
-import Register from "./view/auth/Register";
-import Login from "./view/auth/Login";
+import Authentication from "./view/auth/Authentication";
 import ProductList from "./view/client/products/products"; 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./provider/features/auth/AuthSlice";
 import DasbhoardLayout from "./layout/DashboardLayout";
-import CatalogIndex from "./view/catalog/CatalogIndex";
-import ProductIndex from "./view/product/ProductIndex";
+import CatalogIndex from "./view/admin/catalog/CatalogIndex";
+import ProductIndex from "./view/admin/product/ProductIndex";
 import DefaultLayout from "./layout/DefaultLayout";
-import ProductDetail from "./view/client/products/productDetails";
+import ProductDetail from "./view/client/products/ProductDetail";
 
 function App() {
-  const { user, isError, isSuccess, isLoading, getuser, message } = useSelector(
+  const { user,getUserState } = useSelector(
     (state) => state.auth
 
   );
@@ -23,7 +22,7 @@ function App() {
   useEffect(() => {
     dispatch(getUser());
   }, []);
-  if (isLoading) {
+  if (getUserState.isLoading) {
     return(
       <h1>loading</h1>
     )
@@ -40,8 +39,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/category/:category" element={<ProductList />} />
             <Route path="/product/:product" element={<ProductDetail />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Authentication/>} />
+            <Route path="/detail" element={<ProductDetail/>} />
           </Route>
         </Routes>
       </BrowserRouter>

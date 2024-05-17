@@ -2,29 +2,30 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Input, InputNumber, Modal, Select, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import {
+  createCatalog,
   getCatalogs,
   resetStateCatalog,
-} from "../../provider/features/catalog/CatalogSlice";
+  updateCatalog,
+} from "../../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  createProduct,
-  resetStateProduct,
-} from "../../provider/features/product/ProductSlice";
 import ProductCustomization from "./ProductCustomization";
+import { updateProduct } from "../../../provider/features/product/ProductSlice";
+import { resetProductState } from "../../../provider/features/product/ProductState";
 
-const ProductCreate = (props) => {
-  const { open, setOpen } = props;
+const ProductEdit = (props) => {
+  const { open, setOpen, id } = props;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const { TextArea } = Input;
 
-  const { createProductstate } = useSelector((state) => state.product);
+  const { updateProductstate, products } = useSelector(
+    (state) => state.product
+  );
 
-  const dispatch = useDispatch();
-  const { catalogs ,getCatalogsState} = useSelector((state) => state.catalog);
+  const { catalogs,getCatalogsState } = useSelector((state) => state.catalog);
 
   useEffect(() => {
     if (catalogs.length == 0) {
@@ -34,26 +35,60 @@ const ProductCreate = (props) => {
     }
   }, []);
 
+  const [product, setProduct] = useState(null);
+
   useEffect(() => {
-    if (createProductstate.isSuccess) {
+    if (id) {
+      const foundProduct = products.find((e) => e.id === id);
+      if (foundProduct) {
+        setProduct(foundProduct);
+      }
+      if (product) {
+        formik.setFieldValue("name", product.name);
+        formik.setFieldValue("description", product.description);
+        formik.setFieldValue("price", product.price);
+        formik.setFieldValue("quantity", product.quantity);
+        formik.setFieldValue("catalog_id", product.catalog_id);
+        formik.setFieldValue("options", product.options);
+        formik.setFieldValue("quantity", product.quantity);
+        formik.setFieldValue("image", [
+          {
+            name: product.name,
+            status: "done",
+            originFileObj: null,
+            crossOrigin: import.meta.env.VITE_CLIENT_URL,
+            url: `${import.meta.env.VITE_SERVER_URL}/${product.image}`,
+          },
+        ]);
+        setPreviewImage(`${import.meta.env.VITE_SERVER_URL}/${product.image}`);
+        setPreviewTitle(product.name);
+      }
+    }
+  }, [open, product]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (updateProductstate.isSuccess) {
       setOpen(false);
       notification.open({
-        description: createProductstate.message,
+        description: updateProductstate.message,
         duration: 3,
         type: "success",
       });
     }
-    if (createProductstate.isError) {
+    if (updateProductstate.isError) {
       setOpen(false);
       notification.open({
-        description: createProductstate.message,
+        description: updateProductstate.message,
         duration: 3,
         type: "error",
       });
+      formik.resetForm();
+      dispatch(resetProductState());
+
     }
-    formik.resetForm();
-    dispatch(resetStateProduct());
-  }, [createProductstate.isSuccess, createProductstate.isError]);
+  }, [updateProductstate.isSuccess, updateProductstate.isError]);
 
   // Formik setup
   const formik = useFormik({
@@ -91,7 +126,7 @@ const ProductCreate = (props) => {
         description: values.description,
         image: values.image[0].originFileObj,
       };
-      dispatch(createProduct(formData));
+      dispatch(updateProduct({id,product:formData}));
     },
   });
 
@@ -114,6 +149,7 @@ const ProductCreate = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
+
   const options = [];
   for (let i = 0; i < catalogs.length; i++) {
     options.push({
@@ -121,14 +157,13 @@ const ProductCreate = (props) => {
       label: catalogs[i].name,
     });
   }
-
   return (
     <Modal
-      title="Create New Product"
+      title="Edit Product"
       open={open}
       onOk={handleOk}
-      okText="CREATE"
-      confirmLoading={createProductstate.isLoading}
+      okText="UPDATE"
+      // confirmLoading={updateCatalogState.isLoading}
       onCancel={handleCancel}
     >
       <form onSubmit={formik.handleSubmit}>
@@ -190,7 +225,8 @@ const ProductCreate = (props) => {
             id="catalog_id"
             name="catalog_id"
             size="middle"
-            value={formik.values.catalog_id}
+            labelInValue={true}
+            value={{ value:formik.values.catalog_id}}
             onChange={(catalog_id) => {
               formik.setFieldValue("catalog_id", catalog_id);
             }}
@@ -233,6 +269,7 @@ const ProductCreate = (props) => {
             Customization Options <span>*</span>
           </label>
           <ProductCustomization
+            options={formik.getFieldProps('options').value}
             onSave={(options) => {
               formik.setFieldValue("options", options);
             }}
@@ -285,7 +322,7 @@ const ProductCreate = (props) => {
     </Modal>
   );
 };
-export default ProductCreate;
+export default ProductEdit;
 
 const uploadButton = (
   <div>
@@ -295,7 +332,7 @@ const uploadButton = (
         marginTop: 8,
       }}
     >
-      Click or drag picture to this area to upload
+      Upload
     </div>
   </div>
 );

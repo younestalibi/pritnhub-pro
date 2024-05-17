@@ -1,0 +1,51 @@
+.loader-app-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader-app,
+.loader-app::before,
+.loader-app::after {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-color: #5a4ff3;
+}
+
+.loader-app::before,
+.loader-app::after {
+  position: absolute;
+  content: "";
+}
+
+.loader-app::before {
+  border-color: #35a2d2;
+  width: 110%;
+  height: 110%;
+  animation-delay: 0.5s;
+}
+
+.loader-app::after {
+  border-color: #9c40fc;
+  width: 120%;
+  height: 120%;
+  animation-delay: 0.1s;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

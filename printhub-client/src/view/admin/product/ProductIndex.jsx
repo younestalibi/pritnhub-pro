@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import BreadCrumb from "../../components/BreadCrumb/BreadCrum";
+import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -8,16 +8,16 @@ import { IoAddOutline } from "react-icons/io5";
 import {
   getCatalogs,
   resetStateCatalog,
-} from "../../provider/features/catalog/CatalogSlice";
+} from "../../../provider/features/catalog/CatalogSlice";
 import { Button, Popover, Table, notification } from "antd";
 import { Image } from "antd";
-import Confirmation from "../../components/CustomAlert/Confirmation";
+import Confirmation from "../../../components/CustomAlert/Confirmation";
 
 import {
   deleteProductById,
   getProducts,
   resetStateProduct,
-} from "../../provider/features/product/ProductSlice";
+} from "../../../provider/features/product/ProductSlice";
 import ProductCreate from "./ProductCreate";
 import ProductEdit from "./ProductEdit";
 

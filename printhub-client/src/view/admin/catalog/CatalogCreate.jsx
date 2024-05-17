@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   createCatalog,
   resetStateCatalog,
-} from "../../provider/features/catalog/CatalogSlice";
+} from "../../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
