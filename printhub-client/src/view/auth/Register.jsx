@@ -1,58 +1,109 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../provider/features/auth/AuthSlice";
+import { Button, Input } from "antd";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isError, isSuccess, isLoading, message } = useSelector((state) => state.auth);
+  const { user, registerState } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isSuccess && user) {
+    if (registerState.isSuccess && user) {
       navigate("/");
     }
-  }, [isSuccess, user]);
+  }, [registerState.isSuccess, user]);
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    const formData={name,email,password}
-    dispatch(register(formData));
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email format").required("Required"),
+      password: Yup.string()
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      dispatch(register(values));
+    },
+  });
 
+
+  useEffect(() => {
+    if (registerState.message) {
+      if (Array.isArray(registerState.message)) {
+        const errors = {};
+        registerState.message.forEach((error) => {
+          errors[error.path] = error.msg;
+        });
+        formik.setErrors(errors);
+      } else if (typeof registerState.message === "string") {
+        notification.open({
+          description: registerState.message,
+          duration: 3,
+          type: "error",
+        });
+      }
+    }
+  }, [registerState.isError]);
   return (
     <div>
       <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={formik.handleSubmit}>
         <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+          <label htmlFor="name">Name:</label>
+          <Input
+            name="name"
+            id="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.name && formik.errors.name ? (
+            <div style={{ color: "red" }}>{formik.errors.name}</div>
+          ) : null}
         </div>
         <div>
-          <label>Email:</label>
-          <input
+          <label htmlFor="email">Email:</label>
+          <Input
+            name="email"
+            id="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.email && formik.errors.email ? (
+            <div style={{ color: "red" }}>{formik.errors.email}</div>
+          ) : null}
         </div>
         <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} required/>
+          <label htmlFor="password">Password:</label>
+          <Input.Password
+            name="password"
+            id="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div style={{ color: "red" }}>{formik.errors.password}</div>
+          ) : null}
         </div>
-        <button type="submit">Register</button>
+        <Button
+          style={{ marginTop: "13px" }}
+          loading={registerState.isLoading}
+          type="primary"
+          htmlType="submit"
+        >
+          Register
+        </Button>
       </form>
     </div>
   );

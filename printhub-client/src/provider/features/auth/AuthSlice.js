@@ -1,17 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./AuthServices";
 
-const getUserfromLocalStorage = localStorage.getItem("token")
-  ? localStorage.getItem("token")
-  : null;
+import { resetAuthState, initialAuthState } from "./ProductState";
 
-const initialState = {
-  user: getUserfromLocalStorage,
-  isError: false,
-  isLoading: false,
-  isSuccess: false,
-  message: "",
-};
+const initialState = initialAuthState;
 export const login = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
@@ -52,84 +44,85 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (buildeer) => {
     buildeer
-    // register
+      // register
       .addCase(register.pending, (state) => {
-        state.isLoading = true;
+        resetAuthState(state)
+        state.registerState.isLoading = true;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
+        state.registerState.isError = false;
+        state.registerState.isLoading = false;
+        state.registerState.isSuccess = true;
+        state.registerState.message = action.payload.message;
         state.user = action.payload.user;
-        state.message = action.payload.message;
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(register.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        // state.message = action.payload.response.data.errors;
-        state.isLoading = false;
+        state.registerState.isError = true;
+        state.registerState.isSuccess = false;
+        state.registerState.isLoading = false;
+        state.registerState.message = action.payload.error;
       })
-    // register
-    //   ----------------------
-    // login
+      // register
+      //   ----------------------
+      // login
       .addCase(login.pending, (state) => {
-        state.isLoading = true;
+        resetAuthState(state)
+        state.loginState.isLoading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
+        state.loginState.isError = false;
+        state.loginState.isLoading = false;
+        state.loginState.isSuccess = true;
+        state.loginState.message = action.payload.message;
         state.user = action.payload.user;
-        state.message = action.payload.message;
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(login.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        // state.message = action.payload.response.data.errors;
-        state.isLoading = false;
+        state.loginState.isError = true;
+        state.loginState.isSuccess = false;
+        state.loginState.isLoading = false;
+        state.loginState.message = action.payload.error;
       })
-    // login
-    //   ----------------------
-    // logout
+      // login
+      //   ----------------------
+      // logout
       .addCase(logout.pending, (state) => {
-        state.isLoading = true;
+        resetAuthState(state)
+        state.logoutState.isLoading = true;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isSuccess = true;
+        state.logoutState.isLoading = false;
+        state.logoutState.isSuccess = true;
+        state.logoutState.message = action.payload.message;
         state.user = null;
-
-        state.message = action.payload.message;
         localStorage.removeItem("token");
       })
       .addCase(logout.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        state.isLoading = false;
-        // state.message = action.error;
+        state.logoutState.isError = true;
+        state.logoutState.isSuccess = false;
+        state.logoutState.isLoading = false;
+        state.logoutState.message = action.payload.error;
       })
-    // logout
-    //   ----------------------
-    // getUser
+      // logout
+      //   ----------------------
+      // getUser
       .addCase(getUser.pending, (state) => {
-        state.isLoading = true;
+        resetAuthState(state)
+        state.getUserState.isLoading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.getuser = true;
+        state.getUserState.isError = false;
+        state.getUserState.isLoading = false;
+        state.getUserState.isSuccess = true;
+        state.getUserState.message = action.payload.message;
         state.user = action.payload.user;
-        state.message = action.payload.message;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        // state.message = action.error;
-        state.user = null;
-        state.isLoading = false;
+        state.getUserState.isError = true;
+        state.getUserState.isSuccess = false;
+        state.getUserState.message = action.error;
+        state.getUserState.isLoading = false;
       });
     // getUser
     //   ----------------------
