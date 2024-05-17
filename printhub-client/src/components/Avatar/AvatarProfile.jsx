@@ -30,8 +30,12 @@ const AvatarProfile = () => (
     trigger={["click"]}
   >
     <a onClick={(e) => e.preventDefault()}>
-      <Space direction="vertical" size={16}>
-        <Avatar size="large" icon={<UserOutlined />} />
+      <Space direction="vertical" size={16}   >
+        <Avatar size="middle" 
+        icon={<UserOutlined />}  
+        style={{
+        backgroundColor: '#1890ff',
+        }}/>
       </Space>
     </a>
   </Dropdown>
