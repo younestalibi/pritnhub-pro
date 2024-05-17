@@ -11,7 +11,25 @@ const CheckBoxInput = ({
   tooltip,
 }) => {
   const handleChange = (e) => {
-    setFormValues((prevValues) => ({ ...prevValues, [name]: e }));
+    const { value: checkboxValue, checked } = e.target;
+
+    setFormValues((prevValues) => {
+      const currentValues = prevValues[name] || [];
+
+      if (checked) {
+        // Add the checkbox value if it is checked
+        return {
+          ...prevValues,
+          [name]: [...currentValues, checkboxValue],
+        };
+      } else {
+        // Remove the checkbox value if it is unchecked
+        return {
+          ...prevValues,
+          [name]: currentValues.filter((val) => val !== checkboxValue),
+        };
+      }
+    });
   };
 
   return (
@@ -22,21 +40,20 @@ const CheckBoxInput = ({
           <FaCircleQuestion />
         </Tooltip>
       </label>
-      {choices.map((choice, index) => (
-        <>
-          <Checkbox.Group onChange={handleChange}>
-            <Checkbox
-              key={index}
-              id={`${name}-${choice.value}`}
-              name={name}
-              value={choice.value}
-              checked={value.includes(choice.value)}
-            >
-              {choice.value}
-            </Checkbox>
-          </Checkbox.Group>
-        </>
-      ))}
+      <Checkbox.Group>
+        {choices.map((choice, index) => (
+          <Checkbox
+            key={index}
+            id={`${name}-${choice.value}`}
+            name={name}
+            value={choice.value}
+            checked={value.includes(choice.value)}
+            onChange={handleChange}
+          >
+            {choice.value}
+          </Checkbox>
+        ))}
+      </Checkbox.Group>
     </div>
   );
 };

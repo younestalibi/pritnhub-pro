@@ -127,8 +127,8 @@ const ProductDetail = () => {
   const [formValues, setFormValues] = useState({});
 
   const calculateTotalPrice = (formValues) => {
+    console.log(formValues);
     let totalPrice = product.basePrice;
-    console.log(formValues["quantity"]);
     if (!formValues["quantity"]) {
       totalPrice = "------------";
     } else {
@@ -138,7 +138,7 @@ const ProductDetail = () => {
 
         if (option.type === "number") {
           const number = value;
-          totalPrice *= quantity;
+          totalPrice *= number;
         } else if (option.type === "select" || option.type === "radio") {
           const choice = option.choices.find(
             (choice) => choice.value === value
@@ -163,15 +163,17 @@ const ProductDetail = () => {
     return totalPrice;
   };
 
-  console.log("Total Price:", calculateTotalPrice(formValues));
-
   const customization = [];
-  for (let i = 0; i < product.options.length; i++) {
-    if (i == product.options.length - 1) {
+  for (let i = 0; i <= product.options.length; i++) {
+    if (i == product.options.length) {
       customization.push({
         key: i + 1,
         label: <b style={{ color: "red" }}>Total Price</b>,
-        children: <Tag color="magenta">{calculateTotalPrice(formValues)}</Tag>,
+        children: (
+          <Tag bordered={false} color="magenta">
+            <b>{calculateTotalPrice(formValues)}</b>
+          </Tag>
+        ),
       });
     } else {
       customization.push({
@@ -313,6 +315,20 @@ const ProductDetail = () => {
               }
             })}
           </form>
+          <Button
+            type="primary"
+            style={{
+              backgroundColor: "#c43b53",
+              padding: "19px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            // loading={true}
+            block={true}
+          >
+            Add To Cart
+          </Button>
         </div>
       </Col>
     </Row>
