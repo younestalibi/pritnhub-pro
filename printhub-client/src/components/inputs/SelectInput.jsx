@@ -2,9 +2,18 @@ import { Select, Tooltip } from "antd";
 import React from "react";
 import { FaCircleQuestion } from "react-icons/fa6";
 
-const SelectInput = ({ label, name, value, choices, setFormValues,tooltip }) => {
+const SelectInput = ({
+  label,
+  name,
+  value,
+  choices,
+  setFormValues,
+  tooltip,
+  error,
+}) => {
   const handleChange = (e) => {
-    setFormValues((prevValues) => ({ ...prevValues, [name]: e }));
+    setFormValues(name, e);
+    // setFormValues((prevValues) => ({ ...prevValues, [name]: e }));
   };
   const options = [];
   for (let i = 0; i < choices.length; i++) {
@@ -17,13 +26,14 @@ const SelectInput = ({ label, name, value, choices, setFormValues,tooltip }) => 
   return (
     <div style={{ margin: "20px 0px" }}>
       <label className="custom-input-label">
-      <b>{label}</b>
+        <b>{label}</b>
         <Tooltip placement="top" title={tooltip}>
           <FaCircleQuestion />
         </Tooltip>
       </label>
       <Select
-        mode="multiple"
+        value={value}
+        mode="combobox"
         maxCount={1}
         allowClear
         style={{
@@ -33,6 +43,7 @@ const SelectInput = ({ label, name, value, choices, setFormValues,tooltip }) => 
         onChange={handleChange}
         options={options}
       />
+      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 };

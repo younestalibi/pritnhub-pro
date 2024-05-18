@@ -1,4 +1,4 @@
-import { Badge, Button, Col, Descriptions, Row, Tag, Typography } from "antd";
+import { Badge, Button, Col, Descriptions, Row, Tag, Typography, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -8,15 +8,20 @@ import SelectInput from "../../../components/inputs/SelectInput";
 import RadioInput from "../../../components/inputs/RadioInput";
 import CheckBoxInput from "../../../components/inputs/CheckBoxInput";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
+
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { addCartItem, resetStateCart } from "../../../provider/features/cart/CartSlice";
 const { Title, Paragraph } = Typography;
 const ProductDetail = () => {
   const [expanded, setExpanded] = useState(false);
-
+  const {carts,addCartItemState}=useSelector((state)=>state.cart)
   const product = {
     catalog_id: "353",
     createdAt: "2024-05-16T10:49:12.378Z",
     description: "High-quality business cards to leave a lasting impression.",
-    id: 82,
+    id: 1,
     images: [
       {
         original: "https://picsum.photos/id/1018/1000/600/",
@@ -71,7 +76,6 @@ const ProductDetail = () => {
           { value: "Textured", priceAdjustment: 20 },
           { value: "Recycled", priceAdjustment: 5 },
         ],
-        defaultValue: "Matte",
         tooltip: "Choose the type of paper for your business cards",
       },
       {
@@ -110,7 +114,6 @@ const ProductDetail = () => {
           { value: "Spot UV", priceAdjustment: 20 },
           { value: "Custom Shapes", priceAdjustment: 50 },
         ],
-        defaultValue: [],
         tooltip: "Choose any additional features for your business cards",
       },
     ],
@@ -119,6 +122,8 @@ const ProductDetail = () => {
       min: 100,
       max: 1000,
       step: 100,
+      label: "Quantity",
+      name: "quantity",
       tooltip: "Select the number of business cards you want to print",
     },
     updatedAt: "2024-05-16T10:49:12.378Z",
@@ -127,7 +132,6 @@ const ProductDetail = () => {
   const [formValues, setFormValues] = useState({});
 
   const calculateTotalPrice = (formValues) => {
-    console.log(formValues);
     let totalPrice = product.basePrice;
     if (!formValues["quantity"]) {
       totalPrice = "------------";
@@ -196,6 +200,82 @@ const ProductDetail = () => {
   ) {
     quantities.push({ value: i });
   }
+  const dispatch=useDispatch()
+
+  ////
+  const formik = useFormik({
+    initialValues: {
+      quantity: null,
+      ...product.options.reduce(
+        (acc, option) => ({ ...acc, [option.name]: null }),
+        {}
+      ),
+    },
+    validationSchema: () =>
+      Yup.object().shape({
+        quantity: Yup.number()
+          .typeError("Please enter a valid quantity")
+          .min(product.quantity.min, `Minimum ${product.quantity.min}`)
+          .max(product.quantity.max, `Maximum ${product.quantity.max}`)
+          .required("Quantity is required"),
+        ...product.options.reduce((acc, option) => {
+          switch (option.type) {
+            case "text":
+            case "number":
+            case "select":
+              acc[option.name] = Yup.string().required(
+                `${option.label} is required`
+              );
+              break;
+            case "radio":
+              acc[option.name] = Yup.string().required(
+                `Please select a ${option.label}`
+              );
+              break;
+            case "checkbox":
+              acc[option.name] = Yup.array().min(
+                1,
+                `Please select at least one ${option.label}`
+              );
+              break;
+            default:
+              break;
+          }
+          return acc;
+        }, {}),
+      }),
+    onSubmit: (values) => {
+      const productId=82;
+      const customizations = { ...values };
+      const quantity=customizations.quantity;
+      delete customizations.quantity;
+      dispatch(addCartItem({productId,quantity,customizations}))
+    },
+  });
+
+  useEffect(() => {
+    if (addCartItemState.isSuccess) {
+
+      notification.open({
+        description: addCartItemState.message,
+        duration: 3,
+        type: "success",
+      });
+    }
+    if (addCartItemState.isError) {
+
+      notification.open({
+        description: addCartItemState.message,
+        duration: 3,
+        type: "error",
+      });
+    }
+    formik.resetForm();
+    dispatch(resetStateCart());
+  }, [addCartItemState.isSuccess, addCartItemState.isError]);
+
+
+
   return (
     <Row
       justify={"space-evenly"}
@@ -240,13 +320,17 @@ const ProductDetail = () => {
             {product.description}
           </Paragraph>
 
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             <RadioInput
+              value={formik.values[product.quantity.name]}
+              setFormValues={formik.setFieldValue}
+              error={
+                formik.touched[product.quantity.name] &&
+                formik.errors[product.quantity.name]
+              }
               tooltip={product.quantity.tooltip}
-              setFormValues={setFormValues}
-              label={"Quantity"}
-              name={"quantity"}
-              value={formValues["quantity"] || ""}
+              label={product.quantity.label}
+              name={product.quantity.name}
               choices={quantities}
             />
 
@@ -255,80 +339,102 @@ const ProductDetail = () => {
                 case "text":
                   return (
                     <TextInput
+                      value={formik.values[option.name]}
+                      setFormValues={formik.setFieldValue}
+                      error={
+                        formik.touched[option.name] &&
+                        formik.errors[option.name]
+                      }
                       tooltip={option.tooltip}
-                      setFormValues={setFormValues}
                       key={index}
                       label={option.label}
                       name={option.name}
-                      value={formValues[option.name] || ""}
                     />
                   );
                 case "number":
                   return (
                     <NumberInput
+                      value={formik.values[option.name]}
+                      setFormValues={formik.setFieldValue}
+                      error={
+                        formik.touched[option.name] &&
+                        formik.errors[option.name]
+                      }
                       tooltip={option.tooltip}
-                      setFormValues={setFormValues}
                       key={index}
                       label={option.label}
                       name={option.name}
-                      value={formValues[option.name] || ""}
                     />
                   );
                 case "select":
                   return (
                     <SelectInput
+                      value={formik.values[option.name]}
+                      setFormValues={formik.setFieldValue}
+                      error={
+                        formik.touched[option.name] &&
+                        formik.errors[option.name]
+                      }
                       tooltip={option.tooltip}
-                      setFormValues={setFormValues}
                       key={index}
                       label={option.label}
                       name={option.name}
                       choices={option.choices}
-                      value={formValues[option.name] || ""}
                     />
                   );
                 case "radio":
                   return (
                     <RadioInput
+                      value={formik.values[option.name]}
+                      setFormValues={formik.setFieldValue}
+                      error={
+                        formik.touched[option.name] &&
+                        formik.errors[option.name]
+                      }
                       tooltip={option.tooltip}
-                      setFormValues={setFormValues}
                       key={index}
                       label={option.label}
                       name={option.name}
                       choices={option.choices}
-                      value={formValues[option.name] || ""}
                     />
                   );
                 case "checkbox":
                   return (
                     <CheckBoxInput
+                      value={formik.values[option.name]}
+                      setFormValues={formik.setFieldValue}
+                      error={
+                        formik.touched[option.name] &&
+                        formik.errors[option.name]
+                      }
                       tooltip={option.tooltip}
-                      setFormValues={setFormValues}
                       key={index}
                       label={option.label}
                       name={option.name}
                       choices={option.choices}
-                      value={formValues[option.name] || []}
                     />
                   );
                 default:
                   return null;
               }
             })}
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                backgroundColor: "#c43b53",
+                padding: "19px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              block={true}
+              loading={addCartItemState.isLoading}
+            >
+              Add To Cart
+            </Button>
           </form>
-          <Button
-            type="primary"
-            style={{
-              backgroundColor: "#c43b53",
-              padding: "19px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            // loading={true}
-            block={true}
-          >
-            Add To Cart
-          </Button>
         </div>
       </Col>
     </Row>

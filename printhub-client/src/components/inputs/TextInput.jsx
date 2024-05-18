@@ -2,15 +2,15 @@ import { Button, Input, Tooltip } from "antd";
 import React from "react";
 import { FaCircleQuestion } from "react-icons/fa6";
 
-const TextInput = ({ label, name, value, setFormValues,tooltip }) => {
+const TextInput = ({ label, name, value, setFormValues, tooltip, error }) => {
   const handleChange = (e) => {
-    console.log(e.target.value);
-    setFormValues((prevValues) => ({ ...prevValues, [name]: e.target.value }));
+    // setFormValues((prevValues) => ({ ...prevValues, [name]: e.target.value }));
+    setFormValues(name, e.target.value);
   };
 
   return (
     <div style={{ margin: "20px 0px" }}>
-      <label className="custom-input-label"> 
+      <label className="custom-input-label">
         <b>{label}</b>
         <Tooltip placement="top" title={tooltip}>
           <FaCircleQuestion />
@@ -26,6 +26,7 @@ const TextInput = ({ label, name, value, setFormValues,tooltip }) => {
         value={value}
         onChange={handleChange}
       />
+      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 };

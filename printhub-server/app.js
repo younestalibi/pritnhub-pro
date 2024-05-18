@@ -4,6 +4,7 @@ const app = express();
 const authRoutes = require('./routes/authRoutes');
 const catalogRoutes = require('./routes/catalogRoutes');
 const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const { sequelize } = require('./models'); 
 const helmet = require('helmet');
 const cors = require('cors');
@@ -20,6 +21,7 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/catalog', catalogRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/cart', cartRoutes);
 
 sequelize.sync()
     .then(() => {

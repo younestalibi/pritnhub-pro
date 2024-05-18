@@ -9,10 +9,13 @@ const RadioInput = ({
   choices,
   setFormValues,
   tooltip,
+  error,
 }) => {
   const handleChange = (e) => {
-    setFormValues((prevValues) => ({ ...prevValues, [name]: e.target.value }));
+    setFormValues(name, e.target.value);
+    // setFormValues((prevValues) => ({ ...prevValues, [name]: e.target.value }));
   };
+
 
   return (
     <div style={{ margin: "20px 0px" }}>
@@ -22,14 +25,13 @@ const RadioInput = ({
           <FaCircleQuestion />
         </Tooltip>
       </label>
-      <Radio.Group buttonStyle="solid">
+      <Radio.Group value={value} buttonStyle="solid">
         {choices.map((choice, index) => (
           <>
             <Radio.Button
               style={{
                 borderRadius: "2px",
                 margin: "2px",
-                
               }}
               id={`${name}-${choice.value}`}
               name={name}
@@ -43,6 +45,7 @@ const RadioInput = ({
           </>
         ))}
       </Radio.Group>
+      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 };
