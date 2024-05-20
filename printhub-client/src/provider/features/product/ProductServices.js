@@ -17,6 +17,14 @@ const deleteProductById = async (id) => {
     throw error.response.data;
   }
 };
+const getProductById = async (id) => {
+  try {
+    const response = await axiosHttp.get(`/product/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 const createProduct = async (catalog) => {
   try {
     const response = await axiosHttp.post(`/product`,catalog,config);
@@ -39,7 +47,8 @@ const ProductServices = {
   getProducts,
   deleteProductById,
   createProduct,
-  updateProduct
+  updateProduct,
+  getProductById
 };
 
 export default ProductServices;

@@ -91,7 +91,7 @@ export const authSlice = createSlice({
         resetAuthState(state)
         state.logoutState.isLoading = true;
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(logout.fulfilled, (state,action) => {
         state.logoutState.isLoading = false;
         state.logoutState.isSuccess = true;
         state.logoutState.message = action.payload.message;

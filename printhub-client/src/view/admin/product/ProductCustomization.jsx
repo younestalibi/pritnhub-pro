@@ -1,36 +1,93 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, Popover, Select, Tag } from "antd";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function ProductCustomization({ onSave, options }) {
-  const [customizationOptions, setCustomizationOptions] = useState(options?options:[]);
-  
+  // const validationSchema = Yup.object({
+  //   type: Yup.string().required("Type is required"),
+  //   name: Yup.string().required("Name is required"),
+  //   label: Yup.string().required("Label is required"),
+  //   choiceText: Yup.string().when('type', {
+  //     is: (type) => ['select', 'radio', 'checkbox'].includes(type),
+  //     then: Yup.string().required("Choice value is required")
+  //   }),
+  //   choicePrice: Yup.number().when('type', {
+  //     is: (type) => ['select', 'radio', 'checkbox'].includes(type),
+  //     then: Yup.number().required("Price adjustment is required").min(0, "Price must be at least 0")
+  //   }),
+  // });
+  //  const formik = useFormik({
+  //     initialValues: {
+  //       type: "",
+  //       name: "",
+  //       label: "",
+  //       choiceText: "",
+  //       choicePrice: "",
+  //     },
+  //     validationSchema,
+  //     onSubmit: (values, { resetForm }) => {
+  //       const { type, name, label } = values;
+  //       if (type && name && label) {
+  //         const newCustomizationOption = {
+  //           type,
+  //           name,
+  //           label,
+  //           choices: type === "text" || type === "number" ? [] : choices,
+  //         };
+  //         setCustomizationOptions((prevOptions) => [...prevOptions, newCustomizationOption]);
+  //         setChoices([]);
+  //         resetForm();
+  //       }
+  //     },
+  //   });
+
+  const [customizationOptions, setCustomizationOptions] = useState(
+    options ? options : []
+  );
   const [newOption, setNewOption] = useState({
     type: "",
     name: "",
     label: "",
     choices: [],
     choiceText: "",
+    choicePrice: "",
   });
 
   const handleInputChange = (e) => {
-    let name, value;
-    if (typeof e === "object") {
-      name = e.target.name;
-      value = e.target.value;
-    } else if (typeof e === "string") {
-      name = "type";
-      value = e;
-    }
+    const { name, value } = e.target;
     setNewOption((prevOption) => ({
       ...prevOption,
       [name]: value,
     }));
   };
 
+  const handleTypeChange = (value) => {
+    setNewOption((prevOption) => ({
+      ...prevOption,
+      type: value,
+    }));
+  };
+
+  const addChoice = () => {
+    const { choiceText, choicePrice } = newOption;
+    if (choiceText && choicePrice) {
+      const newChoice = {
+        value: choiceText.trim(),
+        priceAdjustment: parseFloat(choicePrice),
+      };
+      setNewOption((prevOption) => ({
+        ...prevOption,
+        choices: [...prevOption.choices, newChoice],
+        choiceText: "",
+        choicePrice: "",
+      }));
+    }
+  };
+
   const addCustomizationOption = () => {
-    const { type, name, label, choiceText } = newOption;
+    const { type, name, label, choices } = newOption;
     if (type && name && label) {
-      const choices = choiceText.split(",").map((choice) => choice.trim());
       const newCustomizationOption = {
         type,
         name,
@@ -47,6 +104,7 @@ function ProductCustomization({ onSave, options }) {
         label: "",
         choices: [],
         choiceText: "",
+        choicePrice: "",
       });
     }
   };
@@ -54,9 +112,12 @@ function ProductCustomization({ onSave, options }) {
   useEffect(() => {
     onSave(customizationOptions);
   }, [customizationOptions]);
+
   useEffect(() => {
     if (options) {
       setCustomizationOptions(options);
+    } else {
+      setCustomizationOptions([]);
     }
   }, [options]);
 
@@ -69,7 +130,7 @@ function ProductCustomization({ onSave, options }) {
           name="type"
           defaultValue=""
           value={newOption.type}
-          onChange={handleInputChange}
+          onChange={handleTypeChange}
           style={{ display: "block" }}
           options={[
             { value: "", disabled: true, label: "Select Type" },
@@ -102,7 +163,7 @@ function ProductCustomization({ onSave, options }) {
             <br />
             {["select", "radio", "checkbox"].includes(newOption.type) && (
               <>
-                <label htmlFor="choiceText">Choices (comma-separated):</label>
+                <label htmlFor="choiceText">Choice Value:</label>
                 <Input
                   type="text"
                   id="choiceText"
@@ -110,6 +171,42 @@ function ProductCustomization({ onSave, options }) {
                   value={newOption.choiceText}
                   onChange={handleInputChange}
                 />
+                <br />
+                <label htmlFor="choicePrice">Price Adjustment:</label>
+                <Input
+                  type="number"
+                  id="choicePrice"
+                  name="choicePrice"
+                  value={newOption.choicePrice}
+                  onChange={handleInputChange}
+                />
+                <Button
+                  style={{ marginTop: "10px" }}
+                  type="dashed"
+                  onClick={addChoice}
+                >
+                  Add Choice
+                </Button>
+                <div>
+                  {newOption.choices.map((choice, index) => (
+                    <Tag
+                      color="cyan-inverse"
+                      style={{ marginTop: "10px" }}
+                      key={index}
+                      closable
+                      onClose={() => {
+                        setNewOption({
+                          ...newOption,
+                          choices: newOption.choices.filter(
+                            (_, i) => i !== index
+                          ),
+                        });
+                      }}
+                    >
+                      {choice.value} - ${choice.priceAdjustment}
+                    </Tag>
+                  ))}
+                </div>
               </>
             )}
 
@@ -127,11 +224,7 @@ function ProductCustomization({ onSave, options }) {
         {customizationOptions.map((option, index) => (
           <Popover
             key={index}
-            content={
-              <>
-                <pre>{JSON.stringify(option, null, 2)}</pre>
-              </>
-            }
+            content={<pre>{JSON.stringify(option, null, 2)}</pre>}
             title="Form Details"
             trigger="hover"
           >

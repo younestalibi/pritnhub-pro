@@ -1,5 +1,13 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, InputNumber, Modal, Select, Upload, notification } from "antd";
+import {
+  Flex,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Upload,
+  notification,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import {
   createCatalog,
@@ -25,7 +33,7 @@ const ProductEdit = (props) => {
     (state) => state.product
   );
 
-  const { catalogs,getCatalogsState } = useSelector((state) => state.catalog);
+  const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
 
   useEffect(() => {
     if (catalogs.length == 0) {
@@ -86,7 +94,6 @@ const ProductEdit = (props) => {
       });
       formik.resetForm();
       dispatch(resetProductState());
-
     }
   }, [updateProductstate.isSuccess, updateProductstate.isError]);
 
@@ -97,7 +104,11 @@ const ProductEdit = (props) => {
       image: [],
       catalog_id: null,
       options: null,
-      quantity: 0,
+      quantity: {
+        max: null,
+        min: null,
+        step: null,
+      },
       price: null,
       description: "",
     },
@@ -112,9 +123,11 @@ const ProductEdit = (props) => {
       image: Yup.array()
         .length(1, "Please upload only one image")
         .required("Image is required*"),
-      quantity: Yup.number()
-        .min(1, "Quantity must be at least 1")
-        .required("Quantity is required*"),
+      quantity: Yup.object({
+        max: Yup.number().required("Max quantity is required"),
+        min: Yup.number().required("Min quantity is required"),
+        step: Yup.number().required("Step amount is required"),
+      }),
     }),
     onSubmit: (values) => {
       const formData = {
@@ -126,7 +139,7 @@ const ProductEdit = (props) => {
         description: values.description,
         image: values.image[0].originFileObj,
       };
-      dispatch(updateProduct({id,product:formData}));
+      dispatch(updateProduct({ id, product: formData }));
     },
   });
 
@@ -185,19 +198,73 @@ const ProductEdit = (props) => {
           <label htmlFor="quantity">
             Quantity <span>*</span>
           </label>
-          <InputNumber
-            id="quantity"
-            name="quantity"
-            style={{ display: "block", width: "100%" }}
-            min={0}
-            value={formik.values.quantity}
-            onChange={(quantity) => {
-              formik.setFieldValue("quantity", quantity);
-            }}
-          />
-          {formik.errors.quantity && formik.touched.quantity && (
-            <div style={{ color: "red" }}>{formik.errors.quantity}</div>
-          )}
+          <Flex gap={10}>
+            <div>
+              <InputNumber
+                placeholder="Max quantity to buy"
+                id="quantity.max"
+                name="quantity.max"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.max}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.max", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.max && formik.errors.quantity?.max ? (
+                <div style={{ color: "red" }}>{formik.errors.quantity.max}</div>
+              ) : null}
+            </div>
+            <div>
+              <InputNumber
+                placeholder="Min quantity to buy"
+                id="quantity.min"
+                name="quantity.min"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.min}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.min", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.min && formik.errors.quantity?.min ? (
+                <div style={{ color: "red" }}>{formik.errors.quantity.min}</div>
+              ) : null}
+            </div>
+            <div>
+              <InputNumber
+                placeholder="Step amount"
+                id="quantity.step"
+                name="quantity.step"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.step}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.step", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.step && formik.errors.quantity?.step ? (
+                <div style={{ color: "red" }}>
+                  {formik.errors.quantity.step}
+                </div>
+              ) : null}
+            </div>
+          </Flex>
         </div>
         <div>
           <label htmlFor="price">
@@ -226,7 +293,7 @@ const ProductEdit = (props) => {
             name="catalog_id"
             size="middle"
             labelInValue={true}
-            value={{ value:formik.values.catalog_id}}
+            value={{ value: formik.values.catalog_id }}
             onChange={(catalog_id) => {
               formik.setFieldValue("catalog_id", catalog_id);
             }}
@@ -269,7 +336,7 @@ const ProductEdit = (props) => {
             Customization Options <span>*</span>
           </label>
           <ProductCustomization
-            options={formik.getFieldProps('options').value}
+            options={formik.getFieldProps("options").value}
             onSave={(options) => {
               formik.setFieldValue("options", options);
             }}

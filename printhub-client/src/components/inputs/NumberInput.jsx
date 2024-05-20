@@ -13,9 +13,11 @@ const NumberInput = ({ label, name, value, setFormValues, tooltip, error }) => {
     <div style={{ margin: "20px 0px" }}>
       <label className="custom-input-label">
         <b>{label}</b>
-        <Tooltip placement="top" title={tooltip}>
-          <FaCircleQuestion />
-        </Tooltip>
+        {tooltip && (
+          <Tooltip placement="top" title={tooltip}>
+            <FaCircleQuestion />
+          </Tooltip>
+        )}
       </label>
       <InputNumber
         min={0}

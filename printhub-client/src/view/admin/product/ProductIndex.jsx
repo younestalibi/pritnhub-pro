@@ -90,7 +90,7 @@ const ProductIndex = () => {
       ),
       catalog: catalogs.find((e) => e.id == products[i].catalog_id).name,
       price: products[i].price,
-      quantity: products[i].quantity,
+      quantity: products[i].quantity.max,
       options: (
         <Popover
           content={products[i].options.map((option, i) => (

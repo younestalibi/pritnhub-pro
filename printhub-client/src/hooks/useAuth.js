@@ -1,16 +1,9 @@
-import { useEffect } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const useAuth = () => {
-  const navigate = useNavigate();
-  const isAuthenticated =localStorage.getItem("token");
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/');
-    }
-  }, [isAuthenticated]);
-
-  return null; 
+  const token = localStorage.getItem('token');
+  const user = useSelector((state) => state.auth.user);
+  return !!token && !!user;
 };
 
 export default useAuth;

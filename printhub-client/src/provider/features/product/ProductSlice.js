@@ -33,6 +33,16 @@ export const deleteProductById = createAsyncThunk(
     }
   }
 );
+export const getProductById = createAsyncThunk(
+  "product/get-one",
+  async (id, thunkAPI) => {
+    try {
+      return await ProductServices.getProductById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const updateProduct = createAsyncThunk(
   "product/update-one",
   async (catalog, thunkAPI) => {
@@ -128,8 +138,6 @@ export const ProductSlice = createSlice({
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
-        console.log(state.products[index])
-        console.log(action.payload.product)
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.updateProductstate.isError = true;
@@ -138,6 +146,27 @@ export const ProductSlice = createSlice({
         state.updateProductstate.message = action.payload.error;
       })
       // update-one
+      //   =========================================================================
+      // get-product-by-id
+      .addCase(getProductById.pending, (state) => {
+        resetProductState(state);
+        state.getProductByIdState.isLoading = true;
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.getProductByIdState.isError = false;
+        state.getProductByIdState.isLoading = false;
+        state.getProductByIdState.isSuccess = true;
+        state.getProductByIdState.message = action.payload.message;
+        state.getProductByIdState.product=action.payload.product;
+
+      })
+      .addCase(getProductById.rejected, (state, action) => {
+        state.getProductByIdState.isError = true;
+        state.getProductByIdState.isLoading = false;
+        state.getProductByIdState.isSuccess = false;
+        state.getProductByIdState.message = action.payload.error;
+      })
+      // get-product-by-id
       //   =========================================================================
       //reset-state-product
       .addCase(resetStateProduct, (state) => {

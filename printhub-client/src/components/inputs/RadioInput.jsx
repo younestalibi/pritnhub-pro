@@ -16,14 +16,15 @@ const RadioInput = ({
     // setFormValues((prevValues) => ({ ...prevValues, [name]: e.target.value }));
   };
 
-
   return (
     <div style={{ margin: "20px 0px" }}>
       <label className="custom-input-label">
         <b>{label}</b>
-        <Tooltip placement="top" title={tooltip}>
-          <FaCircleQuestion />
-        </Tooltip>
+        {tooltip && (
+          <Tooltip placement="top" title={tooltip}>
+            <FaCircleQuestion />
+          </Tooltip>
+        )}
       </label>
       <Radio.Group value={value} buttonStyle="solid">
         {choices.map((choice, index) => (

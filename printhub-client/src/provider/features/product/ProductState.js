@@ -12,6 +12,12 @@ export const initialProductState = {
     isSuccess: false,
     message: "",
   },
+  getProductByIdState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
   createProductstate: {
     isLoading: false,
     isError: false,
@@ -37,6 +43,13 @@ export const resetProductState = (state) => {
     isError: false,
     isSuccess: false,
     message: "",
+  }
+  state.getProductByIdState={
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+    product:null
   }
   state.createProductstate={
     isLoading: false,

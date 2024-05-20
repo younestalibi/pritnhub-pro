@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import CartServices from "./CartServices";
-import { resetCartState,initialCartState } from "./CartState";
+import { resetCartState, initialCartState } from "./CartState";
 
-// export const getCatalogs = createAsyncThunk(
-//   "catalog/get-all",
-//   async (thunkAPI) => {
-//     try {
-//       return await catalogService.getCatalogs();
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const getCartItems = createAsyncThunk(
+  "cart/get-all-items",
+  async (thunkAPI) => {
+    try {
+      return await CartServices.getCartItems();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const addCartItem = createAsyncThunk(
   "cart/create-one-item",
   async (cart, thunkAPI) => {
@@ -50,27 +50,27 @@ export const CartSlice = createSlice({
   reducers: {},
   extraReducers: (buildeer) => {
     buildeer
-      // get-all-catalogs
-      // .addCase(getCatalogs.pending, (state) => {
-      //   resetCatalogState(state);
-      //   state.getCatalogsState.isLoading = true;
-      // })
-      // .addCase(getCatalogs.fulfilled, (state, action) => {
-      //   state.getCatalogsState.isError = false;
-      //   state.getCatalogsState.isLoading = false;
-      //   state.getCatalogsState.isSuccess = true;
-      //   state.getCatalogsState.message = action.payload.message;
-      //   state.catalogs = action.payload.catalogs;
-      // })
-      // .addCase(getCatalogs.rejected, (state, action) => {
-      //   state.getCatalogsState.isError = true;
-      //   state.getCatalogsState.isLoading = false;
-      //   state.getCatalogsState.isSuccess = false;
-      //   console.log(action)
-      //   state.getCatalogsState.message = action.payload.error;
-      // })
-      // // get-all-catalogs
-      // //   =========================================================================
+      // get-all-cart-items
+      .addCase(getCartItems.pending, (state) => {
+        resetCartState(state);
+        state.getCartItemsState.isLoading = true;
+      })
+      .addCase(getCartItems.fulfilled, (state, action) => {
+        state.getCartItemsState.isError = false;
+        state.getCartItemsState.isLoading = false;
+        state.getCartItemsState.isSuccess = true;
+        state.getCartItemsState.message = action.payload.message;
+        state.carts = action.payload.cart.CartItems;
+      })
+      .addCase(getCartItems.rejected, (state, action) => {
+        console.log(action);
+        state.getCartItemsState.isError = true;
+        state.getCartItemsState.isLoading = false;
+        state.getCartItemsState.isSuccess = false;
+        state.getCartItemsState.message = action.payload.error;
+      })
+      // get-all-cart-items
+      //   =========================================================================
       // // delete-one-by-id
       // .addCase(deleteCatalogById.pending, (state) => {
       //   resetCatalogState(state);
@@ -105,16 +105,16 @@ export const CartSlice = createSlice({
         state.addCartItemState.isSuccess = true;
         state.addCartItemState.message = action.payload.message;
         state.carts.unshift(action.payload.cartItem);
-        console.log(action)
-        console.log(state.carts)
+        console.log(action);
+        console.log(state.carts);
       })
       .addCase(addCartItem.rejected, (state, action) => {
         state.addCartItemState.isError = true;
         state.addCartItemState.isLoading = false;
         state.addCartItemState.isSuccess = false;
         state.addCartItemState.message = action.payload.error;
-        console.log(action)
-        console.log(state.carts)
+        console.log(action);
+        console.log(state.carts);
       })
       // add-cart-item
       //   =========================================================================

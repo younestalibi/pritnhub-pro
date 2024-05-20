@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, InputNumber, Modal, Select, Upload, notification } from "antd";
+import { Flex, Input, InputNumber, Modal, Select, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   getCatalogs,
@@ -24,7 +24,7 @@ const ProductCreate = (props) => {
   const { createProductstate } = useSelector((state) => state.product);
 
   const dispatch = useDispatch();
-  const { catalogs ,getCatalogsState} = useSelector((state) => state.catalog);
+  const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
 
   useEffect(() => {
     if (catalogs.length == 0) {
@@ -62,7 +62,11 @@ const ProductCreate = (props) => {
       image: [],
       catalog_id: null,
       options: null,
-      quantity: 0,
+      quantity: {
+        max: null,
+        min: null,
+        step: null,
+      },
       price: null,
       description: "",
     },
@@ -77,9 +81,11 @@ const ProductCreate = (props) => {
       image: Yup.array()
         .length(1, "Please upload only one image")
         .required("Image is required*"),
-      quantity: Yup.number()
-        .min(1, "Quantity must be at least 1")
-        .required("Quantity is required*"),
+      quantity: Yup.object({
+        max: Yup.number().required("Max quantity is required"),
+        min: Yup.number().required("Min quantity is required"),
+        step: Yup.number().required("Step amount is required"),
+      }),
     }),
     onSubmit: (values) => {
       const formData = {
@@ -150,19 +156,53 @@ const ProductCreate = (props) => {
           <label htmlFor="quantity">
             Quantity <span>*</span>
           </label>
-          <InputNumber
-            id="quantity"
-            name="quantity"
-            style={{ display: "block", width: "100%" }}
-            min={0}
-            value={formik.values.quantity}
-            onChange={(quantity) => {
-              formik.setFieldValue("quantity", quantity);
-            }}
-          />
-          {formik.errors.quantity && formik.touched.quantity && (
-            <div style={{ color: "red" }}>{formik.errors.quantity}</div>
-          )}
+          <Flex gap={10}>
+          <div>
+            <InputNumber
+              placeholder="Max quantity to buy"
+              id="quantity.max"
+              name="quantity.max"
+              style={{ display: "block", width: "100%", marginBottom: "10px" }}
+              min={0}
+              value={formik.values.quantity.max}
+              onChange={(value) => formik.setFieldValue("quantity.max", value)}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.quantity?.max && formik.errors.quantity?.max ? (
+              <div style={{ color: "red" }}>{formik.errors.quantity.max}</div>
+            ) : null}
+          </div>
+          <div>
+            <InputNumber
+              placeholder="Min quantity to buy"
+              id="quantity.min"
+              name="quantity.min"
+              style={{ display: "block", width: "100%", marginBottom: "10px" }}
+              min={0}
+              value={formik.values.quantity.min}
+              onChange={(value) => formik.setFieldValue("quantity.min", value)}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.quantity?.min && formik.errors.quantity?.min ? (
+              <div style={{ color: "red" }}>{formik.errors.quantity.min}</div>
+            ) : null}
+          </div>
+          <div>
+            <InputNumber
+              placeholder="Step amount"
+              id="quantity.step"
+              name="quantity.step"
+              style={{ display: "block", width: "100%", marginBottom: "10px" }}
+              min={0}
+              value={formik.values.quantity.step}
+              onChange={(value) => formik.setFieldValue("quantity.step", value)}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.quantity?.step && formik.errors.quantity?.step ? (
+              <div style={{ color: "red" }}>{formik.errors.quantity.step}</div>
+            ) : null}
+          </div>
+          </Flex>
         </div>
         <div>
           <label htmlFor="price">
@@ -236,6 +276,7 @@ const ProductCreate = (props) => {
             onSave={(options) => {
               formik.setFieldValue("options", options);
             }}
+            options={formik.getFieldProps('options').value}
             id="options"
             name="options"
           />

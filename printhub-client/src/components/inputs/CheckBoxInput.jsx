@@ -52,9 +52,11 @@ const CheckBoxInput = ({
     <div style={{ margin: "20px 0px" }}>
       <label className="custom-input-label">
         <b>{label}</b>
-        <Tooltip placement="top" title={tooltip}>
-          <FaCircleQuestion />
-        </Tooltip>
+        {tooltip && (
+          <Tooltip placement="top" title={tooltip}>
+            <FaCircleQuestion />
+          </Tooltip>
+        )}
       </label>
       <Checkbox.Group value={value}>
         {choices.map((choice, index) => (

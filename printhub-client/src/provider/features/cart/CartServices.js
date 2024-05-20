@@ -9,11 +9,20 @@ const addCartItem = async (cart) => {
     throw error.response.data;
   }
 };
+const getCartItems = async () => {
+  try {
+    const response = await axiosHttp.get(`/cart`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 
 
 const CartServices = {
   addCartItem,
+  getCartItems,
 };
 
 export default CartServices;

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
-    });
+    }); 
   
     Cart.associate = (models) => {
       Cart.belongsTo(models.User, {

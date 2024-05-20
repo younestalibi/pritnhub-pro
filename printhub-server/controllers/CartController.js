@@ -3,7 +3,7 @@ const { Cart, CartItem, Product } = require("../models");
 // Get all items in the user's cart
 exports.index = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user ID is available in the request
+    const userId = req.userId;
     const cart = await Cart.findOne({
       where: { user_id: userId },
       include: {
@@ -13,9 +13,12 @@ exports.index = async (req, res) => {
         },
       },
     });
+    console.log(cart);
 
     if (cart) {
-      return res.status(200).json({ cart, message: "Returned Cart Successfully!" });
+      return res
+        .status(200)
+        .json({ cart, message: "Returned Cart Successfully!" });
     } else {
       res.status(404).json({ error: "Cart not found" });
     }
@@ -27,20 +30,28 @@ exports.index = async (req, res) => {
 // Add an item to the cart
 exports.addToCart = async (req, res) => {
   try {
-    // const userId = req.user.id; 
     const userId = req.userId;
     const { productId, quantity, customizations } = req.body;
 
     let [cart] = await Cart.findOrCreate({ where: { user_id: userId } });
 
-    const cartItem = await CartItem.create({
+    const newCartItem = await CartItem.create({
       cart_id: cart.id,
       product_id: productId,
       quantity,
       customizations,
     });
 
-    res.status(201).json({ message: "Item added to cart successfully", cartItem });
+    const cartItem = await CartItem.findOne({
+      where: { id: newCartItem.id },
+      include: {
+        model: Product,
+      },
+    });
+
+    res
+      .status(201)
+      .json({ message: "Item added to cart successfully", cartItem });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -61,7 +72,9 @@ exports.updateCartItem = async (req, res) => {
     cartItem.customizations = customizations;
     await cartItem.save();
 
-    res.status(200).json({ message: "CartItem updated successfully", cartItem });
+    res
+      .status(200)
+      .json({ message: "CartItem updated successfully", cartItem });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -78,7 +91,9 @@ exports.removeFromCart = async (req, res) => {
 
     await CartItem.destroy({ where: { id: cartItemId } });
 
-    res.status(200).json({ message: "CartItem removed successfully", id: cartItemId });
+    res
+      .status(200)
+      .json({ message: "CartItem removed successfully", id: cartItemId });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
