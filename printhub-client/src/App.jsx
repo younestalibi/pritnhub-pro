@@ -14,6 +14,8 @@ import ProductDetail from "./view/client/products/ProductDetail";
 import CartIndex from "./view/client/cart/CartIndex";
 import useAuth from "./hooks/useAuth";
 import Loader from "./components/loader/Loader";
+import Page404 from "./view/abort/404";
+import Checkout from "./view/client/checkout/Checkout";
 function App() {
   const { user, getUserState } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
@@ -23,7 +25,7 @@ function App() {
     dispatch(getUser());
   }, []);
   if (getUserState.isLoading) {
-    return <Loader/>;
+    return <Loader />;
   } else {
     return (
       <BrowserRouter>
@@ -38,9 +40,19 @@ function App() {
             <Route path="/category/:category" element={<ProductList />} />
             <Route path="/product/:product" element={<ProductDetail />} />
             <Route path="login" element={<Authentication />} />
-            <Route path="/product/:id/:productName" element={<ProductDetail />} />  {/* the path of this route must be changed */}
-            {isAuthenticated && <Route path="/cart" element={<CartIndex />} />}
+            <Route
+              path="/product/:id/:productName"
+              element={<ProductDetail />}
+            />
+
+            {isAuthenticated && (
+              <>
+                <Route path="/cart" element={<CartIndex />} />
+                <Route path="/checkout" element={<Checkout />} />
+              </>
+            )}
           </Route>
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </BrowserRouter>
     );
