@@ -12,6 +12,18 @@ export const initialCartState = {
     isSuccess: false,
     message: "",
   },
+  deleteItemByIdState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
+  clearCartState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
   
 };
 export const resetCartState = (state) => {
@@ -22,6 +34,18 @@ export const resetCartState = (state) => {
     message: "",
   }
   state.getCartItemsState={
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  }
+  state.deleteItemByIdState={
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  }
+  state.clearCartState={
     isLoading: false,
     isError: false,
     isSuccess: false,
