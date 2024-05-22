@@ -66,7 +66,6 @@ const ProductIndex = () => {
       });
     }
   }, [deleteProductByIdState.isSuccess, deleteProductByIdState.isError]);
-
   const deleteRecord = (e) => {
     dispatch(deleteProductById(deleteId));
     setOpen(false);
@@ -171,7 +170,7 @@ const ProductIndex = () => {
         columns={columns}
         dataSource={data}
         loading={getProductsState.isLoading}
-        scroll={{ x: 1000}}
+        scroll={{ x: 1000 }}
       />
       <Confirmation
         setOpen={setOpen}
@@ -204,41 +203,33 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
-
   },
   {
     title: "Description",
     dataIndex: "description",
-
   },
   {
     title: "Image",
     dataIndex: "image",
-
   },
   {
     title: "Catalog",
     dataIndex: "catalog",
-
   },
   {
     title: "Options",
     dataIndex: "options",
-
   },
   {
     title: "Quantity",
     dataIndex: "quantity",
-
   },
   {
     title: "Price",
     dataIndex: "price",
-
   },
   {
     title: "Actions",
     dataIndex: "action",
-
   },
 ];

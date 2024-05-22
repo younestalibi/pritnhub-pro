@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../provider/features/auth/AuthSlice";
-import { Button, Input } from "antd";
+import { Button, Input, notification } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 

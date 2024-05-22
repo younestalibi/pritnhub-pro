@@ -73,10 +73,11 @@ export const CartSlice = createSlice({
         state.carts = action.payload.cart.CartItems;
       })
       .addCase(getCartItems.rejected, (state, action) => {
+        console.log(action)
         state.getCartItemsState.isError = true;
         state.getCartItemsState.isLoading = false;
         state.getCartItemsState.isSuccess = false;
-        state.getCartItemsState.message = action.payload.error;
+        state.getCartItemsState.message = action.payload?.error|| 'Failed to fetch items';;
       })
       // get-all-cart-items
       //   =========================================================================

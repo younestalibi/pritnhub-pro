@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import authService from "./AuthServices";
-
-import { resetAuthState, initialAuthState } from "./ProductState";
+import { initialAuthState, resetAuthState } from "./AuthState";
 
 const initialState = initialAuthState;
 export const login = createAsyncThunk(
@@ -31,6 +30,7 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 });
+
 export const getUser = createAsyncThunk("auth/get-user", async (thunkAPI) => {
   try {
     return await authService.getUser();
@@ -38,6 +38,29 @@ export const getUser = createAsyncThunk("auth/get-user", async (thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 });
+export const updateProfile = createAsyncThunk(
+  "auth/update-profile",
+  async (profile, thunkAPI) => {
+    try {
+      return await authService.updateProfile(profile);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const updatePassword = createAsyncThunk(
+  "auth/update-password",
+  async (password, thunkAPI) => {
+    try {
+      return await authService.updatePassword(password);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const resetStateUser = createAction("auth/reset-state");
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
@@ -46,7 +69,7 @@ export const authSlice = createSlice({
     buildeer
       // register
       .addCase(register.pending, (state) => {
-        resetAuthState(state)
+        resetAuthState(state);
         state.registerState.isLoading = true;
       })
       .addCase(register.fulfilled, (state, action) => {
@@ -55,6 +78,7 @@ export const authSlice = createSlice({
         state.registerState.isSuccess = true;
         state.registerState.message = action.payload.message;
         state.user = action.payload.user;
+        state.profile = action.payload.profile;
         localStorage.setItem("token", action.payload.token);
       })
       .addCase(register.rejected, (state, action) => {
@@ -67,7 +91,7 @@ export const authSlice = createSlice({
       //   ----------------------
       // login
       .addCase(login.pending, (state) => {
-        resetAuthState(state)
+        resetAuthState(state);
         state.loginState.isLoading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
@@ -76,7 +100,9 @@ export const authSlice = createSlice({
         state.loginState.isSuccess = true;
         state.loginState.message = action.payload.message;
         state.user = action.payload.user;
+        state.profile = action.payload.user.profile;
         localStorage.setItem("token", action.payload.token);
+        console.log(state.profile);
       })
       .addCase(login.rejected, (state, action) => {
         state.loginState.isError = true;
@@ -88,10 +114,10 @@ export const authSlice = createSlice({
       //   ----------------------
       // logout
       .addCase(logout.pending, (state) => {
-        resetAuthState(state)
+        resetAuthState(state);
         state.logoutState.isLoading = true;
       })
-      .addCase(logout.fulfilled, (state,action) => {
+      .addCase(logout.fulfilled, (state, action) => {
         state.logoutState.isLoading = false;
         state.logoutState.isSuccess = true;
         state.logoutState.message = action.payload.message;
@@ -108,7 +134,7 @@ export const authSlice = createSlice({
       //   ----------------------
       // getUser
       .addCase(getUser.pending, (state) => {
-        resetAuthState(state)
+        resetAuthState(state);
         state.getUserState.isLoading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
@@ -117,15 +143,62 @@ export const authSlice = createSlice({
         state.getUserState.isSuccess = true;
         state.getUserState.message = action.payload.message;
         state.user = action.payload.user;
+        state.profile = action.payload.user.profile;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.getUserState.isError = true;
         state.getUserState.isSuccess = false;
-        state.getUserState.message = action.error;
+        state.getUserState.message = action.payload.error;
         state.getUserState.isLoading = false;
+      })
+      // getUser
+      //   ----------------------
+      // update-profile
+      .addCase(updateProfile.pending, (state) => {
+        resetAuthState(state);
+        state.updateProfileState.isLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.updateProfileState.isError = false;
+        state.updateProfileState.isLoading = false;
+        state.updateProfileState.isSuccess = true;
+        state.updateProfileState.message = action.payload.message;
+        state.user = action.payload.user;
+        state.profile = action.payload.user.profile;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.updateProfileState.isError = true;
+        state.updateProfileState.isSuccess = false;
+        state.updateProfileState.message = action.payload.error;
+        state.updateProfileState.isLoading = false;
+      })
+      // update-profile
+      //   ----------------------
+      // update-password
+      .addCase(updatePassword.pending, (state) => {
+        resetAuthState(state);
+        state.updatePasswordState.isLoading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        console.log(action)
+        state.updatePasswordState.isError = false;
+        state.updatePasswordState.isLoading = false;
+        state.updatePasswordState.isSuccess = true;
+        state.updatePasswordState.message = action.payload.message;
+      })
+      .addCase(updatePassword.rejected, (state, action) => { 
+        console.log(action)
+        state.updatePasswordState.isError = true;
+        state.updatePasswordState.isSuccess = false;
+        state.updatePasswordState.message = action.payload.error;
+        state.updatePasswordState.isLoading = false;
+      })
+      // update-password
+      //   ----------------------
+      // reset-state-user
+      .addCase(resetStateUser, (state) => {
+        resetAuthState(state);
       });
-    // getUser
-    //   ----------------------
   },
 });
 

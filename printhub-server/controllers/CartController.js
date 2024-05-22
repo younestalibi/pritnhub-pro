@@ -13,7 +13,6 @@ exports.index = async (req, res) => {
         },
       },
     });
-    console.log(cart);
 
     if (cart) {
       return res

@@ -16,6 +16,8 @@ import useAuth from "./hooks/useAuth";
 import Loader from "./components/loader/Loader";
 import Page404 from "./view/abort/404";
 import Checkout from "./view/client/checkout/Checkout";
+import CheckoutStepOne from "./view/client/checkout/CheckoutStepOne";
+import ProfileIndex from "./view/client/profile/ProfileIndex";
 function App() {
   const { user, getUserState } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
@@ -49,6 +51,7 @@ function App() {
               <>
                 <Route path="/cart" element={<CartIndex />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/profile" element={<ProfileIndex />} />
               </>
             )}
           </Route>

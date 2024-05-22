@@ -173,7 +173,7 @@ const ProductDetail = () => {
     ? [
         ...product.options.map((option, index) => ({
           key: index + 1,
-          label: option.name,
+          label: option.label,
           children:
             formik.values[option.name] == null
               ? "------------"

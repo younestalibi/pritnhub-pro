@@ -26,28 +26,8 @@ export const initialState = {
   },
 };
 export const resetCatalogState = (state) => {
-  state.getCatalogsState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  },
-  state.deleteCatalogByIdState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  },
-  state.createCatalogState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  }
-  state.updateCatalogState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  }
+  state.getCatalogsState=initialState.getCatalogsState
+  state.deleteCatalogByIdState=initialState.deleteCatalogByIdState
+  state.createCatalogState=initialState.createCatalogState
+  state.updateCatalogState=initialState.updateCatalogState
 };
