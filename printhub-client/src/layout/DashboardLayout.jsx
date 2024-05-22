@@ -5,6 +5,7 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  StockOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -46,6 +47,12 @@ const DasbhoardLayout = () => {
               icon: <UploadOutlined />,
               label: "Product",
             },
+            {
+              key: "article",
+              icon:  <StockOutlined />,
+              label: "Article",
+            },
+           
           ]}
         />
       </Sider>

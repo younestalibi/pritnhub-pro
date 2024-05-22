@@ -27,9 +27,7 @@ const ProductIndex = () => {
   const [open, setOpen] = useState(false);
   const [createProductModal, setCreateProductModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
-  const { products, getProductsState, deleteProductByIdState } = useSelector(
-    (state) => state.product
-  );
+  const { products, getProductsState, deleteProductByIdState } = useSelector((state) => state.product);
   const { catalogs } = useSelector((state) => state.catalog);
   const data = [];
   const dispatch = useDispatch();
@@ -74,6 +72,7 @@ const ProductIndex = () => {
     setOpen(true);
     setDeleteId(e);
   };
+  console.log(products)
   for (let i = 0; i < products.length; i++) {
     data.push({
       key: i,
@@ -92,9 +91,9 @@ const ProductIndex = () => {
       quantity: products[i].quantity.max,
       options: (
         <Popover
-          content={products[i].options.map((option, i) => (
-            <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
-          ))}
+          // content={products[i].options.map((option, i) => (
+          //   <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
+          // ))}
           title="Form Details"
           trigger="hover"
         >

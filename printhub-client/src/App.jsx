@@ -9,6 +9,7 @@ import { getUser } from "./provider/features/auth/AuthSlice";
 import DasbhoardLayout from "./layout/DashboardLayout";
 import CatalogIndex from "./view/admin/catalog/CatalogIndex";
 import ProductIndex from "./view/admin/product/ProductIndex";
+import ArticleIndex from "./view/admin/article/ArticleIndex";
 import DefaultLayout from "./layout/DefaultLayout";
 import ProductDetail from "./view/client/products/ProductDetail";
 import CartIndex from "./view/client/cart/CartIndex";
@@ -35,8 +36,8 @@ function App() {
           <Route path="admin" element={<DasbhoardLayout />}>
             <Route path="catalog" element={<CatalogIndex />} />
             <Route path="product" element={<ProductIndex />} />
+            <Route path="article" element={<ArticleIndex />} />
           </Route>
-
           <Route path="/" element={<DefaultLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/category/:category" element={<ProductList />} />
