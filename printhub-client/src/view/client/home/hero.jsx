@@ -1,4 +1,5 @@
 import { Carousel ,Button} from 'antd';
+import { Link } from "react-router-dom";
 const contentStyle = {
   height: '160px',
   color: '#fff',
@@ -26,7 +27,10 @@ export default function AppHero(){
                 <h3 >{item.title}</h3>
                 <p>{item.content}</p>
                 <div className='btnHolder'>
-                 <Button type="primary" size='large'>Discover our products</Button>
+
+                  <Link to="/all-products">
+                  <Button type="primary" size='large'>Discover our products</Button>
+                </Link>
                 </div>
               </div>
               </div>

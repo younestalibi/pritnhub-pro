@@ -40,3 +40,6 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+ProductCard.propTypes = {
+  product: {}
+}
