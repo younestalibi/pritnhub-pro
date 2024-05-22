@@ -41,136 +41,32 @@ const ProductDetail = () => {
   const { carts, addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
-  // const product = {
-  //   catalog_id: "353",
-  //   createdAt: "2024-05-16T10:49:12.378Z",
-  //   description: "High-quality business cards to leave a lasting impression.",
-  //   id: 1,
-  //   images: [
-  //     {
-  //       original: "https://picsum.photos/id/1018/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1018/250/150/",
-  //     },
-  //     {
-  //       original: "https://picsum.photos/id/1015/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1015/250/150/",
-  //     },
-  //     {
-  //       original: "https://picsum.photos/id/1019/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1019/250/150/",
-  //     },
-  //     {
-  //       original: "https://picsum.photos/id/1018/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1018/250/150/",
-  //     },
-  //     {
-  //       original: "https://picsum.photos/id/1015/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1015/250/150/",
-  //     },
-  //     {
-  //       original: "https://picsum.photos/id/1019/1000/600/",
-  //       thumbnail: "https://picsum.photos/id/1019/250/150/",
-  //     },
-  //   ],
-  //   name: "Premium Business Cards",
-  //   options: [
-  //     {
-  //       type: "text",
-  //       name: "name",
-  //       label: "Name",
-  //       placeholder: "Enter your name",
-  //       tooltip: "Your full name as it will appear on the business card",
-  //       priceAdjustment: 0,
-  //     },
-  //     {
-  //       type: "text",
-  //       name: "company",
-  //       label: "Company Name",
-  //       placeholder: "Enter your company name",
-  //       tooltip: "Your company name as it will appear on the business card",
-  //       priceAdjustment: 0,
-  //     },
-  //     {
-  //       type: "select",
-  //       name: "paper_type",
-  //       label: "Paper Type",
-  //       choices: [
-  //         { value: "Matte", priceAdjustment: 0 },
-  //         { value: "Glossy", priceAdjustment: 10 },
-  //         { value: "Textured", priceAdjustment: 20 },
-  //         { value: "Recycled", priceAdjustment: 5 },
-  //       ],
-  //       tooltip: "Choose the type of paper for your business cards",
-  //     },
-  //     {
-  //       type: "radio",
-  //       name: "size",
-  //       label: "Size",
-  //       choices: [
-  //         { value: "3.5 x 2 inches", priceAdjustment: 0 },
-  //         { value: "2.5 x 2.5 inches", priceAdjustment: 5 },
-  //         { value: "2.125 x 3.375 inches", priceAdjustment: 10 },
-  //         { value: "3.5 x 4 inches", priceAdjustment: 15 },
-  //         { value: "3.5 x 5.5 inches", priceAdjustment: 20 },
-  //         { value: "3.125 x 4.375 inches", priceAdjustment: 25 },
-  //       ],
-  //       tooltip: "Select the size of your business cards",
-  //     },
-  //     {
-  //       type: "radio",
-  //       name: "corner_style",
-  //       label: "Corner Style",
-  //       choices: [
-  //         { value: "Square", priceAdjustment: 0 },
-  //         { value: "Rounded", priceAdjustment: 10 },
-  //       ],
-  //       tooltip: "Select the corner style for your business cards",
-  //     },
-  //     {
-  //       type: "checkbox",
-  //       name: "additional_features",
-  //       label: "Additional Features",
-  //       choices: [
-  //         { value: "Foil Stamping", priceAdjustment: 30 },
-  //         { value: "Embossing", priceAdjustment: 25 },
-  //         { value: "Spot UV", priceAdjustment: 20 },
-  //         { value: "Custom Shapes", priceAdjustment: 50 },
-  //       ],
-  //       tooltip: "Choose any additional features for your business cards",
-  //     },
-  //   ],
-  //   basePrice: 20,
-  //   quantity: {
-  //     min: 100,
-  //     max: 1000,
-  //     step: 100,
-  //     label: "Quantity",
-  //     name: "quantity",
-  //     tooltip: "Select the number of business cards you want to print",
-  //   },
-  //   updatedAt: "2024-05-16T10:49:12.378Z",
-  // };
-console.log(product)
+  console.log(product);
   const calculateTotalPrice = (formValues) => {
-    if (!product) return "------------";
+    if (!product) {
+      return {
+        totalPrice: "-----------",
+        totalUnit: "-----------",
+      };
+    }
 
-    let totalPrice = product.price;
-    if (!formValues["quantity"]) {
-      totalPrice = "------------";
-    } else {
-      totalPrice *= formValues["quantity"];
+    let totalPrice = parseFloat(product.price);
+    let customizationTotal = 0;
+
+    if (formValues["quantity"]) {
+      // totalPrice *= formValues["quantity"];
       product.options.forEach((option) => {
         const value = formValues[option.name];
 
         if (option.type === "number") {
-          const number = value;
-          totalPrice *= Number(number);
+          // const number = value;
+          // totalPrice *= parseFloat(number);
         } else if (option.type === "select" || option.type === "radio") {
           const choice = option.choices.find(
             (choice) => choice.value === value
           );
           if (choice) {
-            totalPrice += Number(choice.priceAdjustment);
+            customizationTotal += parseFloat(choice.priceAdjustment);
           }
         } else if (option.type === "checkbox") {
           const selectedChoices = value || [];
@@ -179,17 +75,22 @@ console.log(product)
               (choice) => choice.value === selectedChoice
             );
             if (choice) {
-              totalPrice += Number(choice.priceAdjustment);
+              customizationTotal += parseFloat(choice.priceAdjustment);
             }
           });
         }
       });
+      return {
+        totalPrice: (totalPrice + customizationTotal) * formValues["quantity"],
+        totalUnit: totalPrice + customizationTotal,
+      };
     }
-
-    return totalPrice;
+    return {
+      totalPrice: "-----------",
+      totalUnit: "-----------",
+    };
   };
 
-  // const quantities = product?['hi']:[];
   const quantities = product
     ? Array.from(
         {
@@ -208,16 +109,7 @@ console.log(product)
     : [];
 
   console.log(product);
-  // if (product) {
-  // for (
-  //   let i = product.quantity.min;
-  //   i <= product.quantity.max;
-  //   i += product.quantity.step
-  // ) {
-  //   quantities.push({ value: i });
-  // }
 
-  // }
   useEffect(() => {
     dispatch(getProductById(id));
   }, []);
@@ -281,7 +173,7 @@ console.log(product)
     ? [
         ...product.options.map((option, index) => ({
           key: index + 1,
-          label: option.name,
+          label: option.label,
           children:
             formik.values[option.name] == null
               ? "------------"
@@ -289,12 +181,22 @@ console.log(product)
               ? formik.values[option.name].join(", ")
               : formik.values[option.name],
         })),
+
         {
           key: product.options.length + 1,
+          label: <span style={{ color: "red" }}>Total Unit</span>,
+          children: (
+            <span style={{ color: "red" }}>
+              {calculateTotalPrice(formik.values).totalUnit}
+            </span>
+          ),
+        },
+        {
+          key: product.options.length + 2,
           label: <b style={{ color: "red" }}>Total Price</b>,
           children: (
             <Tag bordered={false} color="magenta">
-              <b>{calculateTotalPrice(formik.values)}</b>
+              <b>{calculateTotalPrice(formik.values).totalPrice}</b>
             </Tag>
           ),
         },
@@ -326,7 +228,7 @@ console.log(product)
       align={"stretch"}
       style={{ marginTop: "40px" }}
     >
-      <Col md={{ span: 10 }} sm={{ span: 20 }}>
+      <Col md={{ span: 11 }} sm={{ span: 24 }}>
         <Skeleton
           paragraph={{ rows: 0 }}
           style={{ width: "500px" }}
@@ -355,7 +257,7 @@ console.log(product)
           />
         </div>
       </Col>
-      <Col md={{ span: 10 }} sm={{ span: 20 }}>
+      <Col md={{ span: 11 }} sm={{ span: 24 }}>
         <div>
           <Skeleton active={true} />
           <form>
@@ -380,12 +282,8 @@ console.log(product)
       </Col>
     </Row>
   ) : getProductByIdState.product ? (
-    <Row
-      justify={"space-evenly"}
-      align={"stretch"}
-      style={{ marginTop: "40px" }}
-    >
-      <Col md={{ span: 10 }} sm={{ span: 20 }}>
+    <Row justify={"space-evenly"} align={"stretch"}>
+      <Col md={{ span: 11 }} sm={{ span: 24 }}>
         <BreadCrumb titles={["home", product.Catalog.name, product.name]} />
         <div style={{ position: "sticky", top: "-175px" }}>
           <ImageGallery
@@ -407,7 +305,7 @@ console.log(product)
           />
         </div>
       </Col>
-      <Col md={{ span: 10 }} sm={{ span: 20 }}>
+      <Col md={{ span: 11 }} sm={{ span: 24 }}>
         <div>
           <Title level={3}>{product.name}</Title>
           <Paragraph

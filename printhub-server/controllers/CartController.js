@@ -13,7 +13,6 @@ exports.index = async (req, res) => {
         },
       },
     });
-    console.log(cart);
 
     if (cart) {
       return res
@@ -102,7 +101,7 @@ exports.removeFromCart = async (req, res) => {
 // Clear all items from the user's cart
 exports.clearCart = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user ID is available in the request
+    const userId = req.userId;
     const cart = await Cart.findOne({ where: { user_id: userId } });
 
     if (!cart) {

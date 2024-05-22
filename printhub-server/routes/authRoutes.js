@@ -9,5 +9,7 @@ router.post('/login',loginValidation, AuthController.login);
 router.get('/user', authMiddleware, AuthController.getUser);
 router.post('/logout', authMiddleware, AuthController.logout);
 router.delete('/user', authMiddleware, AuthController.deleteUser);
+router.put('/update',authMiddleware, AuthController.updateProfile);
+router.put('/update/password',authMiddleware, AuthController.updatePassword);
 
 module.exports = router;

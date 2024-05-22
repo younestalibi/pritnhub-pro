@@ -31,12 +31,30 @@ const getUser = async () => {
     throw error.response.data;
   }
 };
+const updateProfile = async (profile) => {
+  try {
+    const response = await axiosHttp.put(`auth/update`,profile);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+const updatePassword = async (password) => {
+  try {
+    const response = await axiosHttp.put(`auth/update/password`,password);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 const authService = {
   login,
   getUser,
   register,
   logout,
+  updateProfile,
+  updatePassword
 };
 
 export default authService;

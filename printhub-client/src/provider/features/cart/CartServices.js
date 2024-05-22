@@ -17,12 +17,30 @@ const getCartItems = async () => {
     throw error.response.data;
   }
 };
+const deleteItemById = async (id) => {
+  try {
+    const response = await axiosHttp.delete(`/cart/remove/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+const clearCart = async () => {
+  try {
+    const response = await axiosHttp.delete(`/cart/clear`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 
 
 const CartServices = {
   addCartItem,
   getCartItems,
+  deleteItemById,
+  clearCart
 };
 
 export default CartServices;

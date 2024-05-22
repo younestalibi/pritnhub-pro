@@ -1,9 +1,6 @@
-// const getUserfromLocalStorage = localStorage.getItem("token")
-//   ? localStorage.getItem("token")
-//   : null;
-
 export const initialAuthState = {
   user: null,
+  profile: null,
   registerState: {
     isLoading: false,
     isError: false,
@@ -28,30 +25,24 @@ export const initialAuthState = {
     isSuccess: false,
     message: "",
   },
-};
-export const resetAuthState = (state) => {
-  state.registerState={
+  updateProfileState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
     message: "",
   },
-  state.loginState={
+  updatePasswordState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
     message: "",
-  }
-  state.logoutState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  }
-  state.getUserState={
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  }
+  },
+};
+export const resetAuthState = (state) => {
+  state.registerState = initialAuthState.registerState;
+  state.loginState = initialAuthState.loginState;
+  state.logoutState = initialAuthState.loginState;
+  state.getUserState = initialAuthState.getUserState;
+  state.updateProfileState = initialAuthState.updateProfileState;
+  state.updatePasswordState = initialAuthState.updatePasswordState;
 };

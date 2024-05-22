@@ -22,16 +22,26 @@ export const addCartItem = createAsyncThunk(
     }
   }
 );
-// export const deleteCatalogById = createAsyncThunk(
-//   "catalog/delete-one",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await catalogService.deleteCatalogById(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const deleteItemById = createAsyncThunk(
+  "cart/delete-one",
+  async (id, thunkAPI) => {
+    try {
+      return await CartServices.deleteItemById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const clearCart = createAsyncThunk(
+  "cart/clear-cart",
+  async (thunkAPI) => {
+    try {
+      return await CartServices.clearCart();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 // export const updateCatalog = createAsyncThunk(
 //   "catalog/update-one",
 //   async (catalog, thunkAPI) => {
@@ -63,36 +73,35 @@ export const CartSlice = createSlice({
         state.carts = action.payload.cart.CartItems;
       })
       .addCase(getCartItems.rejected, (state, action) => {
-        console.log(action);
+        console.log(action)
         state.getCartItemsState.isError = true;
         state.getCartItemsState.isLoading = false;
         state.getCartItemsState.isSuccess = false;
-        state.getCartItemsState.message = action.payload.error;
+        state.getCartItemsState.message = action.payload?.error|| 'Failed to fetch items';;
       })
       // get-all-cart-items
       //   =========================================================================
-      // // delete-one-by-id
-      // .addCase(deleteCatalogById.pending, (state) => {
-      //   resetCatalogState(state);
-      //   state.deleteCatalogByIdState.isLoading = true;
-      // })
-      // .addCase(deleteCatalogById.fulfilled, (state, action) => {
-      //   state.deleteCatalogByIdState.isError = false;
-      //   state.deleteCatalogByIdState.isLoading = false;
-      //   state.deleteCatalogByIdState.isSuccess = true;
-      //   state.deleteCatalogByIdState.message = action.payload.message;
-      //   state.catalogs = state.catalogs.filter((catalog) => {
-      //     return catalog.id != action.payload.id;
-      //   });
-      // })
-      // .addCase(deleteCatalogById.rejected, (state, action) => {
-      //   state.deleteCatalogByIdState.isError = true;
-      //   state.deleteCatalogByIdState.isLoading = false;
-      //   state.deleteCatalogByIdState.isSuccess = false;
-      //   state.deleteCatalogByIdState.message = action.payload.error;
-
-      // })
-      // // delete-one-by-id
+      // delete-one-by-id
+      .addCase(deleteItemById.pending, (state) => {
+        resetCartState(state);
+        state.deleteItemByIdState.isLoading = true;
+      })
+      .addCase(deleteItemById.fulfilled, (state, action) => {
+        state.deleteItemByIdState.isError = false;
+        state.deleteItemByIdState.isLoading = false;
+        state.deleteItemByIdState.isSuccess = true;
+        state.deleteItemByIdState.message = action.payload.message;
+        state.carts = state.carts.filter((cart) => {
+          return cart.id != action.payload.id;
+        });
+      })
+      .addCase(deleteItemById.rejected, (state, action) => {
+        state.deleteItemByIdState.isError = true;
+        state.deleteItemByIdState.isLoading = false;
+        state.deleteItemByIdState.isSuccess = false;
+        state.deleteItemByIdState.message = action.payload.error;
+      })
+      // delete-one-by-id
       //   =========================================================================
       // add-cart-item
       .addCase(addCartItem.pending, (state) => {
@@ -105,18 +114,34 @@ export const CartSlice = createSlice({
         state.addCartItemState.isSuccess = true;
         state.addCartItemState.message = action.payload.message;
         state.carts.unshift(action.payload.cartItem);
-        console.log(action);
-        console.log(state.carts);
       })
       .addCase(addCartItem.rejected, (state, action) => {
         state.addCartItemState.isError = true;
         state.addCartItemState.isLoading = false;
         state.addCartItemState.isSuccess = false;
         state.addCartItemState.message = action.payload.error;
-        console.log(action);
-        console.log(state.carts);
       })
       // add-cart-item
+      //   =========================================================================
+      // clear-cart
+      .addCase(clearCart.pending, (state) => {
+        resetCartState(state);
+        state.clearCartState.isLoading = true;
+      })
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.clearCartState.isError = false;
+        state.clearCartState.isLoading = false;
+        state.clearCartState.isSuccess = true;
+        state.clearCartState.message = action.payload.message;
+        state.carts = [];
+      })
+      .addCase(clearCart.rejected, (state, action) => {
+        state.clearCartState.isError = true;
+        state.clearCartState.isLoading = false;
+        state.clearCartState.isSuccess = false;
+        state.clearCartState.message = action.payload.error;
+      })
+      // clear-cart
       //   =========================================================================
       // // update-one
       // .addCase(updateCatalog.pending, (state) => {

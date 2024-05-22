@@ -4,7 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Space, Dropdown, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../provider/features/auth/AuthSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const AvatarProfile = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const AvatarProfile = () => {
   }, [logoutState.isSuccess]);
   const items = [
     {
-      label: <a href="">Profile</a>,
+      label: <Link to={'/profile'}>Profile</Link>,
       key: "0",
     },
 
