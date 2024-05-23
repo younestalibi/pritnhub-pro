@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { User, Profile } = require("../models");
 const secretKey = "your-secret-key";
 const { validationResult } = require("express-validator");
+const Mail = require("../services/EmailService");
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -24,6 +25,7 @@ exports.register = async (req, res) => {
     });
 
     const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "5h" });
+    // await Mail.send(email, "Welcome to Printhub-Pro", "welcome.ejs");
 
     res
       .status(201)
