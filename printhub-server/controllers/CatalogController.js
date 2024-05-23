@@ -2,7 +2,7 @@ const { Catalog } = require("../models");
 const multer = require("multer");
 const fs = require("fs");
 
-const storage = multer.diskStorage({
+const storage = multer.diskStorage({    
   destination: (req, file, cb) => {
     cb(null, "uploads/");
   },
