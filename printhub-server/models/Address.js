@@ -28,17 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       country: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: "Morocco",
-      },
-      state: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email: {
         type: DataTypes.STRING,
         allowNull: false,
       },

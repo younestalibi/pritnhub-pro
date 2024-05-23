@@ -9,14 +9,14 @@ const getAddresses = async () => {
     throw error.response.data;
   }
 };
-// const deleteProductById = async (id) => {
-//   try {
-//     const response = await axiosHttp.delete(`/product/delete/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
+const deleteAddressById = async (id) => {
+  try {
+    const response = await axiosHttp.delete(`/address/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 // const getProductById = async (id) => {
 //   try {
 //     const response = await axiosHttp.get(`/product/${id}`);
@@ -25,14 +25,14 @@ const getAddresses = async () => {
 //     throw error.response.data;
 //   }
 // };
-// const createProduct = async (catalog) => {
-//   try {
-//     const response = await axiosHttp.post(`/product`,catalog,config);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
+const createAddress = async (address) => {
+  try {
+    const response = await axiosHttp.post(`/address`,address);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 // const updateProduct = async ({id,product}) => {
 //   try {
 //     const response = await axiosHttp.put(`/product/update/${id}`,product,config);
@@ -45,8 +45,8 @@ const getAddresses = async () => {
 
 const AddressServices = {
   getAddresses,
-  // deleteProductById,
-  // createProduct,
+  deleteAddressById,
+  createAddress,
   // updateProduct,
   // getProductById
 };

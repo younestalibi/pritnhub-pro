@@ -108,6 +108,7 @@ export const authSlice = createSlice({
         state.loginState.isError = true;
         state.loginState.isSuccess = false;
         state.loginState.isLoading = false;
+        console.log(action)
         state.loginState.message = action.payload.error;
       })
       // login
@@ -148,7 +149,8 @@ export const authSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.getUserState.isError = true;
         state.getUserState.isSuccess = false;
-        state.getUserState.message = action.payload.error;
+        console.log(action)
+        state.getUserState.message = action.payload?.error||'User not found';
         state.getUserState.isLoading = false;
       })
       // getUser
@@ -180,14 +182,12 @@ export const authSlice = createSlice({
         state.updatePasswordState.isLoading = true;
       })
       .addCase(updatePassword.fulfilled, (state, action) => {
-        console.log(action)
         state.updatePasswordState.isError = false;
         state.updatePasswordState.isLoading = false;
         state.updatePasswordState.isSuccess = true;
         state.updatePasswordState.message = action.payload.message;
       })
       .addCase(updatePassword.rejected, (state, action) => { 
-        console.log(action)
         state.updatePasswordState.isError = true;
         state.updatePasswordState.isSuccess = false;
         state.updatePasswordState.message = action.payload.error;

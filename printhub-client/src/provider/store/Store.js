@@ -3,8 +3,8 @@ import AuthSlice from "../features/auth/AuthSlice";
 import CatalogSlice from "../features/catalog/CatalogSlice";
 import ProductSlice from "../features/product/ProductSlice";
 import CartSlice from "../features/cart/CartSlice";
-
 import ArticleSlice from "../features/article/ArticleSlice";
+import AddressSlice from "../features/address/AddressSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +13,7 @@ export const store = configureStore({
     product: ProductSlice, 
     cart: CartSlice, 
     article: ArticleSlice,
+    address: AddressSlice,
 
   },
 });

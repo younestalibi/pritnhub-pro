@@ -56,28 +56,28 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-// Update quantity or customizations of an item in the cart
-exports.updateCartItem = async (req, res) => {
-  const cartItemId = req.params.id;
-  try {
-    const { quantity, customizations } = req.body;
+// // Update quantity or customizations of an item in the cart
+// exports.updateCartItem = async (req, res) => {
+//   const cartItemId = req.params.id;
+//   try {
+//     const { quantity, customizations } = req.body;
 
-    const cartItem = await CartItem.findByPk(cartItemId);
-    if (!cartItem) {
-      return res.status(404).json({ error: "CartItem not found" });
-    }
+//     const cartItem = await CartItem.findByPk(cartItemId);
+//     if (!cartItem) {
+//       return res.status(404).json({ error: "CartItem not found" });
+//     }
 
-    cartItem.quantity = quantity;
-    cartItem.customizations = customizations;
-    await cartItem.save();
+//     cartItem.quantity = quantity;
+//     cartItem.customizations = customizations;
+//     await cartItem.save();
 
-    res
-      .status(200)
-      .json({ message: "CartItem updated successfully", cartItem });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+//     res
+//       .status(200)
+//       .json({ message: "CartItem updated successfully", cartItem });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 // Remove an item from the cart
 exports.removeFromCart = async (req, res) => {

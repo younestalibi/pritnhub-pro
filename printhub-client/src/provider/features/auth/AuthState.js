@@ -39,10 +39,10 @@ export const initialAuthState = {
   },
 };
 export const resetAuthState = (state) => {
-  state.registerState = initialAuthState.registerState;
-  state.loginState = initialAuthState.loginState;
-  state.logoutState = initialAuthState.loginState;
-  state.getUserState = initialAuthState.getUserState;
-  state.updateProfileState = initialAuthState.updateProfileState;
-  state.updatePasswordState = initialAuthState.updatePasswordState;
+  state.registerState = { ...initialAuthState.registerState };
+  state.loginState = { ...initialAuthState.loginState };
+  state.logoutState = { ...initialAuthState.logoutState };
+  state.getUserState = { ...initialAuthState.getUserState };
+  state.updateProfileState = { ...initialAuthState.updateProfileState };
+  state.updatePasswordState = { ...initialAuthState.updatePasswordState };
 };

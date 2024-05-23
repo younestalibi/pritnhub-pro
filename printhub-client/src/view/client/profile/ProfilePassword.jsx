@@ -8,7 +8,7 @@ import {
 } from "../../../provider/features/auth/AuthSlice"; // Assuming you have an action for updating password
 import { useEffect } from "react";
 
-const UpdatePassword = () => {
+const ProfilePassword = () => {
   const { updatePasswordState } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -124,4 +124,4 @@ const UpdatePassword = () => {
   );
 };
 
-export default UpdatePassword;
+export default ProfilePassword;

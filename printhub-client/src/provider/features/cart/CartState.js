@@ -26,8 +26,8 @@ export const initialCartState = {
   },
 };
 export const resetCartState = (state) => {
-  state.addCartItemState = initialCartState.addCartItemState;
-  state.getCartItemsState = initialCartState.getCartItemsState;
-  state.deleteItemByIdState = initialCartState.deleteItemByIdState;
-  state.clearCartState = initialCartState.clearCartState;
+  state.addCartItemState = { ...initialCartState.addCartItemState };
+  state.getCartItemsState = { ...initialCartState.getCartItemsState };
+  state.deleteItemByIdState = { ...initialCartState.deleteItemByIdState };
+  state.clearCartState = { ...initialCartState.clearCartState };
 };

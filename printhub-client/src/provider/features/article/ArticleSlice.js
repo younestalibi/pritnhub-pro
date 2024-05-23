@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import articleService from "./ArticleServices";
-import { initialState, resetArticleState } from "./ArticleState";
+import { initialArticleState, resetArticleState } from "./ArticleState";
 
 export const getArticles = createAsyncThunk(
   "article/get-all",
@@ -19,7 +19,7 @@ export const createArticle = createAsyncThunk(
     try {
       return await articleService.createArticle(article);
     } catch (error) {
-      console.log("erour akhty :"+error)
+      console.log("erour akhty :" + error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -48,11 +48,11 @@ export const resetStateArticle = createAction("article/reset-state");
 
 export const ArticleSlice = createSlice({
   name: "article",
-  initialState: initialState,
+  initialState: initialArticleState,
   reducers: {},
   extraReducers: (buildeer) => {
     buildeer
-      // get-all-catalogs
+      // get-all-articles
       .addCase(getArticles.pending, (state) => {
         resetArticleState(state);
         state.getArticlesState.isLoading = true;
@@ -68,10 +68,10 @@ export const ArticleSlice = createSlice({
         state.getArticlesState.isError = true;
         state.getArticlesState.isLoading = false;
         state.getArticlesState.isSuccess = false;
-        console.log(action)
+        console.log(action);
         state.getArticlesState.message = action.payload.error;
       })
-      // get-all-catalogs
+      // get-all-articles
       //   =========================================================================
       // delete-one-by-id
       .addCase(deleteArticleById.pending, (state) => {
@@ -92,7 +92,6 @@ export const ArticleSlice = createSlice({
         state.deleteArticleByIdState.isLoading = false;
         state.deleteArticleByIdState.isSuccess = false;
         state.deleteArticleByIdState.message = action.payload.error;
-
       })
       // delete-one-by-id
       //   =========================================================================
@@ -109,7 +108,6 @@ export const ArticleSlice = createSlice({
         state.articles.unshift(action.payload.article);
       })
       .addCase(createArticle.rejected, (state, action) => {
-        // state.message = action.payload.response.data.errors;
         state.createArticleState.isError = true;
         state.createArticleState.isLoading = false;
         state.createArticleState.isSuccess = false;
@@ -127,7 +125,9 @@ export const ArticleSlice = createSlice({
         state.updateArticleState.isLoading = false;
         state.updateArticleState.isSuccess = true;
         state.updateArticleState.message = action.payload.message;
-        const index = state.articles.findIndex(e => e.id === action.payload.article.id);
+        const index = state.articles.findIndex(
+          (e) => e.id === action.payload.article.id
+        );
         if (index !== -1) {
           state.articles[index] = action.payload.article;
         }
@@ -140,7 +140,7 @@ export const ArticleSlice = createSlice({
       })
       // update-one
       //   =========================================================================
-      //reset-state-catalog
+      //reset-state-address
       .addCase(resetStateArticle, (state) => {
         resetArticleState(state);
       });

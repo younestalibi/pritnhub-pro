@@ -26,8 +26,8 @@ export const initialState = {
   },
 };
 export const resetCatalogState = (state) => {
-  state.getCatalogsState=initialState.getCatalogsState
-  state.deleteCatalogByIdState=initialState.deleteCatalogByIdState
-  state.createCatalogState=initialState.createCatalogState
-  state.updateCatalogState=initialState.updateCatalogState
+  state.getCatalogsState = { ...initialState.getCatalogsState };
+  state.deleteCatalogByIdState = { ...initialState.deleteCatalogByIdState };
+  state.createCatalogState = { ...initialState.createCatalogState };
+  state.updateCatalogState = { ...initialState.updateCatalogState };
 };

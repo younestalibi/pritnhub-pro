@@ -52,8 +52,8 @@ const ProfileInformation = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Row gutter={20} justify={"space-around"}>
-        <Col sm={{ span: 24 }} md={{ span: 12 }}>
+      <Row gutter={20} justify={"space-evenly"}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
           <div>
             <label htmlFor="first_name">
               <b>First Name:</b>
@@ -124,7 +124,7 @@ const ProfileInformation = () => {
             ) : null}
           </div>
         </Col>
-        <Col sm={{ span: 24 }} md={{ span: 12 }}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }}>
           <div>
             <label htmlFor="company_name">
               <b>Company Name:</b>

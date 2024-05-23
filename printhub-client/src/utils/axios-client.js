@@ -23,7 +23,7 @@ axiosHttp.interceptors.response.use(
     if (response && response.status === 401) {
       localStorage.removeItem('token');
     }
-    console.log(error)
+    console.log(error.response)
     return Promise.reject(error);
   }
 );

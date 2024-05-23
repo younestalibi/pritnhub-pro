@@ -129,7 +129,7 @@ const ArticleCreate = (props) => {
         </div>
         <div>
           <label htmlFor="unit_price">
-          Unit price <span>*</span>
+            Unit price <span>*</span>
           </label>
           <InputNumber
             id="unit_price"
@@ -148,21 +148,21 @@ const ArticleCreate = (props) => {
         <div>
           <label htmlFor="quantity">
             Quantity <span>*</span>
-            </label>
-            <InputNumber
-              placeholder="the quantity available"
-              id="quantity"
-              name="quantity"
-              style={{ display: "block", width: "100%", marginBottom: "10px" }}
-              min={0}
-              value={formik.values.quantity}
-              onChange={(value) => formik.setFieldValue("quantity", value)}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.quantity && formik.errors.quantity && (
-              <div style={{ color: "red" }}>{formik.errors.quantity}</div>
-            )}
-          </div>
+          </label>
+          <InputNumber
+            placeholder="the quantity available"
+            id="quantity"
+            name="quantity"
+            style={{ display: "block", width: "100%", marginBottom: "10px" }}
+            min={0}
+            value={formik.values.quantity}
+            onChange={(value) => formik.setFieldValue("quantity", value)}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.quantity && formik.errors.quantity && (
+            <div style={{ color: "red" }}>{formik.errors.quantity}</div>
+          )}
+        </div>
         <div>
           <label htmlFor="image">
             Image <span>*</span>

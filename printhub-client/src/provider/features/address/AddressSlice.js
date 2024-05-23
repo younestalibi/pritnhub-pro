@@ -12,26 +12,26 @@ export const getAddresses = createAsyncThunk(
     }
   }
 );
-// export const createProduct = createAsyncThunk(
-//   "product/create-one",
-//   async (catalog, thunkAPI) => {
-//     try {
-//       return await ProductServices.createProduct(catalog);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-// export const deleteProductById = createAsyncThunk(
-//   "product/delete-one",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await ProductServices.deleteProductById(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const createAddress = createAsyncThunk(
+  "address/create-one",
+  async (address, thunkAPI) => {
+    try {
+      return await AddressServices.createAddress(address);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const deleteAddressById = createAsyncThunk(
+  "address/delete-one",
+  async (id, thunkAPI) => {
+    try {
+      return await AddressServices.deleteAddressById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 // export const getProductById = createAsyncThunk(
 //   "product/get-one",
 //   async (id, thunkAPI) => {
@@ -71,6 +71,7 @@ export const AddressSlice = createSlice({
         state.getAddressesState.isSuccess = true;
         state.getAddressesState.message = action.payload.message;
         state.addresses = action.payload.addresses;
+        console.log(action)
       })
       .addCase(getAddresses.rejected, (state, action) => {
         state.getAddressesState.isError = true;
@@ -80,49 +81,51 @@ export const AddressSlice = createSlice({
       })
       // get-all-addresses
       //   =========================================================================
-      // // delete-one-by-id
-      // .addCase(deleteProductById.pending, (state) => {
-      //   resetProductState(state);
-      //   state.deleteProductByIdState.isLoading = true;
-      // })
-      // .addCase(deleteProductById.fulfilled, (state, action) => {
-      //   state.deleteProductByIdState.isError = false;
-      //   state.deleteProductByIdState.isLoading = false;
-      //   state.deleteProductByIdState.isSuccess = true;
-      //   state.deleteProductByIdState.message = action.payload.message;
-      //   state.products = state.products.filter((product) => {
-      //     return product.id != action.payload.id;
-      //   });
-      // })
-      // .addCase(deleteProductById.rejected, (state, action) => {
-      //   state.deleteProductByIdState.isError = true;
-      //   state.deleteProductByIdState.isLoading = false;
-      //   state.deleteProductByIdState.isSuccess = false;
-      //   state.deleteProductByIdState.message = action.payload.error;
+      // delete-one-by-id
+      .addCase(deleteAddressById.pending, (state) => {
+        resetAddressState(state);
+        state.deleteAddressState.isLoading = true;
+      })
+      .addCase(deleteAddressById.fulfilled, (state, action) => {
+        state.deleteAddressState.isError = false;
+        state.deleteAddressState.isLoading = false;
+        state.deleteAddressState.isSuccess = true;
+        state.deleteAddressState.message = action.payload.message;
+        state.addresses = state.addresses.filter((address) => {
+          return address.id != action.payload.id;
+        });
+      })
+      .addCase(deleteAddressById.rejected, (state, action) => {
+        console.log(action)
+        state.deleteAddressState.isError = true;
+        state.deleteAddressState.isLoading = false;
+        state.deleteAddressState.isSuccess = false;
+        state.deleteAddressState.message = action.payload.error;
 
-      // })
-      // // delete-one-by-id
-      // //   =========================================================================
-      // // create-one
-      // .addCase(createProduct.pending, (state) => {
-      //   resetProductState(state);
-      //   state.createProductstate.isLoading = true;
-      // })
-      // .addCase(createProduct.fulfilled, (state, action) => {
-      //   state.createProductstate.isError = false;
-      //   state.createProductstate.isLoading = false;
-      //   state.createProductstate.isSuccess = true;
-      //   state.createProductstate.message = action.payload.message;
-      //   state.products.unshift(action.payload.product);
-      // })
-      // .addCase(createProduct.rejected, (state, action) => {
-      //   state.createProductstate.isError = true;
-      //   state.createProductstate.isLoading = false;
-      //   state.createProductstate.isSuccess = false;
-      //   state.createProductstate.message = action.payload.error;
-      // })
-      // // create-one
-      // //   =========================================================================
+      })
+      // delete-one-by-id
+      //   =========================================================================
+      // create-one
+      .addCase(createAddress.pending, (state) => {
+        resetAddressState(state);
+        state.createAddressState.isLoading = true;
+      })
+      .addCase(createAddress.fulfilled, (state, action) => {
+        state.createAddressState.isError = false;
+        state.createAddressState.isLoading = false;
+        state.createAddressState.isSuccess = true;
+        state.createAddressState.message = action.payload.message;
+        state.addresses.unshift(action.payload.address);
+        console.log(action)
+      })
+      .addCase(createAddress.rejected, (state, action) => {
+        state.createAddressState.isError = true;
+        state.createAddressState.isLoading = false;
+        state.createAddressState.isSuccess = false;
+        state.createAddressState.message = action.payload.error;
+      })
+      // create-one
+      //   =========================================================================
       // // update-one
       // .addCase(updateProduct.pending, (state) => {
       //   resetProductState(state);

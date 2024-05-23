@@ -32,9 +32,9 @@ export const initialProductState = {
   },
 };
 export const resetProductState = (state) => {
-  state.getProductsState = initialProductState.getProductsState;
-  state.deleteProductByIdState = initialProductState.deleteProductByIdState;
-  state.getProductByIdState = initialProductState.getProductByIdState;
-  state.createProductstate = initialProductState.createProductstate;
-  state.updateProductstate = initialProductState.updateProductstate;
+  state.getProductsState = { ...initialProductState.getProductsState };
+  state.deleteProductByIdState = {...initialProductState.deleteProductByIdState};
+  state.getProductByIdState = { ...initialProductState.getProductByIdState };
+  state.createProductstate = { ...initialProductState.createProductstate };
+  state.updateProductstate = { ...initialProductState.updateProductstate };
 };
