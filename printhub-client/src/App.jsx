@@ -76,7 +76,6 @@ function App() {
                 element={route.element}
               />
             ))}
-
             {authRoutes.map((route) => (
               <Route
                 key={route.path}

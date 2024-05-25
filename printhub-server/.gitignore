@@ -1,15 +1,4 @@
 node_modules
-
-uploads/*.jpg
-uploads/*.jpeg
-uploads/*.png
-uploads/*.gif
-uploads/*.bmp
-uploads/*.tiff
-uploads/*.tif
-uploads/*.webp
-uploads/*.svg
-uploads/*.ico
-uploads/*.heic
-uploads/*.avif
+uploads/*
+.env
 
