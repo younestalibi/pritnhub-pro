@@ -19,6 +19,7 @@ import ProfileIndex from "./view/client/profile/ProfileIndex";
 import AdminRoute from "./components/route/AdminRoute";
 import AuthRoute from "./components/route/AuthRoute";
 import CheckoutIndex from "./view/client/checkout/CheckoutIndex";
+import ContactApp from "./view/client/contact/contact";
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App() {
       { path: "product/:product", element: <ProductDetail /> },
       { path: "product/:id/:productName", element: <ProductDetail /> },
       { path: "login", element: <Authentication /> },
+      { path: "contact", element: <ContactApp /> },
     ];
 
     return (

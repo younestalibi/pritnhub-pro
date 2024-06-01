@@ -8,10 +8,10 @@ const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const articleRoutes = require("./routes/articleRoutes");
 const addressRoutes = require("./routes/addressRoutes");
+const contactRoutes = require('./routes/contactRoutes');
 const { sequelize } = require("./models");
 const helmet = require("helmet");
 const cors = require("cors");
-const Mail = require("./services/EmailService");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -28,7 +28,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/article", articleRoutes);
 app.use("/api/address", addressRoutes);
-
+app.use('/api/contact', contactRoutes);
 sequelize
   .sync()
   .then(() => {

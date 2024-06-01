@@ -17,7 +17,7 @@ body {
 }
 
 .container-fluid {
-  margin: 0 auto;
+  margin: 0  auto;
   max-width: 1200px;
   padding: 0 15px;
   width: 100%;
@@ -71,6 +71,8 @@ title holder
   font-size: 28px;
   margin: 0;
 }
+
+
 
 /* 
 hero
@@ -137,6 +139,7 @@ block
   padding: 60px 0;
   border-bottom: 1px solid #d9d9d9;
   background-color: #d9d9d9;
+  position: relative;
 }
 
 /* 
@@ -167,6 +170,8 @@ about
   margin: 0 0 10px;
 }
 
+
+
 .textBlock {
   width: 100%;
   text-align: center;
@@ -189,6 +194,7 @@ about
 
 .image {
   max-width: 100%;
+  
 }
 
 @media only screen and (max-width: 992px) {
