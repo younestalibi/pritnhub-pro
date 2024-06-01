@@ -5,7 +5,7 @@ import ProductSlice from "../features/product/ProductSlice";
 import CartSlice from "../features/cart/CartSlice";
 import ArticleSlice from "../features/article/ArticleSlice";
 import AddressSlice from "../features/address/AddressSlice";
-
+import ContactSlice from "../features/contact/ContactSlice";
 export const store = configureStore({
   reducer: {
     auth: AuthSlice, 
@@ -14,6 +14,6 @@ export const store = configureStore({
     cart: CartSlice, 
     article: ArticleSlice,
     address: AddressSlice,
-
+    contact: ContactSlice,
   },
 });
