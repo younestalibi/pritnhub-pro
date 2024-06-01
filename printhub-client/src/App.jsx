@@ -15,10 +15,10 @@ import ProductDetail from "./view/client/products/ProductDetail";
 import CartIndex from "./view/client/cart/CartIndex";
 import Loader from "./components/loader/Loader";
 import Page404 from "./view/abort/404";
-import Checkout from "./view/client/checkout/Checkout";
 import ProfileIndex from "./view/client/profile/ProfileIndex";
 import AdminRoute from "./components/route/AdminRoute";
 import AuthRoute from "./components/route/AuthRoute";
+import CheckoutIndex from "./view/client/checkout/CheckoutIndex";
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ function App() {
 
     const authRoutes = [
       { path: "cart", element: <CartIndex /> },
-      { path: "checkout", element: <Checkout /> },
+      { path: "checkout", element: <CheckoutIndex /> },
       { path: "profile", element: <ProfileIndex /> },
     ];
 

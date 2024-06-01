@@ -13,7 +13,7 @@ Printhub-Pro is a comprehensive web application designed for printing services, 
                     <img
                 src="https://avatars.githubusercontent.com/u/118536564?v=4"
                 width="100px;"
-                alt="Youness"
+                alt="Youness Talibi"
               />
                     <br />
                     <sub>
@@ -27,11 +27,11 @@ Printhub-Pro is a comprehensive web application designed for printing services, 
                     <img
             src="https://avatars.githubusercontent.com/u/107304080?v=4"
             width="100px;"
-            alt="Oumaiama"
+            alt="Oumaiama Ouhsain"
           />
                     <br />
                     <sub>
-                        <b>Oumaima</b>
+                        <b>Oumaima Ouhsain</b>
                     </sub>
                 </a>
                 <br />

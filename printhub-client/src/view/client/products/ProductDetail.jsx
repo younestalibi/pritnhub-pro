@@ -41,7 +41,6 @@ const ProductDetail = () => {
   const { carts, addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
-  console.log(product);
   const calculateTotalPrice = (formValues) => {
     if (!product) {
       return {
