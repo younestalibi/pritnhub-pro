@@ -53,7 +53,9 @@ export default function AppHeader() {
               />
             </div>
             <div className="header-user-actions">
+              <Link to={'contact'}>
               <i className="fa-solid fa-headset headset-icon"></i>
+              </Link>
               {isAuthenticated ? (
                 <>
                   <Badge count={carts.length}>
