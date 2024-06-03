@@ -11,7 +11,7 @@ function DefaultLayout() {
         <AppHeader/>
       </Header>
       
-      <Content>
+      <Content style={{ padding:'50px 0px' }}>
         <Outlet/>
       </Content>
 

@@ -22,6 +22,7 @@ import React from "react";
 import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
 
 const { Title, Paragraph } = Typography;
 
@@ -222,53 +223,3 @@ const CartIndex = () => {
 };
 
 export default CartIndex;
-
-
-const calculateItemTotal = (item) => {
-  const basePrice = parseFloat(item.Product.price);
-  const quantity = item.quantity;
-
-  // Calculate the total price adjustment for customizations
-  const customizationTotal = Object.keys(item.customizations).reduce(
-    (sum, key) => {
-      const customizationValue = item.customizations[key];
-      const option = item.Product.options.find((opt) => opt.name === key);
-
-      if (option) {
-        if (Array.isArray(customizationValue)) {
-          // For checkbox type customizations
-          const adjustments = customizationValue.reduce((acc, value) => {
-            const choice = option.choices.find(
-              (choice) => choice.value === value
-            );
-            return acc + (choice ? parseFloat(choice.priceAdjustment) : 0);
-          }, 0);
-          return sum + adjustments;
-        } else {
-          // For text, number, select, radio type customizations
-          const choice = option.choices
-            ? option.choices.find(
-                (choice) => choice.value === customizationValue
-              )
-            : null;
-          return sum + (choice ? parseFloat(choice.priceAdjustment) : 0);
-        }
-      }
-
-      return sum;
-    },
-    0
-  );
-
-  // Calculate total price for the item
-  const itemTotal = (basePrice + customizationTotal) * quantity;
-  return itemTotal;
-};
-
-// Function to calculate total price for all items in the cart
-const calculateTotal = (cartItems) => {
-  return cartItems.reduce((total, item) => {
-    const itemTotal = calculateItemTotal(item);
-    return total + itemTotal;
-  }, 0);
-};

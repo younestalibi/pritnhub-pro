@@ -83,6 +83,9 @@ const ProfileAddress = () => {
         type: "error",
       });
     }
+    if(createAddressState.isSuccess){
+      setShowForm(false)
+    }
     dispatch(resetStateAddress());
     formik.resetForm();
   }, [
@@ -91,7 +94,7 @@ const ProfileAddress = () => {
     deleteAddressState.isSuccess,
     deleteAddressState.isError,
   ]);
-  console.log(formik.errors);
+
   return (
     <div>
       <List

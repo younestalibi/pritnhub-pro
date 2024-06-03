@@ -1,36 +1,50 @@
 import React, { useEffect, useState } from "react";
 import {
-  LoadingOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, message, Steps, theme, Row, Col } from "antd";
-import { Link } from "react-router-dom";
+  Button,
+  message,
+  Steps,
+  Row,
+  Col,
+  List,
+  Avatar,
+  Image,
+  Flex,
+} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddresses } from "../../../provider/features/address/AddressSlice";
-import CheckoutStepOne from "./CheckoutStepOne";
 import {
   getCartItems,
   resetStateCart,
 } from "../../../provider/features/cart/CartSlice";
+import CheckoutStepOne from "./CheckoutStepOne";
+import CheckoutStepTwo from "./CheckoutStepTwo";
+import CheckoutStepThree from "./CheckoutStepThree"; // New step component
+import CheckoutStepFour from "./CheckoutStepFour"; // New step component
+import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
 
 const CheckoutIndex = () => {
-  const { carts, deleteItemByIdState, getCartItemsState, clearCartState } =
-    useSelector((state) => state.cart);
+  const { carts } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [checkoutData, setCheckoutData] = useState({
+    addressId: null,
+    paymentMethod: null,
+  });
 
   const [current, setCurrent] = useState(0);
   const next = () => {
     setCurrent(current + 1);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
   const prev = () => {
     setCurrent(current - 1);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
-  const items = steps.map((item) => ({
-    key: item.title,
-    title: item.title,
-  }));
 
   useEffect(() => {
     if (carts.length == 0) {
@@ -38,122 +52,118 @@ const CheckoutIndex = () => {
     } else {
       dispatch(resetStateCart());
     }
-  }, []);
+  }, [dispatch, carts]);
 
+  const steps = [
+    {
+      title: "Address Informations",
+      content: (
+        <CheckoutStepOne
+          checkoutData={checkoutData}
+          setCheckoutData={setCheckoutData}
+        />
+      ),
+    },
+    {
+      title: "Payment Method",
+      content: (
+        <CheckoutStepTwo
+          checkoutData={checkoutData}
+          setCheckoutData={setCheckoutData}
+        />
+      ),
+    },
+    {
+      title: "Review Order",
+
+      content: <CheckoutStepThree checkoutData={checkoutData} carts={carts} />,
+    },
+    {
+      title: "Place Order and Billing",
+      content: <CheckoutStepFour checkoutData={checkoutData} />,
+    },
+  ];
+
+  const items = steps.map((item) => ({
+    key: item.title,
+    title: item.title,
+  }));
+  console.log(carts);
   return (
     <div style={{ width: "80%", minHeight: "80vh", margin: "auto" }}>
-      <Steps current={current} items={items} />
-
-      <Row gutter={20} justify={"space-evenly"}>
-        <Col md={{ span: 17 }}>{steps[current].content}</Col>
+      <Steps type="navigation" current={current} items={items} />
+      <Row gutter={50} justify={"space-evenly"}>
         <Col md={{ span: 7 }}>
           <div style={{ position: "sticky", top: "0px" }}>
-            <Row justify={"space-between"} align={"middle"}>
-              <Col>
-                <h1>Total Price</h1>
-              </Col>
-              <Col>
-                <h1>{calculateTotal(carts)}</h1>
-              </Col>
-            </Row>
+            <h1>Total Price</h1>
+            <Button style={{ fontWeight:'bold',textAlign:'left' }} block type="primary">{calculateTotal(carts)} DH</Button>
+            <h3>Order Summary:</h3>
+            <List
+              dataSource={carts}
+              renderItem={(item) => (
+                <List.Item>
+                  <Flex
+                    style={{ width: "100%" }}
+                    justify="space-around"
+                    gap={20}
+                    align="flex-start"
+                  >
+                    <Image
+                      alt={item.Product.name}
+                      width={80}
+                      height={60}
+                      style={{ objectFit: "cover" }}
+                      crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                      loading="lazy"
+                      src={`${import.meta.env.VITE_SERVER_URL}/${
+                        item.Product.image
+                      }`}
+                    />
+                    <List.Item.Meta
+                      title={item.Product.name}
+                      description={`Quantity: ${
+                        item.quantity
+                      } - Price: ${calculateItemTotal(item)}`}
+                    />
+                  </Flex>
+                </List.Item>
+              )}
+            />
+          </div>
+        </Col>
+        <Col md={{ span: 17 }}>
+          <div style={{ padding: "40px 0px" }}>{steps[current].content}</div>
+          <div>
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={() => next()}>
+                Next
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Done
+              </Button>
+            )}
+            {current > 0 && (
+              <Button
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => prev()}
+              >
+                Previous
+              </Button>
+            )}
           </div>
         </Col>
       </Row>
-
-      <div>
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Done
-          </Button>
-        )}
-        {current > 0 && (
-          <Button
-            style={{
-              margin: "0 8px",
-            }}
-            onClick={() => prev()}
-          >
-            Previous
-          </Button>
-        )}
-      </div>
     </div>
   );
 };
+
 export default CheckoutIndex;
-const steps = [
-  {
-    title: "Address Informations",
-    content: <CheckoutStepOne />,
-  },
-  {
-    title: "Payment Method",
-    content: "Second-content",
-  },
-  {
-    title: "Billing",
-    content: "Last-content",
-  },
-  {
-    title: "Finished",
-    content: "Done",
-    status:'done'
-  },
-];
-const calculateItemTotal = (item) => {
-  const basePrice = parseFloat(item.Product.price);
-  const quantity = item.quantity;
 
-  // Calculate the total price adjustment for customizations
-  const customizationTotal = Object.keys(item.customizations).reduce(
-    (sum, key) => {
-      const customizationValue = item.customizations[key];
-      const option = item.Product.options.find((opt) => opt.name === key);
 
-      if (option) {
-        if (Array.isArray(customizationValue)) {
-          // For checkbox type customizations
-          const adjustments = customizationValue.reduce((acc, value) => {
-            const choice = option.choices.find(
-              (choice) => choice.value === value
-            );
-            return acc + (choice ? parseFloat(choice.priceAdjustment) : 0);
-          }, 0);
-          return sum + adjustments;
-        } else {
-          // For text, number, select, radio type customizations
-          const choice = option.choices
-            ? option.choices.find(
-                (choice) => choice.value === customizationValue
-              )
-            : null;
-          return sum + (choice ? parseFloat(choice.priceAdjustment) : 0);
-        }
-      }
-
-      return sum;
-    },
-    0
-  );
-
-  // Calculate total price for the item
-  const itemTotal = (basePrice + customizationTotal) * quantity;
-  return itemTotal;
-};
-
-// Function to calculate total price for all items in the cart
-const calculateTotal = (cartItems) => {
-  return cartItems.reduce((total, item) => {
-    const itemTotal = calculateItemTotal(item);
-    return total + itemTotal;
-  }, 0);
-};
-////////
