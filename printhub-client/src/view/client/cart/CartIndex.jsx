@@ -84,7 +84,6 @@ const CartIndex = () => {
 
   const [loadingItemId, setLoadingItemId] = useState(null);
 
-
   return (
     <Row justify={"space-evenly"} align={"stretch"}>
       <Col lg={{ span: 14 }} md={{ span: 24 }}>
@@ -203,19 +202,21 @@ const CartIndex = () => {
               <h1>{calculateTotal(carts)}</h1>
             </Col>
           </Row>
-          <Button
-            block
-            type="primary"
-            style={{
-              backgroundColor: "#c43b53",
-              padding: "19px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Link to={"/checkout"}>Checkout</Link>
-          </Button>
+          <Link to={"/checkout"}>
+            <Button
+              block
+              type="primary"
+              style={{
+                backgroundColor: "#c43b53",
+                padding: "19px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Checkout
+            </Button>
+          </Link>
         </div>
       </Col>
     </Row>

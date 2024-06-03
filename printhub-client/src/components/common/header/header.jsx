@@ -11,14 +11,16 @@ import {
   resetStateCart,
 } from "../../../provider/features/cart/CartSlice";
 import useAuth from "../../../hooks/useAuth";
+import CartMenu from "../../../view/client/cart/CartMenu";
 
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 
 export default function AppHeader() {
   const [current, setCurrent] = useState("mail");
-  const { carts,addCartItemState } = useSelector((state) => state.cart);
+  const { carts, addCartItemState } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
+  const [open, setOpen] = useState(false);
 
   const onClick = (e) => {
     console.log("click ", e);
@@ -53,21 +55,26 @@ export default function AppHeader() {
               />
             </div>
             <div className="header-user-actions">
-              <Link to={'contact'}>
-              <i className="fa-solid fa-headset headset-icon"></i>
+              <Link to={"contact"}>
+                <i className="fa-solid fa-headset headset-icon"></i>
               </Link>
               {isAuthenticated ? (
                 <>
                   <Badge count={carts.length}>
-                    <Link to={"cart"}>
-                      <ShoppingCartOutlined style={{ fontSize: "32px" }} />
-                    </Link>
+                    {/* <Link to={"cart"}> */}
+                    <ShoppingCartOutlined
+                      onClick={() => setOpen(!open)}
+                      style={{ fontSize: "32px" }}
+                    />
+                    {/* </Link> */}
                   </Badge>
                   <AvatarProfile />
                 </>
-              ):(<>
-              <Link to={'login'}>Join us</Link>
-              </>)}
+              ) : (
+                <>
+                  <Link to={"login"}>Join us</Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -81,6 +88,7 @@ export default function AppHeader() {
           />
         </div>
       </div>
+      <CartMenu open={open} setOpen={setOpen} />
     </>
   );
 }

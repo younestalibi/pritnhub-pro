@@ -53,6 +53,7 @@ export const clearCart = createAsyncThunk(
 //   }
 // );
 export const resetStateCart = createAction("Cart/reset-state");
+export const resetStateCartsCollection = createAction("Cart-collection/reset-state");
 
 export const CartSlice = createSlice({
   name: "cart",
@@ -169,6 +170,9 @@ export const CartSlice = createSlice({
       //reset-state-catalog
       .addCase(resetStateCart, (state) => {
         resetCartState(state);
+      })
+      .addCase(resetStateCartsCollection, (state) => {
+        state.carts=[]
       });
   },
 });

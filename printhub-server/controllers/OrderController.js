@@ -1,13 +1,18 @@
-const { Order, OrderItem, Payment, sequelize } = require("../models");
+const {
+  Order,
+  OrderItem,
+  Payment,
+  Cart,
+  CartItem,
+  Product,
+  sequelize,
+} = require("../models");
 
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
     const userId = req.userId;
-    // const { totalAmount, items } = req.body;
-
-    const totalAmount=1000;
-    // Start a transaction
+    const totalAmount = 1000;
     const transaction = await sequelize.transaction();
 
     try {
@@ -20,38 +25,75 @@ exports.createOrder = async (req, res) => {
         },
         { transaction }
       );
+      const cart = await Cart.findOne(
+        {
+          where: { user_id: userId },
+          include: {
+            model: CartItem,
+            include: {
+              model: Product,
+            },
+          },
+        },
+        { transaction }
+      );
+      if (cart.CartItems) {
+        await Promise.all(
+          cart.CartItems.map(async (item) => {
+            await OrderItem.create(
+              {
+                order_id: order.id,
+                product_id: item.Product.id,
+                quantity: item.quantity,
+                customizations: item.customizations,
+                price: 1111,
+              },
+              { transaction }
+            );
+            // let product = await Product.findByPk(item.Product.id);
+            // let newMaxValue = String(Number(product.quantity.max)-item.quantity);
+            // let updatedQuantity = {
+            //   ...product.quantity,
+            //   max: newMaxValue,
+            // };
 
-      // Create order items
-    //   await Promise.all(
-    //     items.map(async (item) => {
-    //       await OrderItem.create(
-    //         {
-    //           order_id: order.id,
-    //           product_id: item.productId,
-    //           quantity: item.quantity,
-    //           customizations: item.customizations,
-    //         },
-    //         { transaction }
-    //       );
-    //     })
-    //   );
+            // // product.quantity=JSON.stringify({'test':'hi'})
+            // // JSON.parse(product.quantity).max='someth'
+            // console.log("--------");
+            // // console.log(JSON.parse(product.quantity))
+            // console.log(newMaxValue)
+            // console.log(updatedQuantity)
+            // // console.log(JSON.stringify(product.quantity))
+            // // console.log(JSON.stringify(updatedQuantity));
+            // console.log("--------");
 
-    // const cartItem = await CartItem.findOne({
-    //     where: { id: newCartItem.id },
-    //     include: {
-    //       model: Product,
-    //     },
-    //   });
-  
+            // product.quantity = JSON.stringify({name:"younes"})
+            // await product.save();
+
+            // await CartItem.destroy({ where: { id: item.id } }, { transaction });
+          })
+        );
+      }
+
+      // const cartItem = await CartItem.findOne({
+      //     where: { id: newCartItem.id },
+      //     include: {
+      //       model: Product,
+      //     },
+      //   });
 
       // Commit the transaction
       await transaction.commit();
 
-      res.status(201).json({ message: "Order created successfully", order });
+      res.status(201).json({
+        message: "Order created successfully",
+        order,
+        cart,
+        cartItems: cart.CartItems,
+      });
     } catch (error) {
-      // Rollback the transaction if an error occurs
       await transaction.rollback();
-      throw error; // Throw the error to the outer catch block
+      throw error;
     }
   } catch (err) {
     res.status(500).json({ error: err.message });

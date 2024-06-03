@@ -52,7 +52,7 @@ const CheckoutIndex = () => {
     } else {
       dispatch(resetStateCart());
     }
-  }, [dispatch, carts]);
+  }, []);
 
   const steps = [
     {
