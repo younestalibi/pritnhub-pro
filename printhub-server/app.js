@@ -13,6 +13,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const { sequelize } = require("./models");
 const helmet = require("helmet");
 const cors = require("cors");
+const Mail = require("./services/EmailService");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -22,6 +23,9 @@ app.use(
     origin: process.env.APP_CLIENT,
   })
 );
+///copy this line and reuse it 
+// Mail.send('yourEamil@gmail.com','test','welcome.ejs')
+//(email,subject,name of email template file it's exist in the folder view)
 
 app.use("/api/auth", authRoutes);
 app.use("/api/catalog", catalogRoutes);

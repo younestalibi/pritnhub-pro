@@ -27,9 +27,9 @@ class EmailService {
     const html = await ejs.renderFile(htmlPath, data);
 
     const mailOptions = {
-      from: process.env.MAIL_FROM_ADDRESS,
+      from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`,
       to: to,
-      subject: subject,
+      subject: subject, 
       html: html,
     };
 
