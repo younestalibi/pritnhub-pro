@@ -106,28 +106,32 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
 
   return (
     <>
-      <Select
-        loading={getAddressesState.isLoading}
-        style={{ width: "100%" }}
-        defaultValue={checkoutData.addressId}
-        allowClear
-        placeholder="select shipping address"
-        onChange={(e) => {
-          setCheckoutData((prev) => ({
-            ...prev,
-            addressId: e,
-          }));
-        }}
-        options={options}
-      />
+      <Flex align="center" gap={10} justify="space-between">
+        <Select
+          loading={getAddressesState.isLoading}
+          style={{ width: "100%" }}
+          defaultValue={checkoutData.addressId}
+          allowClear
+          placeholder="select shipping address"
+          onChange={(e) => {
+            setCheckoutData((prev) => ({
+              ...prev,
+              addressId: e,
+            }));
+          }}
+          options={options}
+        />
+        {!showForm && (
+          <Button
+            type="primary"
+            onClick={() => setShowForm(!showForm)}
+            style={{ marginBottom: "20px", marginTop: "20px" }}
+          >
+            Add New Address
+          </Button>
+        )}
+      </Flex>
       <div>
-        <Button
-          type="primary"
-          onClick={() => setShowForm(!showForm)}
-          style={{ marginBottom: "20px", marginTop: "20px" }}
-        >
-          {showForm ? "Cancel" : "Add New Address"}
-        </Button>
         {showForm && (
           <form onSubmit={formik.handleSubmit} style={{ marginBottom: "20px" }}>
             <Row gutter={20} justify={"space-evenly"}>
@@ -290,16 +294,22 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
                 </div>
               </Col>
             </Row>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{
-                marginTop: "10px",
-              }}
-              loading={createAddressState.isLoading}
-            >
-              Create address
-            </Button>
+
+            <Flex align="center" gap={20}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={createAddressState.isLoading}
+              >
+                Create address
+              </Button>
+              <Button
+                onClick={() => setShowForm(false)}
+                style={{ marginBottom: "20px", marginTop: "20px" }}
+              >
+                Cancel
+              </Button>
+            </Flex>
           </form>
         )}
         {address && (

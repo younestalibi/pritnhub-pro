@@ -20,6 +20,7 @@ import AdminRoute from "./components/route/AdminRoute";
 import AuthRoute from "./components/route/AuthRoute";
 import CheckoutIndex from "./view/client/checkout/CheckoutIndex";
 import ContactApp from "./view/client/contact/contact";
+import OrderIndex from "./view/admin/order/OrderIndex";
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function App() {
       { path: "catalog", element: <CatalogIndex /> },
       { path: "product", element: <ProductIndex /> },
       { path: "article", element: <ArticleIndex /> },
+      { path: "order", element: <OrderIndex /> },
     ];
 
     const authRoutes = [

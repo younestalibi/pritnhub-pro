@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { initialOrderState, resetOrderState } from "./OrderState";
 import OrderServices from "./OrderServices";
 
-// export const getProducts = createAsyncThunk(
-//   "product/get-all",
-//   async (thunkAPI) => {
-//     try {
-//       return await ProductServices.getProducts();
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const getOrders = createAsyncThunk(
+  "order/get-all",
+  async (thunkAPI) => {
+    try {
+      return await OrderServices.getOrders();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const createOrder = createAsyncThunk(
   "order/create-one",
   async (order, thunkAPI) => {
@@ -62,24 +62,26 @@ export const OrderSlice = createSlice({
   extraReducers: (buildeer) => {
     buildeer
       // get-all-products
-      // .addCase(getProducts.pending, (state) => {
-      //   resetProductState(state);
-      //   state.getProductsState.isLoading = true;
-      // })
-      // .addCase(getProducts.fulfilled, (state, action) => {
-      //   state.getProductsState.isError = false;
-      //   state.getProductsState.isLoading = false;
-      //   state.getProductsState.isSuccess = true;
-      //   state.getProductsState.message = action.payload.message;
-      //   state.products = action.payload.products;
-      // })
-      // .addCase(getProducts.rejected, (state, action) => {
-      //   state.getProductsState.isError = true;
-      //   state.getProductsState.isLoading = false;
-      //   state.getProductsState.isSuccess = false;
-      //   state.getProductsState.message = action.payload.error;
-      // })
-      // // get-all-products
+      .addCase(getOrders.pending, (state) => {
+        resetOrderState(state);
+        state.getOrdersState.isLoading = true;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        console.log(action)
+        state.getOrdersState.isError = false;
+        state.getOrdersState.isLoading = false;
+        state.getOrdersState.isSuccess = true;
+        state.getOrdersState.message = action.payload.message;
+        state.orders = action.payload.orders;
+      })
+      .addCase(getOrders.rejected, (state, action) => {
+        console.log(action)
+        state.getOrdersState.isError = true;
+        state.getOrdersState.isLoading = false;
+        state.getOrdersState.isSuccess = false;
+        state.getOrdersState.message = action.payload.error;
+      })
+      // get-all-products
       // //   =========================================================================
       // // delete-one-by-id
       // .addCase(deleteProductById.pending, (state) => {

@@ -7,12 +7,41 @@ const {
   Product,
   sequelize,
 } = require("../models");
+const uuid = require('uuid');
+
+// Get all orders 
+exports.index = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const orders = await Order.findAll({
+    //   where: { user_id: userId },
+      include: {
+        model: OrderItem,
+        include: {
+          model: Product,
+        },
+      },
+    });
+
+    if (orders) {
+      return res
+        .status(200)
+        .json({ orders, message: "Returned order Successfully!" });
+    } else {
+      res.status(404).json({ error: "Order not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 // Create a new order
 exports.createOrder = async (req, res) => {
   try {
     const userId = req.userId;
     const totalAmount = 1000;
+    const trackingId = uuid.v4();
+
     const transaction = await sequelize.transaction();
 
     try {
@@ -21,6 +50,7 @@ exports.createOrder = async (req, res) => {
         {
           user_id: userId,
           total_amount: totalAmount,
+          tracking_id:trackingId,
           status: "pending",
         },
         { transaction }

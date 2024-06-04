@@ -52,6 +52,11 @@ const DasbhoardLayout = () => {
               icon:  <StockOutlined />,
               label: "Article",
             },
+            {
+              key: "order",
+              icon:  <StockOutlined />,
+              label: "Order",
+            },
            
           ]}
         />

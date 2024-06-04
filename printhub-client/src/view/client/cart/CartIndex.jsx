@@ -47,7 +47,6 @@ const CartIndex = () => {
         }),
       ]
     : [];
-  console.log(items);
   useEffect(() => {
     if (carts.length == 0) {
       dispatch(getCartItems());
@@ -56,11 +55,13 @@ const CartIndex = () => {
     }
   }, []);
 
-  console.log(carts);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    console.log(deleteItemByIdState.isSuccess)
+    console.log(clearCartState.isSuccess)
     if (deleteItemByIdState.isSuccess || clearCartState.isSuccess) {
+      console.log('hii')
       notification.open({
         description: deleteItemByIdState.message || clearCartState.message,
         duration: 3,
