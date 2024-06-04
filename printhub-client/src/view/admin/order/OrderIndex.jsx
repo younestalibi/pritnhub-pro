@@ -18,17 +18,21 @@ import CatalogCreate from "./CatalogCreate";
 import { icons } from "antd/es/image/PreviewGroup";
 import CatalogEdit from "./CatalogEdit";
 import {
+  deleteOrderById,
   getOrders,
   resetStateOrder,
+  updateOrderStatus,
 } from "../../../provider/features/order/OrderSlice";
 
 const OrderIndex = () => {
-  // const [deleteId, setDeleteId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   // const [editId, setEditId] = useState(null);
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   // const [createCatalogModal, setCreateCatalogModal] = useState(false);
   // const [editCatalogModal, setEditCatalogModal] = useState(false);
-  const { orders, getOrdersState } = useSelector((state) => state.order);
+  const { orders, getOrdersState, updateOrderStatusState,deleteOrderByIdState } = useSelector(
+    (state) => state.order
+  );
   const data = [];
   const dispatch = useDispatch();
 
@@ -41,33 +45,33 @@ const OrderIndex = () => {
   }, []);
   console.log(orders);
 
-  // useEffect(() => {
-  //   if (deleteCatalogByIdState.isSuccess) {
-  //     setOpen(false);
-  //     notification.open({
-  //       description: deleteCatalogByIdState.message,
-  //       duration: 3,
-  //       type: "success",
-  //     });
-  //   }
-  //   if (deleteCatalogByIdState.isError) {
-  //     setOpen(false);
-  //     notification.open({
-  //       description: deleteCatalogByIdState.message,
-  //       duration: 3,
-  //       type: "error",
-  //     });
-  //   }
-  // }, [deleteCatalogByIdState.isSuccess, deleteCatalogByIdState.isError]);
+  useEffect(() => {
+    if (updateOrderStatusState.isSuccess) {
+      // setOpen(false);
+      notification.open({
+        description: updateOrderStatusState.message,
+        duration: 3,
+        type: "success",
+      });
+    }
+    if (updateOrderStatusState.isError) {
+      // setOpen(false);
+      notification.open({
+        description: updateOrderStatusState.message,
+        duration: 3,
+        type: "error",
+      });
+    }
+  }, [updateOrderStatusState.isSuccess, updateOrderStatusState.isError]);
 
-  // const deleteRecord = (e) => {
-  //   dispatch(deleteCatalogById(deleteId));
-  //   setOpen(false);
-  // };
-  // const showModal = (e) => {
-  //   setOpen(true);
-  //   setDeleteId(e);
-  // };
+  const deleteRecord = (e) => {
+    dispatch(deleteOrderById(deleteId));
+    setOpen(false);
+  };
+  const showModal = (e) => {
+    setOpen(true);
+    setDeleteId(e);
+  };
   for (let i = 0; i < orders.length; i++) {
     data.push({
       key: orders[i].id,
@@ -77,10 +81,15 @@ const OrderIndex = () => {
       status: (
         <Select
           defaultValue={orders[i].status}
+          loading={updateOrderStatusState.isLoading}
           style={{
             width: 120,
           }}
-          // onChange={handleChange}
+          onChange={(status) => {
+            dispatch(
+              updateOrderStatus({ id: orders[i].id, status: { status } })
+            );
+          }}
           options={[
             {
               value: "pending",
@@ -93,7 +102,7 @@ const OrderIndex = () => {
             {
               value: "cancelled",
               label: "Cancelled",
-            }
+            },
           ]}
         />
       ),
@@ -110,7 +119,7 @@ const OrderIndex = () => {
           </span>
           <span
             className="btn-delete"
-            // onClick={() => showModal(orders[i].id)}
+            onClick={() => showModal(orders[i].id)}
           >
             <AiFillDelete />
           </span>
@@ -148,16 +157,16 @@ const OrderIndex = () => {
         scroll={{ x: 1000 }}
       />
       <Confirmation
-        // setOpen={setOpen}
-        // open={open}
+        setOpen={setOpen}
+        open={open}
         performAction={() => {
-          // deleteRecord(deleteId);
+          deleteRecord(deleteId);
         }}
         okType="danger"
         okText="Delete anyway!"
-        description="Are you sure you want to delete this Catalog?"
+        description="Are you sure you want to delete this Order?"
         title="Confirmation"
-        // loading={deleteCatalogByIdState.isLoading}
+        loading={deleteOrderByIdState.isLoading}
       />
       <CatalogCreate
       // setOpen={setCreateCatalogModal}

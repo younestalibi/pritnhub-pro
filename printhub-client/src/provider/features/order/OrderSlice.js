@@ -2,16 +2,13 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { initialOrderState, resetOrderState } from "./OrderState";
 import OrderServices from "./OrderServices";
 
-export const getOrders = createAsyncThunk(
-  "order/get-all",
-  async (thunkAPI) => {
-    try {
-      return await OrderServices.getOrders();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
+export const getOrders = createAsyncThunk("order/get-all", async (thunkAPI) => {
+  try {
+    return await OrderServices.getOrders();
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
 export const createOrder = createAsyncThunk(
   "order/create-one",
   async (order, thunkAPI) => {
@@ -23,36 +20,27 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-// export const deleteProductById = createAsyncThunk(
-//   "product/delete-one",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await ProductServices.deleteProductById(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-// export const getProductById = createAsyncThunk(
-//   "product/get-one",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await ProductServices.getProductById(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-// export const updateProduct = createAsyncThunk(
-//   "product/update-one",
-//   async (catalog, thunkAPI) => {
-//     try {
-//       return await ProductServices.updateProduct(catalog);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const deleteOrderById = createAsyncThunk(
+  "order/delete-one",
+  async (id, thunkAPI) => {
+    try {
+      return await OrderServices.deleteOrderById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  "order/update-one",
+  async (order, thunkAPI) => {
+    try {
+      return await OrderServices.updateOrderStatus(order);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const resetStateOrder = createAction("order/reset-state");
 
 export const OrderSlice = createSlice({
@@ -61,13 +49,13 @@ export const OrderSlice = createSlice({
   reducers: {},
   extraReducers: (buildeer) => {
     buildeer
-      // get-all-products
+      // get-all-orders
       .addCase(getOrders.pending, (state) => {
         resetOrderState(state);
         state.getOrdersState.isLoading = true;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
-        console.log(action)
+        console.log(action);
         state.getOrdersState.isError = false;
         state.getOrdersState.isLoading = false;
         state.getOrdersState.isSuccess = true;
@@ -75,35 +63,37 @@ export const OrderSlice = createSlice({
         state.orders = action.payload.orders;
       })
       .addCase(getOrders.rejected, (state, action) => {
-        console.log(action)
+        console.log(action);
         state.getOrdersState.isError = true;
         state.getOrdersState.isLoading = false;
         state.getOrdersState.isSuccess = false;
         state.getOrdersState.message = action.payload.error;
       })
-      // get-all-products
-      // //   =========================================================================
-      // // delete-one-by-id
-      // .addCase(deleteProductById.pending, (state) => {
-      //   resetProductState(state);
-      //   state.deleteProductByIdState.isLoading = true;
-      // })
-      // .addCase(deleteProductById.fulfilled, (state, action) => {
-      //   state.deleteProductByIdState.isError = false;
-      //   state.deleteProductByIdState.isLoading = false;
-      //   state.deleteProductByIdState.isSuccess = true;
-      //   state.deleteProductByIdState.message = action.payload.message;
-      //   state.products = state.products.filter((product) => {
-      //     return product.id != action.payload.id;
-      //   });
-      // })
-      // .addCase(deleteProductById.rejected, (state, action) => {
-      //   state.deleteProductByIdState.isError = true;
-      //   state.deleteProductByIdState.isLoading = false;
-      //   state.deleteProductByIdState.isSuccess = false;
-      //   state.deleteProductByIdState.message = action.payload.error;
+      // get-all-orders
+      //   =========================================================================
+      // delete-one-by-id
+      .addCase(deleteOrderById.pending, (state) => {
+        resetOrderState(state);
+        state.deleteOrderByIdState.isLoading = true;
+      })
+      .addCase(deleteOrderById.fulfilled, (state, action) => {
+        console.log(action)
+        state.deleteOrderByIdState.isError = false;
+        state.deleteOrderByIdState.isLoading = false;
+        state.deleteOrderByIdState.isSuccess = true;
+        state.deleteOrderByIdState.message = action.payload.message;
+        state.orders = state.orders.filter((order) => {
+          return order.id != action.payload.id;
+        });
+      })
+      .addCase(deleteOrderById.rejected, (state, action) => {
+        console.log(action)
+        state.deleteOrderByIdState.isError = true;
+        state.deleteOrderByIdState.isLoading = false;
+        state.deleteOrderByIdState.isSuccess = false;
+        state.deleteOrderByIdState.message = action.payload.error;
 
-      // })
+      })
       // delete-one-by-id
       //   =========================================================================
       // create-one
@@ -112,7 +102,7 @@ export const OrderSlice = createSlice({
         state.createOrderState.isLoading = true;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        console.log(action)
+        console.log(action);
         state.createOrderState.isError = false;
         state.createOrderState.isLoading = false;
         state.createOrderState.isSuccess = true;
@@ -120,7 +110,7 @@ export const OrderSlice = createSlice({
         state.orders.unshift(action.payload.orderItem);
       })
       .addCase(createOrder.rejected, (state, action) => {
-        console.log(action)
+        console.log(action);
         state.createOrderState.isError = true;
         state.createOrderState.isLoading = false;
         state.createOrderState.isSuccess = false;
@@ -129,48 +119,29 @@ export const OrderSlice = createSlice({
       // create-one
       //   =========================================================================
       // update-one
-      // .addCase(updateProduct.pending, (state) => {
-      //   resetProductState(state);
-      //   state.updateProductstate.isLoading = true;
-      // })
-      // .addCase(updateProduct.fulfilled, (state, action) => {
-      //   state.updateProductstate.isError = false;
-      //   state.updateProductstate.isLoading = false;
-      //   state.updateProductstate.isSuccess = true;
-      //   state.updateProductstate.message = action.payload.message;
-      //   const index = state.products.findIndex(e => e.id === action.payload.product.id);
-      //   if (index !== -1) {
-      //     state.products[index] = action.payload.product;
-      //   }
-      // })
-      // .addCase(updateProduct.rejected, (state, action) => {
-      //   state.updateProductstate.isError = true;
-      //   state.updateProductstate.isLoading = false;
-      //   state.updateProductstate.isSuccess = false;
-      //   state.updateProductstate.message = action.payload.error;
-      // })
+      .addCase(updateOrderStatus.pending, (state) => {
+        resetOrderState(state);
+        state.updateOrderStatusState.isLoading = true;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.updateOrderStatusState.isError = false;
+        state.updateOrderStatusState.isLoading = false;
+        state.updateOrderStatusState.isSuccess = true;
+        state.updateOrderStatusState.message = action.payload.message;
+        const index = state.orders.findIndex(
+          (e) => e.id === action.payload.order.id
+        );
+        if (index !== -1) {
+          state.orders[index] = action.payload.order;
+        }
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.updateOrderStatusState.isError = true;
+        state.updateOrderStatusState.isLoading = false;
+        state.updateOrderStatusState.isSuccess = false;
+        state.updateOrderStatusState.message = action.payload.error;
+      })
       // update-one
-      //   =========================================================================
-      // get-product-by-id
-      // .addCase(getProductById.pending, (state) => {
-      //   resetProductState(state);
-      //   state.getProductByIdState.isLoading = true;
-      // })
-      // .addCase(getProductById.fulfilled, (state, action) => {
-      //   state.getProductByIdState.isError = false;
-      //   state.getProductByIdState.isLoading = false;
-      //   state.getProductByIdState.isSuccess = true;
-      //   state.getProductByIdState.message = action.payload.message;
-      //   state.getProductByIdState.product=action.payload.product;
-
-      // })
-      // .addCase(getProductById.rejected, (state, action) => {
-      //   state.getProductByIdState.isError = true;
-      //   state.getProductByIdState.isLoading = false;
-      //   state.getProductByIdState.isSuccess = false;
-      //   state.getProductByIdState.message = action.payload.error;
-      // })
-      // get-product-by-id
       //   =========================================================================
       //reset-state-product
       .addCase(resetStateOrder, (state) => {

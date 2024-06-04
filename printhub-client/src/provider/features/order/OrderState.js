@@ -6,12 +6,12 @@ export const initialOrderState = {
     isSuccess: false,
     message: "",
   },
-  // deleteProductByIdState: {
-  //   isLoading: false,
-  //   isError: false,
-  //   isSuccess: false,
-  //   message: "",
-  // },
+  deleteOrderByIdState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
   // getProductByIdState: {
   //   isLoading: false,
   //   isError: false,
@@ -24,17 +24,17 @@ export const initialOrderState = {
     isSuccess: false,
     message: "",
   },
-  // updateProductstate: {
-  //   isLoading: false,
-  //   isError: false,
-  //   isSuccess: false,
-  //   message: "",
-  // },
+  updateOrderStatusState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
 };
 export const resetOrderState = (state) => {
   state.getOrdersState = { ...initialOrderState.getOrdersState };
-  // state.deleteProductByIdState = {...initialOrderState.deleteProductByIdState};
+  state.deleteOrderByIdState = {...initialOrderState.deleteOrderByIdState};
   // state.getProductByIdState = { ...initialOrderState.getProductByIdState };
   state.createOrderState = { ...initialOrderState.createOrderState };
-  // state.updateProductstate = { ...initialOrderState.updateProductstate };
+  state.updateOrderStatusState = { ...initialOrderState.updateOrderStatusState };
 };
