@@ -4,9 +4,8 @@ general
 */
 
 body {
-
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   line-height: 1.6;
   color: #333;
@@ -17,7 +16,7 @@ body {
 }
 
 .container-fluid {
-  margin: 0  auto;
+  margin: 0 auto;
   max-width: 1200px;
   padding: 0 15px;
   width: 100%;
@@ -71,8 +70,6 @@ title holder
   font-size: 28px;
   margin: 0;
 }
-
-
 
 /* 
 hero
@@ -170,8 +167,6 @@ about
   margin: 0 0 10px;
 }
 
-
-
 .textBlock {
   width: 100%;
   text-align: center;
@@ -194,7 +189,6 @@ about
 
 .image {
   max-width: 100%;
-  
 }
 
 @media only screen and (max-width: 992px) {
@@ -309,24 +303,26 @@ responsive
     display: none;
   }
 }
-.btn-edit {
+.btn-edit,
+.btn-delete,
+.btn-view {
   font-size: 20px;
-  color: green;
   margin: 0px 5px;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.6;
   transaction: 0.2s;
+}
+.btn-edit {
+  color: green;
 }
 .btn-delete {
-  font-size: 20px;
   color: red;
-  margin: 0px 5px;
-  cursor: pointer;
-  opacity: 0.8;
-  transaction: 0.2s;
-  scale: 2;
+}
+.btn-view {
+  color: blue;
 }
 .btn-delete:hover,
+.btn-view:hover,
 .btn-edit:hover {
   opacity: 1;
 }

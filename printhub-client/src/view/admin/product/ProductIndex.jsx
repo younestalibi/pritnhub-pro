@@ -75,7 +75,7 @@ const ProductIndex = () => {
   console.log(products)
   for (let i = 0; i < products.length; i++) {
     data.push({
-      key: i,
+      key:  products[i].id,
       name: products[i].name,
       description: (
         <Popover
@@ -86,7 +86,7 @@ const ProductIndex = () => {
           {products[i].description.slice(0, 13) + "..."}
         </Popover>
       ),
-      catalog: catalogs.find((e) => e.id == products[i].catalog_id).name,
+      catalog: catalogs.find((e) => e.id == products[i].catalog_id)?.name,
       price: products[i].price,
       quantity: products[i].quantity.max,
       options: (
@@ -199,6 +199,10 @@ const ProductIndex = () => {
 export default ProductIndex;
 
 const columns = [
+  {
+    title: "#ID",
+    dataIndex: "key",
+  },
   {
     title: "Name",
     dataIndex: "name",

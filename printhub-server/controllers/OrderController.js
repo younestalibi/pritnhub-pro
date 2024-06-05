@@ -8,6 +8,7 @@ const {
   sequelize,
 } = require("../models");
 const uuid = require("uuid");
+const { calculateItemTotal } = require("../services/CalculationService");
 
 // Get all orders
 exports.index = async (req, res) => {
@@ -16,10 +17,7 @@ exports.index = async (req, res) => {
     const orders = await Order.findAll({
       //   where: { user_id: userId },
       include: {
-        model: OrderItem,
-        include: {
-          model: Product,
-        },
+        model: OrderItem
       },
     });
 
@@ -49,7 +47,6 @@ exports.createOrder = async (req, res) => {
       const order = await Order.create(
         {
           user_id: userId,
-          total_amount: totalAmount,
           tracking_id: trackingId,
           status: "pending",
         },
@@ -74,11 +71,13 @@ exports.createOrder = async (req, res) => {
               {
                 order_id: order.id,
                 product_id: item.Product.id,
+                name: item.Product.name,
+                image: item.Product.image,
                 quantity: item.quantity,
                 customizations: item.customizations,
-                price: 1111,
+                price: calculateItemTotal(item),
               },
-              { transaction }
+              { transaction } 
             );
             // let product = await Product.findByPk(item.Product.id);
             // let newMaxValue = String(Number(product.quantity.max)-item.quantity);
@@ -139,9 +138,7 @@ exports.updateOrderStatus = async (req, res) => {
       where: { id: orderId },
       include: {
         model: OrderItem,
-        include: {
-          model: Product,
-        },
+        
       },
     });
     if (!order) {

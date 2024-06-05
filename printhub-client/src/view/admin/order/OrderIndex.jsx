@@ -1,38 +1,31 @@
 import { useDispatch, useSelector } from "react-redux";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
-import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { IoAddOutline } from "react-icons/io5";
-
-import {
-  deleteCatalogById,
-  getCatalogs,
-  resetStateCatalog,
-} from "../../../provider/features/catalog/CatalogSlice";
+import { IoEyeOutline } from "react-icons/io5";
 import { Button, Select, Table, notification } from "antd";
-import { Image } from "antd";
-import { Link } from "react-router-dom";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
-import CatalogCreate from "./CatalogCreate";
-import { icons } from "antd/es/image/PreviewGroup";
-import CatalogEdit from "./CatalogEdit";
 import {
   deleteOrderById,
   getOrders,
   resetStateOrder,
   updateOrderStatus,
 } from "../../../provider/features/order/OrderSlice";
+import OrderView from "./OrderView";
+import { calculateTotalPrice } from "../../../utils/functions";
 
 const OrderIndex = () => {
   const [deleteId, setDeleteId] = useState(null);
-  // const [editId, setEditId] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [viewId, setViewId] = useState(null);
   const [open, setOpen] = useState(false);
-  // const [createCatalogModal, setCreateCatalogModal] = useState(false);
-  // const [editCatalogModal, setEditCatalogModal] = useState(false);
-  const { orders, getOrdersState, updateOrderStatusState,deleteOrderByIdState } = useSelector(
-    (state) => state.order
-  );
+  const [viewOrderModal, setViewOrderModal] = useState(false);
+  const {
+    orders,
+    getOrdersState,
+    updateOrderStatusState,
+    deleteOrderByIdState,
+  } = useSelector((state) => state.order);
   const data = [];
   const dispatch = useDispatch();
 
@@ -47,7 +40,6 @@ const OrderIndex = () => {
 
   useEffect(() => {
     if (updateOrderStatusState.isSuccess) {
-      // setOpen(false);
       notification.open({
         description: updateOrderStatusState.message,
         duration: 3,
@@ -55,7 +47,6 @@ const OrderIndex = () => {
       });
     }
     if (updateOrderStatusState.isError) {
-      // setOpen(false);
       notification.open({
         description: updateOrderStatusState.message,
         duration: 3,
@@ -76,16 +67,17 @@ const OrderIndex = () => {
     data.push({
       key: orders[i].id,
       tracking_id: orders[i].tracking_id,
-      total_amount: orders[i].total_amount,
+      total_amount: calculateTotalPrice(orders[i].OrderItems),
       items: `${orders[i].OrderItems.length} items`,
       status: (
         <Select
           defaultValue={orders[i].status}
-          loading={updateOrderStatusState.isLoading}
+          loading={updateOrderStatusState.isLoading && orders[i].id == editId}
           style={{
             width: 120,
           }}
           onChange={(status) => {
+            setEditId(orders[i].id);
             dispatch(
               updateOrderStatus({ id: orders[i].id, status: { status } })
             );
@@ -93,16 +85,17 @@ const OrderIndex = () => {
           options={[
             {
               value: "pending",
-              label: "Pending",
+              label: <b style={{ color: "red" }}>Pending</b>,
             },
             {
-              value: "Completed",
-              label: "completed",
+              value: "completed",
+              label: <b style={{ color: "green" }}>Completed</b>,
             },
             {
               value: "cancelled",
-              label: "Cancelled",
+              label: <b style={{ color: "black" }}>Cancelled</b>,
             },
+           
           ]}
         />
       ),
@@ -110,18 +103,15 @@ const OrderIndex = () => {
         <>
           <span
             onClick={() => {
-              // setEditId(catalogs[i].id);
-              // setEditCatalogModal(true);
+              setViewId(orders[i].id);
+              setViewOrderModal(true);
             }}
-            className="btn-edit"
+            className="btn-view"
           >
-            <BiEdit />
+            <IoEyeOutline title="view" />
           </span>
-          <span
-            className="btn-delete"
-            onClick={() => showModal(orders[i].id)}
-          >
-            <AiFillDelete />
+          <span className="btn-delete" onClick={() => showModal(orders[i].id)}>
+            <AiFillDelete title="delete" />
           </span>
         </>
       ),
@@ -168,14 +158,11 @@ const OrderIndex = () => {
         title="Confirmation"
         loading={deleteOrderByIdState.isLoading}
       />
-      <CatalogCreate
-      // setOpen={setCreateCatalogModal}
-      // open={createCatalogModal}
-      />
-      <CatalogEdit
-      // setOpen={setEditCatalogModal}
-      // open={editCatalogModal}
-      // id={editId}
+
+      <OrderView
+        setOpen={setViewOrderModal}
+        open={viewOrderModal}
+        id={viewId}
       />
     </div>
   );
