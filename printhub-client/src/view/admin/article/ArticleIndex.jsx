@@ -67,7 +67,6 @@ const ArticleIndex = () => {
   };
 
   for (let i = 0; i < articles.length; i++) {
-    console.log("the articles are: "+articles[i].description),
     data.push({
       key: i,
       name: articles[i].name,

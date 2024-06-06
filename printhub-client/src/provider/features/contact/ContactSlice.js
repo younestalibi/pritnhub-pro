@@ -16,9 +16,7 @@ export const getContacts =createAsyncThunk(
 export const createContact = createAsyncThunk(
     "contact/create-one",
     async (contact, thunkAPI) => {
-        console.log("check this girl:"+ contact);
         try {
-
             return await contactService.createContact(contact);
         }catch(error){
             return thunkAPI.rejectWithValue(error);

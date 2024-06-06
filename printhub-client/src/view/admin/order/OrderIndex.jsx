@@ -36,8 +36,7 @@ const OrderIndex = () => {
       dispatch(resetStateOrder());
     }
   }, []);
-  console.log(orders);
-
+  
   useEffect(() => {
     if (updateOrderStatusState.isSuccess) {
       notification.open({

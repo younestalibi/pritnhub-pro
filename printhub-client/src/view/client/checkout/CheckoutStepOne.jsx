@@ -77,7 +77,6 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
       postal_code: Yup.string().required("Postal Code is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       dispatch(createAddress(values));
     },
   });

@@ -28,24 +28,6 @@ const CheckBoxInput = ({
     }else{
       setFormValues(name,value.filter((val) => val !== checkboxValue))
     }
-    // setFormValues((prevValues) => {
-    //   const currentValues = prevValues[name] || [];
-    //   console.log(currentValues)
-    //   if (checked) {
-    //     // Add the checkbox value if it is checked
-    //     return {
-    //       ...prevValues,
-    //       [name]: [...currentValues, checkboxValue],
-    //     };
-
-    //   } else {
-    //     // Remove the checkbox value if it is unchecked
-    //     return {
-    //       ...prevValues,
-    //       [name]: currentValues.filter((val) => val !== checkboxValue),
-    //     };
-    //   }
-    // });
   };
 
   return (

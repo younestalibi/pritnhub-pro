@@ -31,7 +31,6 @@ const CartMenu = (props) => {
         }),
       ]
     : [];
-  console.log(items);
   useEffect(() => {
     if (carts.length == 0) {
       dispatch(getCartItems());
@@ -40,7 +39,6 @@ const CartMenu = (props) => {
     }
   }, []);
 
-  console.log(carts);
   const [expanded, setExpanded] = useState(false);
 
 

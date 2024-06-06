@@ -120,7 +120,7 @@ function ProductCustomization({ onSave, options }) {
       setCustomizationOptions([]);
     }
   }, [options]);
-  console.log(customizationOptions);
+
   return (
     <>
       <div>

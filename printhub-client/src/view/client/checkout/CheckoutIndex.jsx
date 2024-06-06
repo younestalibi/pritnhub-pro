@@ -88,7 +88,7 @@ const CheckoutIndex = () => {
     key: item.title,
     title: item.title,
   }));
-  console.log(carts);
+
   return (
     <div style={{ width: "80%", minHeight: "80vh", margin: "auto" }}>
       <Steps type="navigation" current={current} items={items} />

@@ -102,13 +102,11 @@ export const authSlice = createSlice({
         state.user = action.payload.user;
         state.profile = action.payload.user.profile;
         localStorage.setItem("token", action.payload.token);
-        console.log(state.profile);
       })
       .addCase(login.rejected, (state, action) => {
         state.loginState.isError = true;
         state.loginState.isSuccess = false;
         state.loginState.isLoading = false;
-        console.log(action)
         state.loginState.message = action.payload.error;
       })
       // login
@@ -149,7 +147,6 @@ export const authSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.getUserState.isError = true;
         state.getUserState.isSuccess = false;
-        console.log(action)
         state.getUserState.message = action.payload?.error||'User not found';
         state.getUserState.isLoading = false;
       })

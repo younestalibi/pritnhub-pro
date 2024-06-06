@@ -66,7 +66,6 @@ export const CatalogSlice = createSlice({
         state.getCatalogsState.isError = true;
         state.getCatalogsState.isLoading = false;
         state.getCatalogsState.isSuccess = false;
-        console.log(action)
         state.getCatalogsState.message = action.payload.error;
       })
       // get-all-catalogs

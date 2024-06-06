@@ -15,7 +15,6 @@ const CheckoutStepFour = ({ checkoutData }) => {
       paymentMethod: checkoutData.paymentMethod,
     };
     dispatch(createOrder(orderData));
-    console.log(orderData);
 
     try {
       //   await dispatch(createOrder(orderData));

@@ -55,7 +55,6 @@ export const OrderSlice = createSlice({
         state.getOrdersState.isLoading = true;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
-        console.log(action);
         state.getOrdersState.isError = false;
         state.getOrdersState.isLoading = false;
         state.getOrdersState.isSuccess = true;
@@ -63,7 +62,6 @@ export const OrderSlice = createSlice({
         state.orders = action.payload.orders;
       })
       .addCase(getOrders.rejected, (state, action) => {
-        console.log(action);
         state.getOrdersState.isError = true;
         state.getOrdersState.isLoading = false;
         state.getOrdersState.isSuccess = false;
@@ -77,7 +75,6 @@ export const OrderSlice = createSlice({
         state.deleteOrderByIdState.isLoading = true;
       })
       .addCase(deleteOrderById.fulfilled, (state, action) => {
-        console.log(action)
         state.deleteOrderByIdState.isError = false;
         state.deleteOrderByIdState.isLoading = false;
         state.deleteOrderByIdState.isSuccess = true;
@@ -87,7 +84,6 @@ export const OrderSlice = createSlice({
         });
       })
       .addCase(deleteOrderById.rejected, (state, action) => {
-        console.log(action)
         state.deleteOrderByIdState.isError = true;
         state.deleteOrderByIdState.isLoading = false;
         state.deleteOrderByIdState.isSuccess = false;
@@ -102,7 +98,6 @@ export const OrderSlice = createSlice({
         state.createOrderState.isLoading = true;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        console.log(action);
         state.createOrderState.isError = false;
         state.createOrderState.isLoading = false;
         state.createOrderState.isSuccess = true;
@@ -110,7 +105,6 @@ export const OrderSlice = createSlice({
         state.orders.unshift(action.payload.orderItem);
       })
       .addCase(createOrder.rejected, (state, action) => {
-        console.log(action);
         state.createOrderState.isError = true;
         state.createOrderState.isLoading = false;
         state.createOrderState.isSuccess = false;

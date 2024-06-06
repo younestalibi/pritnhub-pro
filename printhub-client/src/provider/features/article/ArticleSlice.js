@@ -19,7 +19,6 @@ export const createArticle = createAsyncThunk(
     try {
       return await articleService.createArticle(article);
     } catch (error) {
-      console.log("erour akhty :" + error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -68,7 +67,6 @@ export const ArticleSlice = createSlice({
         state.getArticlesState.isError = true;
         state.getArticlesState.isLoading = false;
         state.getArticlesState.isSuccess = false;
-        console.log(action);
         state.getArticlesState.message = action.payload.error;
       })
       // get-all-articles
