@@ -22,7 +22,6 @@ app.use(
     origin: process.env.APP_CLIENT,
   })
 );
-
 app.use("/api/auth", authRoutes);
 app.use("/api/catalog", catalogRoutes);
 app.use("/api/product", productRoutes);

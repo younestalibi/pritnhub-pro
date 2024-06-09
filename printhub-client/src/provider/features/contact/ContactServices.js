@@ -1,5 +1,4 @@
 import axiosHttp from "../../../utils/axios-client";
-import config from "../../../utils/config";
 
 const getContacts = async () =>{
     try{
@@ -11,9 +10,20 @@ const getContacts = async () =>{
     }
 };
 
+
 const createContact = async (contact) =>{
     try{
         const response = await axiosHttp.post('/contact',contact);
+        return response.data;
+    }catch(error){
+        return error.response.data;
+    }
+};
+
+const respondContact = async ({id,contact}) =>{
+    try{
+        const response = await axiosHttp.post(`/contact/${id}`,contact);
+        console.log("log3 :"+response.data);
         return response.data;
     }catch(error){
         return error.response.data;
@@ -32,6 +42,7 @@ const deleteContact = async (id) =>{
 const contactService ={
         getContacts,
         createContact,
+        respondContact,
         deleteContact,
 };
 

@@ -12,6 +12,12 @@ export const initialContactState = {
         isSuccess: false,
         message :""
     },
+    respondContactState : {
+        isLoading : false,
+        isError : false,
+        isSuccess: false,
+        message :""
+    },
     deleteContactState : {
         isLoading : false,
         isError : false,
@@ -24,5 +30,6 @@ export const initialContactState = {
 export const resetContactState = (state) =>{
     state.getContactsState = {...initialContactState.getContactsState};
     state.CreateContactState = {...initialContactState.CreateContactState};
+    state.respondContactState = {...initialContactState.respondContactState};
     state.deleteContactState = {...initialContactState.deleteContactState};
 };

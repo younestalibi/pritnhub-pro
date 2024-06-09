@@ -20,7 +20,9 @@ import AdminRoute from "./components/route/AdminRoute";
 import AuthRoute from "./components/route/AuthRoute";
 import CheckoutIndex from "./view/client/checkout/CheckoutIndex";
 import ContactApp from "./view/client/contact/contact";
+import ContactIndex from "./view/admin/contact/contactIndex";
 import OrderIndex from "./view/admin/order/OrderIndex";
+
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -34,7 +36,9 @@ function App() {
       { path: "catalog", element: <CatalogIndex /> },
       { path: "product", element: <ProductIndex /> },
       { path: "article", element: <ArticleIndex /> },
+      { path: "contact", element: <ContactIndex /> },
       { path: "order", element: <OrderIndex /> },
+
     ];
 
     const authRoutes = [
