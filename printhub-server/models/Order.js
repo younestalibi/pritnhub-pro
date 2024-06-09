@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
-      total_amount: {
-        type: DataTypes.DECIMAL(10, 2),
+      tracking_id: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       status: {
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "pending",
       },
-    });
+    }); 
   
     Order.associate = (models) => {
       Order.belongsTo(models.User, {

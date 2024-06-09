@@ -9,22 +9,34 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
-      product_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Products",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-      },
+    //   product_id: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: false,
+    //     references: {
+    //       model: "Products",
+    //       key: "id",
+    //     },
+    //     onDelete: "CASCADE",
+    //   },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
       },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      }, 
       price: {
         type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+      },
+      customizations: {
+        type: DataTypes.JSON,
         allowNull: false,
       },
     });
@@ -34,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "order_id",
         onDelete: "CASCADE",
       });
-      OrderItem.belongsTo(models.Product, {
-        foreignKey: "product_id",
-        onDelete: "CASCADE",
-      });
+    //   OrderItem.belongsTo(models.Product, {
+    //     foreignKey: "product_id",
+    //     onDelete: "CASCADE",
+    //   });
     };
   
     return OrderItem;

@@ -120,7 +120,7 @@ function ProductCustomization({ onSave, options }) {
       setCustomizationOptions([]);
     }
   }, [options]);
-console.log(customizationOptions)
+
   return (
     <>
       <div>
@@ -224,12 +224,21 @@ console.log(customizationOptions)
         {customizationOptions.map((option, index) => (
           <Popover
             key={index}
-            content={<pre>{JSON.stringify(option, null, 2)}</pre>}
+            content={
+              <pre
+                style={{
+                  maxHeight: "200px",
+                  overflowY:'auto'
+                }}
+              >
+                {JSON.stringify(option, null, 2)}
+              </pre>
+            }
             title="Form Details"
             trigger="hover"
           >
             <Tag
-              style={{ marginTop: "10px" }}
+              style={{ marginTop: "10px",cursor:'pointer' }}
               closable
               onClose={() => {
                 setCustomizationOptions(

@@ -26,7 +26,6 @@ export const initialCartState = {
   },
 };
 export const resetCartState = (state) => {
-  console.log('hii')
   state.addCartItemState = { ...initialCartState.addCartItemState };
   state.getCartItemsState = { ...initialCartState.getCartItemsState };
   state.deleteItemByIdState = { ...initialCartState.deleteItemByIdState };

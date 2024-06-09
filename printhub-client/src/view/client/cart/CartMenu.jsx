@@ -31,7 +31,6 @@ const CartMenu = (props) => {
         }),
       ]
     : [];
-  console.log(items);
   useEffect(() => {
     if (carts.length == 0) {
       dispatch(getCartItems());
@@ -40,31 +39,8 @@ const CartMenu = (props) => {
     }
   }, []);
 
-  console.log(carts);
   const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => {
-    if (deleteItemByIdState.isSuccess || clearCartState.isSuccess) {
-      notification.open({
-        description: deleteItemByIdState.message || clearCartState.message,
-        duration: 3,
-        type: "success",
-      });
-    }
-    if (deleteItemByIdState.isError || clearCartState.isError) {
-      notification.open({
-        description: deleteItemByIdState.message || clearCartState.message,
-        duration: 3,
-        type: "error",
-      });
-    }
-    dispatch(resetStateCart());
-  }, [
-    deleteItemByIdState.isSuccess,
-    deleteItemByIdState.isError,
-    clearCartState.isSuccess,
-    clearCartState.isError,
-  ]);
 
   const [loadingItemId, setLoadingItemId] = useState(null);
   return (

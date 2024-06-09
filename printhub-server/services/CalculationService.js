@@ -1,4 +1,4 @@
-export const calculateItemTotal = (item) => {
+const calculateItemTotal = (item) => {
   const basePrice = parseFloat(item.Product.price);
   const quantity = item.quantity;
 
@@ -35,15 +35,14 @@ export const calculateItemTotal = (item) => {
   return itemTotal;
 };
 
-export const calculateTotal = (cartItems) => {
+const calculateTotal = (cartItems) => {
   return cartItems.reduce((total, item) => {
     const itemTotal = calculateItemTotal(item);
     return total + itemTotal;
   }, 0);
 };
 
-export const calculateTotalPrice = (items) => {
-  return items.reduce((total, item) => {
-    return total + parseFloat(item.price);
-  }, 0);
+module.exports = {
+  calculateItemTotal,
+  calculateTotal,
 };

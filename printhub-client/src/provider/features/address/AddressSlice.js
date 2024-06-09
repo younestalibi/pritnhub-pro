@@ -71,7 +71,6 @@ export const AddressSlice = createSlice({
         state.getAddressesState.isSuccess = true;
         state.getAddressesState.message = action.payload.message;
         state.addresses = action.payload.addresses;
-        console.log(action)
       })
       .addCase(getAddresses.rejected, (state, action) => {
         state.getAddressesState.isError = true;
@@ -96,7 +95,6 @@ export const AddressSlice = createSlice({
         });
       })
       .addCase(deleteAddressById.rejected, (state, action) => {
-        console.log(action)
         state.deleteAddressState.isError = true;
         state.deleteAddressState.isLoading = false;
         state.deleteAddressState.isSuccess = false;
@@ -116,7 +114,6 @@ export const AddressSlice = createSlice({
         state.createAddressState.isSuccess = true;
         state.createAddressState.message = action.payload.message;
         state.addresses.unshift(action.payload.address);
-        console.log(action)
       })
       .addCase(createAddress.rejected, (state, action) => {
         state.createAddressState.isError = true;

@@ -107,8 +107,6 @@ const ProductDetail = () => {
       )
     : [];
 
-  console.log(product);
-
   useEffect(() => {
     dispatch(getProductById(id));
   }, []);

@@ -5,9 +5,7 @@ import { FaCircleQuestion } from "react-icons/fa6";
 const NumberInput = ({ label, name, value, setFormValues, tooltip, error }) => {
   const handleChange = (e) => {
     setFormValues(name, e);
-    // setFormValues((prevValues) => ({ ...prevValues, [name]: e }));
   };
-  console.log(error)
 
   return (
     <div style={{ margin: "20px 0px" }}>

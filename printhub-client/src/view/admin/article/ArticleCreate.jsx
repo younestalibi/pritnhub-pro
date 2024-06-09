@@ -173,10 +173,6 @@ const ArticleCreate = (props) => {
             }}
             listType="picture-card"
             maxCount={1}
-            // onRemove={() => {
-            //   formik.setFieldValue("image", []);
-            //   console.log(formik.getFieldProps("image").value);
-            // }}
             fileList={formik.getFieldProps("image").value}
             onPreview={handlePreview}
             onChange={({ fileList: newFileList }) => {

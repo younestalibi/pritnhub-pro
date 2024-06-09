@@ -1,22 +1,22 @@
 import axiosHttp from "../../../utils/axios-client";
 import config from '../../../utils/config'
 
-// const getProducts = async () => {
-//   try {
-//     const response = await axiosHttp.get(`/product`);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
-// const deleteProductById = async (id) => {
-//   try {
-//     const response = await axiosHttp.delete(`/product/delete/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
+const getOrders = async () => {
+  try {
+    const response = await axiosHttp.get(`/order`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+const deleteOrderById = async (id) => {
+  try {
+    const response = await axiosHttp.delete(`/order/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 // const getProductById = async (id) => {
 //   try {
 //     const response = await axiosHttp.get(`/product/${id}`);
@@ -33,21 +33,21 @@ const createOrder = async (order) => {
     throw error.response.data;
   }
 };
-// const updateProduct = async ({id,product}) => {
-//   try {
-//     const response = await axiosHttp.put(`/product/update/${id}`,product,config);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
+const updateOrderStatus = async ({id,status}) => {
+  try {
+    const response = await axiosHttp.put(`/order/update/${id}`,status);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 
 
 const OrderServices = {
-  // getProducts,
-  // deleteProductById,
+  getOrders,
+  deleteOrderById,
   createOrder,
-  // updateProduct,
+  updateOrderStatus,
   // getProductById
 };
 

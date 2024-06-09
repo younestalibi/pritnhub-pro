@@ -26,7 +26,6 @@ const ProfileInformation = () => {
       email: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       dispatch(updateProfile(values))
       
     },

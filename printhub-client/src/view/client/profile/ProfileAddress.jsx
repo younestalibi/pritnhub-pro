@@ -63,7 +63,6 @@ const ProfileAddress = () => {
       postal_code: Yup.string().required("Postal Code is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       dispatch(createAddress(values));
     },
   });
@@ -83,8 +82,8 @@ const ProfileAddress = () => {
         type: "error",
       });
     }
-    if(createAddressState.isSuccess){
-      setShowForm(false)
+    if (createAddressState.isSuccess) {
+      setShowForm(false);
     }
     dispatch(resetStateAddress());
     formik.resetForm();
@@ -146,13 +145,15 @@ const ProfileAddress = () => {
           </List.Item>
         )}
       />
-      <Button
-        type="primary"
-        onClick={() => setShowForm(!showForm)}
-        style={{ marginBottom: "20px", marginTop: "20px" }}
-      >
-        {showForm ? "Cancel" : "Add New Address"}
-      </Button>
+      {!showForm && (
+        <Button
+          type="primary"
+          onClick={() => setShowForm(!showForm)}
+          style={{ marginBottom: "20px", marginTop: "20px" }}
+        >
+          Add New Address
+        </Button>
+      )}
       {showForm && (
         <form onSubmit={formik.handleSubmit}>
           <Row gutter={20} justify={"space-evenly"}>
@@ -313,16 +314,21 @@ const ProfileAddress = () => {
               </div>
             </Col>
           </Row>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              marginTop: "10px",
-            }}
-            loading={createAddressState.isLoading}
-          >
-            Create address
-          </Button>
+          <Flex align="center" gap={10}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={createAddressState.isLoading}
+            >
+              Create address
+            </Button>
+            <Button
+              onClick={() => setShowForm(false)}
+              style={{ marginBottom: "20px", marginTop: "20px" }}
+            >
+              Cancel
+            </Button>
+          </Flex>
         </form>
       )}
     </div>

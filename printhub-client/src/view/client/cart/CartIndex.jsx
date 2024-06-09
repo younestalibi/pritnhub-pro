@@ -47,7 +47,6 @@ const CartIndex = () => {
         }),
       ]
     : [];
-  console.log(items);
   useEffect(() => {
     if (carts.length == 0) {
       dispatch(getCartItems());
@@ -56,7 +55,6 @@ const CartIndex = () => {
     }
   }, []);
 
-  console.log(carts);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {

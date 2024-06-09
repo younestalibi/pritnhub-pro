@@ -13,7 +13,6 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import CartMenu from "../../../view/client/cart/CartMenu";
 
-const onSearch = (value, _e, info) => console.log(info?.source, value);
 
 export default function AppHeader() {
   const [current, setCurrent] = useState("mail");
@@ -23,7 +22,6 @@ export default function AppHeader() {
   const [open, setOpen] = useState(false);
 
   const onClick = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
   };
   const dispatch = useDispatch();
