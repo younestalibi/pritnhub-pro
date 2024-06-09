@@ -3,9 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome Email</title>
+    <title>Contact Submission Confirmation</title>
   </head>
   <body>
-    <h1>welcome to printhub pro</h1>
+    <h1>Thank You for Your Message!</h1>
+    <p>Dear <%= name %>,</p>
+    <p>
+      We have received your message and will get back to you as soon as
+      possible.
+    </p>
+    <p>Here's a copy of your message:</p>
+    <p><strong>Message:</strong> <%= message %></p>
+    <p>Best Regards,<br />PrintHub Pro</p>
   </body>
 </html>

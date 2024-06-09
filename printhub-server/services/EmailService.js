@@ -23,7 +23,6 @@ class EmailService {
 
   async send(to, subject, htmlFileName, data = {}) {
     const htmlPath = path.join(__dirname, "../", "views", htmlFileName);
-    
     const html = await ejs.renderFile(htmlPath, data);
 
     const mailOptions = {

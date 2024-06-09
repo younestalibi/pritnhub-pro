@@ -6,6 +6,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   StockOutlined,
+  ContactsOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -51,6 +52,11 @@ const DasbhoardLayout = () => {
               key: "article",
               icon:  <StockOutlined />,
               label: "Article",
+            },
+            {
+              key: "contact",
+              icon:  <ContactsOutlined />,
+              label: "Contact",
             },
            
           ]}

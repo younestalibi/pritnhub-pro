@@ -25,7 +25,7 @@ app.use(
 );
 ///copy this line and reuse it 
 // Mail.send('yourEamil@gmail.com','test','welcome.ejs')
-//(email,subject,name of email template file it's exist in the folder view)
+//(email,subject,name of email template file it's exist in the folder view) got you
 
 app.use("/api/auth", authRoutes);
 app.use("/api/catalog", catalogRoutes);
