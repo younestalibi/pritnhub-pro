@@ -32,6 +32,9 @@ export default function AppHeader() {
       dispatch(resetStateCart());
     }
   }, [user]);
+  const onSearch=(e)=>{
+    console.log(e)
+  }
 
   return (
     <>
