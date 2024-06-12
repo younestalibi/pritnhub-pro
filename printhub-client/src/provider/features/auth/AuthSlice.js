@@ -31,7 +31,7 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   }
 });
 
-export const getUser = createAsyncThunk("auth/get-user", async (thunkAPI) => {
+export const getUser = createAsyncThunk("auth/get-user", async (_,thunkAPI) => {
   try {
     return await authService.getUser();
   } catch (error) {

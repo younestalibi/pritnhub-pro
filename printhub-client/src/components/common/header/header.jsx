@@ -17,6 +17,8 @@ import CartMenu from "../../../view/client/cart/CartMenu";
 export default function AppHeader() {
   const [current, setCurrent] = useState("mail");
   const { carts, addCartItemState } = useSelector((state) => state.cart);
+  const { settings } = useSelector((state) => state.setting);
+
   const { user } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
   const [open, setOpen] = useState(false);
@@ -43,7 +45,7 @@ export default function AppHeader() {
           <div className="headerMain">
             <div className="logo">
               <strong>
-                <span>PrintHub</span>-Pro
+                {settings&&settings.website_name}
               </strong>
             </div>
             <div className="SearchInput">

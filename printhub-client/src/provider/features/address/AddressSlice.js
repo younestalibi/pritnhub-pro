@@ -4,7 +4,7 @@ import AddressServices from "./AddressServices";
 
 export const getAddresses = createAsyncThunk(
   "address/get-all",
-  async (thunkAPI) => {
+  async (_,thunkAPI) => {
     try {
       return await AddressServices.getAddresses();
     } catch (error) {

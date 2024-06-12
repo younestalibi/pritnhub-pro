@@ -88,6 +88,10 @@ const CartIndex = () => {
         {carts.length > 0 && (
           <Button
             danger
+            style={{ 
+              paddingLeft:'0px',
+              marginBottom:'10px',
+             }}
             type="link"
             onClick={() => {
               dispatch(clearCart());
@@ -136,9 +140,9 @@ const CartIndex = () => {
               extra={
                 <Image
                   alt={item.Product.name}
-                  width={272}
-                  height={220}
-                  style={{ objectFit: "cover" }}
+                  width={200}
+                  height={200}
+                  style={{ objectFit: "cover"}}
                   crossOrigin={import.meta.env.VITE_CLIENT_URL}
                   loading="lazy"
                   src={`${import.meta.env.VITE_SERVER_URL}/${
@@ -152,7 +156,7 @@ const CartIndex = () => {
                 description={
                   <Paragraph
                     ellipsis={{
-                      rows: 3,
+                      rows: 1,
                       expandable: "collapsible",
                       expanded: expanded,
                       onExpand: (_, info) => {

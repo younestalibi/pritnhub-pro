@@ -1,33 +1,28 @@
-export const initialCartState = {
-  carts: [],
-  addCartItemState: {
+export const initialSettingState = {
+  settings: null,
+  getSettingsState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
     message: "",
   },
-  getCartItemsState: {
+  updateSettingState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
     message: "",
   },
-  deleteItemByIdState: {
+  resetSettingState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
     message: "",
   },
-  clearCartState: {
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
-    message: "",
-  },
+  
 };
-export const resetCartState = (state) => {
-  state.addCartItemState = { ...initialCartState.addCartItemState };
-  state.getCartItemsState = { ...initialCartState.getCartItemsState };
-  state.deleteItemByIdState = { ...initialCartState.deleteItemByIdState };
-  state.clearCartState = { ...initialCartState.clearCartState };
+export const resetSettingState = (state) => {
+  state.getSettingsState = { ...initialSettingState.getSettingsState };
+  state.updateSettingState = { ...initialSettingState.updateSettingState };
+  state.resetSettingState = { ...initialSettingState.resetSettingState };
+  
 };

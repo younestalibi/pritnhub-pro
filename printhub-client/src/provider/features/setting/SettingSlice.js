@@ -1,179 +1,116 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import CartServices from "./CartServices";
-import { resetCartState, initialCartState } from "./CartState";
+import settingService from "./SettingServices";
+import { initialSettingState, resetSettingState } from "./SettingState";
 
-export const getCartItems = createAsyncThunk(
-  "cart/get-all-items",
-  async (thunkAPI) => {
+export const getSettings = createAsyncThunk(
+  "setting/get-all",
+  async (_,thunkAPI) => {
     try {
-      return await CartServices.getCartItems();
+      return await settingService.getSettings();
+    } catch (error) {
+      console.log(error)
+      return thunkAPI.rejectWithValue({error: 'Settings not found'});
+    }
+  }
+);
+export const resetCatalog = createAsyncThunk(
+  "setting/reset-one",
+  async (_,thunkAPI) => {
+    try {
+      return await settingService.resetCatalog();
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
-export const addCartItem = createAsyncThunk(
-  "cart/create-one-item",
-  async (cart, thunkAPI) => {
-    try {
-      return await CartServices.addCartItem(cart);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-export const deleteItemById = createAsyncThunk(
-  "cart/delete-one",
-  async (id, thunkAPI) => {
-    try {
-      return await CartServices.deleteItemById(id);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-export const clearCart = createAsyncThunk(
-  "cart/clear-cart",
-  async (thunkAPI) => {
-    try {
-      return await CartServices.clearCart();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-// export const updateCatalog = createAsyncThunk(
-//   "catalog/update-one",
-//   async (catalog, thunkAPI) => {
-//     try {
-//       return await catalogService.updateCatalog(catalog);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-export const resetStateCart = createAction("Cart/reset-state");
-export const resetStateCartsCollection = createAction("Cart-collection/reset-state");
 
-export const CartSlice = createSlice({
-  name: "cart",
-  initialState: initialCartState,
+export const updateSetting = createAsyncThunk(
+  "setting/update-one",
+  async (setting, thunkAPI) => {
+    try {
+      return await settingService.updateSetting(setting);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const resetStateSetting = createAction("setting/reset-state");
+
+export const SettingSlice = createSlice({
+  name: "setting",
+  initialState: initialSettingState,
   reducers: {},
   extraReducers: (buildeer) => {
     buildeer
-      // get-all-cart-items
-      .addCase(getCartItems.pending, (state) => {
-        resetCartState(state);
-        state.getCartItemsState.isLoading = true;
+      // get-all-settings
+      .addCase(getSettings.pending, (state) => {
+        resetSettingState(state);
+        state.getSettingsState.isLoading = true;
       })
-      .addCase(getCartItems.fulfilled, (state, action) => {
-        state.getCartItemsState.isError = false;
-        state.getCartItemsState.isLoading = false;
-        state.getCartItemsState.isSuccess = true;
-        state.getCartItemsState.message = action.payload.message;
-        state.carts = action.payload.cart.CartItems;
+      .addCase(getSettings.fulfilled, (state, action) => {
+        console.log(action);
+        state.getSettingsState.isError = false;
+        state.getSettingsState.isLoading = false;
+        state.getSettingsState.isSuccess = true;
+        state.getSettingsState.message = action.payload.message;
+        state.settings = action.payload.settings;
       })
-      .addCase(getCartItems.rejected, (state, action) => {
-        state.getCartItemsState.isError = true;
-        state.getCartItemsState.isLoading = false;
-        state.getCartItemsState.isSuccess = false;
-        state.getCartItemsState.message = action.payload?.error|| 'Failed to fetch items';;
+      .addCase(getSettings.rejected, (state, action) => {
+        console.log(action);
+        state.getSettingsState.isError = true;
+        state.getSettingsState.isLoading = false;
+        state.getSettingsState.isSuccess = false;
+        state.getSettingsState.message = action.payload.error;
       })
-      // get-all-cart-items
+      // get-all-settings
       //   =========================================================================
-      // delete-one-by-id
-      .addCase(deleteItemById.pending, (state) => {
-        resetCartState(state);
-        state.deleteItemByIdState.isLoading = true;
+      // create-one
+      .addCase(resetCatalog.pending, (state) => {
+        resetSettingState(state);
+        state.resetSettingState.isLoading = true;
       })
-      .addCase(deleteItemById.fulfilled, (state, action) => {
-        state.deleteItemByIdState.isError = false;
-        state.deleteItemByIdState.isLoading = false;
-        state.deleteItemByIdState.isSuccess = true;
-        state.deleteItemByIdState.message = action.payload.message;
-        state.carts = state.carts.filter((cart) => {
-          return cart.id != action.payload.id;
-        });
+      .addCase(resetCatalog.fulfilled, (state, action) => {
+        state.resetSettingState.isError = false;
+        state.resetSettingState.isLoading = false;
+        state.resetSettingState.isSuccess = true;
+        state.resetSettingState.message = action.payload.message;
+        state.settings = action.payload.setting;
       })
-      .addCase(deleteItemById.rejected, (state, action) => {
-        state.deleteItemByIdState.isError = true;
-        state.deleteItemByIdState.isLoading = false;
-        state.deleteItemByIdState.isSuccess = false;
-        state.deleteItemByIdState.message = action.payload.error;
+      .addCase(resetCatalog.rejected, (state, action) => {
+        state.resetSettingState.isError = true;
+        state.resetSettingState.isLoading = false;
+        state.resetSettingState.isSuccess = false;
+        state.resetSettingState.message = action.payload.error;
       })
-      // delete-one-by-id
+      // create-one
       //   =========================================================================
-      // add-cart-item
-      .addCase(addCartItem.pending, (state) => {
-        resetCartState(state);
-        state.addCartItemState.isLoading = true;
+      // update-one
+      .addCase(updateSetting.pending, (state) => {
+        resetSettingState(state);
+        state.updateSettingState.isLoading = true;
       })
-      .addCase(addCartItem.fulfilled, (state, action) => {
-        state.addCartItemState.isError = false;
-        state.addCartItemState.isLoading = false;
-        state.addCartItemState.isSuccess = true;
-        state.addCartItemState.message = action.payload.message;
-        state.carts.unshift(action.payload.cartItem);
+      .addCase(updateSetting.fulfilled, (state, action) => {
+        console.log(action);
+        state.updateSettingState.isError = false;
+        state.updateSettingState.isLoading = false;
+        state.updateSettingState.isSuccess = true;
+        state.updateSettingState.message = action.payload.message;
+        state.settings = action.payload.setting;
       })
-      .addCase(addCartItem.rejected, (state, action) => {
-        state.addCartItemState.isError = true;
-        state.addCartItemState.isLoading = false;
-        state.addCartItemState.isSuccess = false;
-        state.addCartItemState.message = action.payload.error;
+      .addCase(updateSetting.rejected, (state, action) => {
+        console.log(action);
+        state.updateSettingState.isError = true;
+        state.updateSettingState.isLoading = false;
+        state.updateSettingState.isSuccess = false;
+        state.updateSettingState.message = action.payload.error;
       })
-      // add-cart-item
-      //   =========================================================================
-      // clear-cart
-      .addCase(clearCart.pending, (state) => {
-        resetCartState(state);
-        state.clearCartState.isLoading = true;
-      })
-      .addCase(clearCart.fulfilled, (state, action) => {
-        state.clearCartState.isError = false;
-        state.clearCartState.isLoading = false;
-        state.clearCartState.isSuccess = true;
-        state.clearCartState.message = action.payload.message;
-        state.carts = [];
-      })
-      .addCase(clearCart.rejected, (state, action) => {
-        state.clearCartState.isError = true;
-        state.clearCartState.isLoading = false;
-        state.clearCartState.isSuccess = false;
-        state.clearCartState.message = action.payload.error;
-      })
-      // clear-cart
-      //   =========================================================================
-      // // update-one
-      // .addCase(updateCatalog.pending, (state) => {
-      //   resetCatalogState(state);
-      //   state.updateCatalogState.isLoading = true;
-      // })
-      // .addCase(updateCatalog.fulfilled, (state, action) => {
-      //   state.updateCatalogState.isError = false;
-      //   state.updateCatalogState.isLoading = false;
-      //   state.updateCatalogState.isSuccess = true;
-      //   state.updateCatalogState.message = action.payload.message;
-      //   const index = state.catalogs.findIndex(e => e.id === action.payload.catalog.id);
-      //   if (index !== -1) {
-      //     state.catalogs[index] = action.payload.catalog;
-      //   }
-      // })
-      // .addCase(updateCatalog.rejected, (state, action) => {
-      //   state.updateCatalogState.isError = true;
-      //   state.updateCatalogState.isLoading = false;
-      //   state.updateCatalogState.isSuccess = false;
-      //   state.updateCatalogState.message = action.payload.error;
-      // })
-      // // update-one
+      // update-one
       //   =========================================================================
       //reset-state-catalog
-      .addCase(resetStateCart, (state) => {
-        resetCartState(state);
-      })
-      .addCase(resetStateCartsCollection, (state) => {
-        state.carts=[]
+      .addCase(resetStateSetting, (state) => {
+        resetSettingState(state);
       });
   },
 });
 
-export default CartSlice.reducer;
+export default SettingSlice.reducer;

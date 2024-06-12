@@ -4,7 +4,7 @@ import { initialArticleState, resetArticleState } from "./ArticleState";
 
 export const getArticles = createAsyncThunk(
   "article/get-all",
-  async (thunkAPI) => {
+  async (_,thunkAPI) => {
     try {
       return await articleService.getArticles();
     } catch (error) {

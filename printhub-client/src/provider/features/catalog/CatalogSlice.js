@@ -4,7 +4,7 @@ import { initialState, resetCatalogState } from "./CatalogState";
 
 export const getCatalogs = createAsyncThunk(
   "catalog/get-all",
-  async (thunkAPI) => {
+  async (_,thunkAPI) => {
     try {
       return await catalogService.getCatalogs();
     } catch (error) {

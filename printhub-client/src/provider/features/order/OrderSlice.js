@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { initialOrderState, resetOrderState } from "./OrderState";
 import OrderServices from "./OrderServices";
 
-export const getOrders = createAsyncThunk("order/get-all", async (thunkAPI) => {
+export const getOrders = createAsyncThunk("order/get-all", async (_,thunkAPI) => {
   try {
     return await OrderServices.getOrders();
   } catch (error) {

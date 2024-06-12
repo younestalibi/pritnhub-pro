@@ -1,4 +1,4 @@
-import { FloatButton, Row, Col } from "antd";
+import { Row, Col } from "antd";
 import "./footer.css";
 
 export default function AppFooter() {
@@ -8,11 +8,11 @@ export default function AppFooter() {
         <Row>
           <Col span={12}>
             <div className="logoSocials">
-                <div className="logo">
+              <div className="logo">
                 <strong>
                   <span>PrintHub</span>-Pro
                 </strong>
-                </div>
+              </div>
               <ul className="socials">
                 <li>
                   <a href="https://www.pinterest.com">
@@ -41,27 +41,24 @@ export default function AppFooter() {
             <div className="menu">
               <h5>Site Map</h5>
               <div className="sitemap">
-              <ul  >
-                <li>
-                  <a href="about.html">About us</a>
-                </li>
+                <ul>
+                  <li>
+                    <a href="about.html">About us</a>
+                  </li>
 
-                <li>
-                  <a href="#">Our Products</a>
-                </li>
+                  <li>
+                    <a href="#">Our Products</a>
+                  </li>
 
-                <li>
-                  <a href="#">Contact</a>
-                </li>
-              </ul>
+                  <li>
+                    <a href="#">Contact</a>
+                  </li>
+                </ul>
               </div>
             </div>
           </Col>
         </Row>
-        <div className="copyright">
-          Copyright &copy; 2024 PrintHub-Pro{" "}
-        </div>
-        <FloatButton.BackTop />
+        <div className="copyright">Copyright &copy; 2024 PrintHub-Pro </div>
       </div>
     </div>
   );

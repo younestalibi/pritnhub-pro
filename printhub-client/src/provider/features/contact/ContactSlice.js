@@ -4,7 +4,7 @@ import { initialContactState, resetContactState } from "./ContactState";
 
 export const getContacts = createAsyncThunk(
   "contact/get-all",
-  async (thunkAPI) => {
+  async (_,thunkAPI) => {
     try {
       return await contactService.getContacts();
     } catch (error) {

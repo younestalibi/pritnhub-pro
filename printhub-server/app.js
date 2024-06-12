@@ -10,6 +10,7 @@ const articleRoutes = require("./routes/articleRoutes");
 const addressRoutes = require("./routes/addressRoutes");
 const contactRoutes = require('./routes/contactRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const settingRoutes = require('./routes/settingRoutes');
 const { sequelize } = require("./models");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -30,6 +31,7 @@ app.use("/api/article", articleRoutes);
 app.use("/api/address", addressRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/order', orderRoutes);
+app.use('/api/setting', settingRoutes);
 sequelize
   .sync()
   .then(() => {

@@ -50,20 +50,17 @@ const DasbhoardLayout = () => {
             },
             {
               key: "article",
-              icon:  <StockOutlined />,
+              icon: <StockOutlined />,
               label: "Article",
             },
             {
               key: "contact",
-              icon:  <ContactsOutlined />,
+              icon: <ContactsOutlined />,
               label: "Contact",
-
-              key: "order",
-              icon:  <StockOutlined />,
-              label: "Order",
-
             },
-           
+            { key: "order", icon: <StockOutlined />, label: "Order" },
+            { key: "setting", icon: <StockOutlined />, label: "Settings" },
+
           ]}
         />
       </Sider>

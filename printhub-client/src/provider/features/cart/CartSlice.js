@@ -4,7 +4,7 @@ import { resetCartState, initialCartState } from "./CartState";
 
 export const getCartItems = createAsyncThunk(
   "cart/get-all-items",
-  async (thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       return await CartServices.getCartItems();
     } catch (error) {
@@ -34,7 +34,7 @@ export const deleteItemById = createAsyncThunk(
 );
 export const clearCart = createAsyncThunk(
   "cart/clear-cart",
-  async (thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       return await CartServices.clearCart();
     } catch (error) {
@@ -53,7 +53,9 @@ export const clearCart = createAsyncThunk(
 //   }
 // );
 export const resetStateCart = createAction("Cart/reset-state");
-export const resetStateCartsCollection = createAction("Cart-collection/reset-state");
+export const resetStateCartsCollection = createAction(
+  "Cart-collection/reset-state"
+);
 
 export const CartSlice = createSlice({
   name: "cart",
@@ -77,7 +79,7 @@ export const CartSlice = createSlice({
         state.getCartItemsState.isError = true;
         state.getCartItemsState.isLoading = false;
         state.getCartItemsState.isSuccess = false;
-        state.getCartItemsState.message = action.payload?.error|| 'Failed to fetch items';;
+        state.getCartItemsState.message = action.payload.error;
       })
       // get-all-cart-items
       //   =========================================================================
@@ -171,7 +173,7 @@ export const CartSlice = createSlice({
         resetCartState(state);
       })
       .addCase(resetStateCartsCollection, (state) => {
-        state.carts=[]
+        state.carts = [];
       });
   },
 });

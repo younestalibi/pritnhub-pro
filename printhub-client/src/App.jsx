@@ -22,13 +22,18 @@ import CheckoutIndex from "./view/client/checkout/CheckoutIndex";
 import ContactApp from "./view/client/contact/contact";
 import ContactIndex from "./view/admin/contact/contactIndex";
 import OrderIndex from "./view/admin/order/OrderIndex";
+import { getSettings } from "./provider/features/setting/SettingSlice";
+import SettingIndex from "./view/admin/setting/SettingIndex";
 
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
+  const {settings } = useSelector((state) => state.setting);
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getSettings())
     dispatch(getUser());
   }, []);
+  console.log(settings)
   if (getUserState.isLoading) {
     return <Loader />;
   } else {
@@ -38,6 +43,7 @@ function App() {
       { path: "article", element: <ArticleIndex /> },
       { path: "contact", element: <ContactIndex /> },
       { path: "order", element: <OrderIndex /> },
+      { path: "setting", element: <SettingIndex /> },
 
     ];
 

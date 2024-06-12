@@ -4,7 +4,7 @@ import { initialProductState, resetProductState } from "./ProductState";
 
 export const getProducts = createAsyncThunk(
   "product/get-all",
-  async (thunkAPI) => {
+  async (_,thunkAPI) => {
     try {
       return await ProductServices.getProducts();
     } catch (error) {
