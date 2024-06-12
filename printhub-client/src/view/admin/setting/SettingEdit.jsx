@@ -28,15 +28,6 @@ const SettingEdit = (props) => {
         website_name: settings.website_name,
         whatsapp_chat_url: settings.whatsapp_chat_url,
         social_media_links: settings.social_media_links,
-        favicon: [
-          {
-            name: "favicon.ico",
-            status: "done",
-            originFileObj: null,
-            crossOrigin: import.meta.env.VITE_CLIENT_URL,
-            url: `${import.meta.env.VITE_SERVER_URL}/${settings.favicon}`,
-          },
-        ],
         logo: [
           {
             name: "logo.png",

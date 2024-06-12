@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      favicon: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       logo: {
         type: DataTypes.STRING,
         allowNull: true,
