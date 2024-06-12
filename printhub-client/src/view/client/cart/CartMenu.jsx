@@ -41,7 +41,6 @@ const CartMenu = (props) => {
 
   const [expanded, setExpanded] = useState(false);
 
-
   const [loadingItemId, setLoadingItemId] = useState(null);
   return (
     <>
@@ -98,8 +97,9 @@ const CartMenu = (props) => {
             </List.Item>
           )}
         />
+        <hr />
         <Flex justify="center" align="center">
-          <h4>Total: {calculateTotal(carts)} DH</h4>
+          <h3>Total: {calculateTotal(carts)} DH</h3>
         </Flex>
         <Link to={"/cart"}>
           <Button
