@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      order_payment_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      payment_method: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       status: {
         type: DataTypes.ENUM("pending", "completed", "cancelled"),
         allowNull: false,

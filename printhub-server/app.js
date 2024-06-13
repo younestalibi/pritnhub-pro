@@ -2,6 +2,11 @@ const express = require("express");
 require("dotenv").config();
 const path = require("path");
 const app = express();
+const helmet = require("helmet");
+const cors = require("cors");
+const bodyParser = require('body-parser');
+
+const { sequelize } = require("./models");
 const authRoutes = require("./routes/authRoutes");
 const catalogRoutes = require("./routes/catalogRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -11,12 +16,12 @@ const addressRoutes = require("./routes/addressRoutes");
 const contactRoutes = require('./routes/contactRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const settingRoutes = require('./routes/settingRoutes');
-const { sequelize } = require("./models");
-const helmet = require("helmet");
-const cors = require("cors");
+const paymentRoutes = require('./routes/paymentRoutes');
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
@@ -32,6 +37,8 @@ app.use("/api/address", addressRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/setting', settingRoutes);
+app.use('/api/paypal', paymentRoutes);
+
 sequelize
   .sync()
   .then(() => {
@@ -40,10 +47,11 @@ sequelize
   .catch((err) => {
     console.error("Database synchronization error:", err);
   });
-
 app.use(express.static("public"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on ${process.env.APP_URL}:${process.env.PORT}`);
+  console.log(process.env.NODE_ENV )
+
 });

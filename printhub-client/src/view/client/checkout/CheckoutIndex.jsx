@@ -139,14 +139,14 @@ const CheckoutIndex = () => {
                 Next
               </Button>
             )}
-            {current === steps.length - 1 && (
+            {/* {current === steps.length - 1 && (
               <Button
                 type="primary"
                 onClick={() => message.success("Processing complete!")}
               >
                 Done
               </Button>
-            )}
+            )} */}
             {current > 0 && (
               <Button
                 style={{

@@ -39,9 +39,7 @@ exports.createOrder = async (req, res) => {
     const userId = req.userId;
     const totalAmount = 1000;
     const trackingId = uuid.v4();
-
     const transaction = await sequelize.transaction();
-
     try {
       // Create an order
       const order = await Order.create(

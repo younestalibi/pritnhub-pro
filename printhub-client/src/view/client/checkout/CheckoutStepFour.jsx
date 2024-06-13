@@ -3,6 +3,7 @@ import { Button, Card, message, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../../provider/features/order/OrderSlice";
 import { resetStateCartsCollection } from "../../../provider/features/cart/CartSlice";
+import PayPal from "../../../components/PaymentMethods/Paypal";
 // import { createOrder } from "../../../provider/features/order/OrderSlice";
 
 const CheckoutStepFour = ({ checkoutData }) => {
@@ -26,7 +27,7 @@ const CheckoutStepFour = ({ checkoutData }) => {
 
   useEffect(() => {
     if (createOrderState.isSuccess) {
-    //   dispatch(resetStateCartsCollection());
+      //   dispatch(resetStateCartsCollection());
       notification.open({
         description: createOrderState.message,
         duration: 3,
@@ -44,10 +45,7 @@ const CheckoutStepFour = ({ checkoutData }) => {
 
   return (
     <Card>
-      <h2>Confirm Your Order</h2>
-      <Button type="primary" onClick={handleConfirmOrder}>
-        Confirm Order
-      </Button>
+      <PayPal />
     </Card>
   );
 };
