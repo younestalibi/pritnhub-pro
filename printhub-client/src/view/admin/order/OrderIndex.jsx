@@ -36,7 +36,7 @@ const OrderIndex = () => {
       dispatch(resetStateOrder());
     }
   }, []);
-  
+
   useEffect(() => {
     if (updateOrderStatusState.isSuccess) {
       notification.open({
@@ -62,42 +62,22 @@ const OrderIndex = () => {
     setOpen(true);
     setDeleteId(e);
   };
+  const getDisplayStatus = (status) => {
+    return status === "pending"
+      ? <b style={{ color: "red" }}>Pending</b>
+      : status === "completed"
+      ? <b style={{ color: "green" }}>Completed</b>
+      : status === "cancelled"
+      ? <b style={{ color: "black" }}>Cancelled</b>
+      : "unkonwn";
+  };
   for (let i = 0; i < orders.length; i++) {
     data.push({
       key: orders[i].id,
       tracking_id: orders[i].tracking_id,
       total_amount: calculateTotalPrice(orders[i].OrderItems),
       items: `${orders[i].OrderItems.length} items`,
-      status: (
-        <Select
-          defaultValue={orders[i].status}
-          loading={updateOrderStatusState.isLoading && orders[i].id == editId}
-          style={{
-            width: 120,
-          }}
-          onChange={(status) => {
-            setEditId(orders[i].id);
-            dispatch(
-              updateOrderStatus({ id: orders[i].id, status: { status } })
-            );
-          }}
-          options={[
-            {
-              value: "pending",
-              label: <b style={{ color: "red" }}>Pending</b>,
-            },
-            {
-              value: "completed",
-              label: <b style={{ color: "green" }}>Completed</b>,
-            },
-            {
-              value: "cancelled",
-              label: <b style={{ color: "black" }}>Cancelled</b>,
-            },
-           
-          ]}
-        />
-      ),
+      status: getDisplayStatus(orders[i].status),
       action: (
         <>
           <span
