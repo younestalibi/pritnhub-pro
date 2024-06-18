@@ -34,7 +34,7 @@ function App() {
     dispatch(getSettings())
     dispatch(getUser());
   }, []);
-  console.log(settings)
+
   if (getUserState.isLoading) {
     return <Loader />;
   } else {

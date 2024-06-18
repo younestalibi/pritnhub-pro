@@ -75,7 +75,7 @@ const OrderIndex = () => {
     data.push({
       key: orders[i].id,
       tracking_id: orders[i].tracking_id,
-      total_amount: calculateTotalPrice(orders[i].OrderItems),
+      total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
       items: `${orders[i].OrderItems.length} items`,
       status: getDisplayStatus(orders[i].status),
       action: (

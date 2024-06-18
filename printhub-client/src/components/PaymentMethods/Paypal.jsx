@@ -3,8 +3,8 @@ import axios from "axios";
 import axiosHttp from "../../utils/axios-client";
 import { notification } from "antd";
 
-const PayPal = () => {
-  const [items] = useState([{ id: 1, quantity: 1 }]);
+const PayPal = ({orderData}) => {
+  console.log(orderData)
   const [paypalClientId, setPaypalClientId] = useState("");
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const PayPal = () => {
             createOrder: function () {
               return axiosHttp
                 .post("paypal/create-order", {
-                  items,
+                  ...orderData,
                 })
                 .then((res) => {
                   console.log(res);
@@ -100,7 +100,7 @@ const PayPal = () => {
       });
       document.body.appendChild(script);
     }
-  }, [paypalClientId, items]);
+  }, [paypalClientId, orderData]);
 
   return (
     <div>

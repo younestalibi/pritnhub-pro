@@ -26,7 +26,7 @@ const CheckoutIndex = () => {
   const { carts } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [checkoutData, setCheckoutData] = useState({
-    addressId: null,
+    shippingAddress: null,
     paymentMethod: null,
   });
 
@@ -59,6 +59,7 @@ const CheckoutIndex = () => {
       title: "Address Informations",
       content: (
         <CheckoutStepOne
+          next={next}
           checkoutData={checkoutData}
           setCheckoutData={setCheckoutData}
         />
@@ -68,6 +69,8 @@ const CheckoutIndex = () => {
       title: "Payment Method",
       content: (
         <CheckoutStepTwo
+          next={next}
+          prev={prev}
           checkoutData={checkoutData}
           setCheckoutData={setCheckoutData}
         />
@@ -76,11 +79,18 @@ const CheckoutIndex = () => {
     {
       title: "Review Order",
 
-      content: <CheckoutStepThree checkoutData={checkoutData} carts={carts} />,
+      content: (
+        <CheckoutStepThree
+          next={next}
+          prev={prev}
+          checkoutData={checkoutData}
+          carts={carts}
+        />
+      ),
     },
     {
       title: "Place Order and Billing",
-      content: <CheckoutStepFour checkoutData={checkoutData} />,
+      content: <CheckoutStepFour prev={prev} checkoutData={checkoutData} />,
     },
   ];
 
@@ -96,7 +106,13 @@ const CheckoutIndex = () => {
         <Col md={{ span: 7 }}>
           <div style={{ position: "sticky", top: "0px" }}>
             <h1>Total Price</h1>
-            <Button style={{ fontWeight:'bold',textAlign:'left' }} block type="primary">{calculateTotal(carts)} DH</Button>
+            <Button
+              style={{ fontWeight: "bold", textAlign: "left" }}
+              block
+              type="primary"
+            >
+              {calculateTotal(carts)} DH
+            </Button>
             <h3>Order Summary:</h3>
             <List
               dataSource={carts}
@@ -133,31 +149,6 @@ const CheckoutIndex = () => {
         </Col>
         <Col md={{ span: 17 }}>
           <div style={{ padding: "40px 0px" }}>{steps[current].content}</div>
-          <div>
-            {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                Next
-              </Button>
-            )}
-            {/* {current === steps.length - 1 && (
-              <Button
-                type="primary"
-                onClick={() => message.success("Processing complete!")}
-              >
-                Done
-              </Button>
-            )} */}
-            {current > 0 && (
-              <Button
-                style={{
-                  margin: "0 8px",
-                }}
-                onClick={() => prev()}
-              >
-                Previous
-              </Button>
-            )}
-          </div>
         </Col>
       </Row>
     </div>
@@ -165,5 +156,3 @@ const CheckoutIndex = () => {
 };
 
 export default CheckoutIndex;
-
-

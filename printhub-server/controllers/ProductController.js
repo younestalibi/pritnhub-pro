@@ -17,10 +17,12 @@ const upload = multer({ storage });
 exports.index = async (req, res) => {
   try {
     const products = await Product.findAll({ order: [["id", "desc"]] });
+
     if (products) {
-      return res
-        .status(200)
-        .json({ products, message: "Returned Products Successfully!" });
+      return res.status(200).json({
+        products,
+        message: "Returned Products Successfully!",
+      });
     } else {
       res.status(404).json({ error: "Products not found" });
     }
@@ -63,7 +65,7 @@ exports.getProductById = async (req, res) => {
   const productId = req.params.id;
   try {
     const product = await Product.findByPk(productId, {
-      include: ["Catalog"], 
+      include: ["Catalog"],
     });
     if (product) {
       res
@@ -85,7 +87,7 @@ exports.updateProduct = [
     try {
       const { catalog_id, name, options, quantity, price, description } =
         req.body;
-        const product = await Product.findByPk(productId);
+      const product = await Product.findByPk(productId);
 
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
@@ -146,5 +148,33 @@ exports.deleteProduct = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//update product quantity by ID
+exports.updateProductQuantity = async function (
+  productId,
+  quantityBought,
+  transaction
+) {
+  try {
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    if (parseInt(product.quantity.max) < quantityBought) {
+      throw new Error("Insufficient quantity available");
+    }
+    let newQuantity = (
+      parseInt(product.quantity.max) - quantityBought
+    ).toString();
+    product.quantity = { ...product.quantity, max: newQuantity };
+
+    await product.save({ transaction });
+
+    return;
+  } catch (error) {
+    throw error;
   }
 };

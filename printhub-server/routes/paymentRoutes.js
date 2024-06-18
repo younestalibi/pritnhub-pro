@@ -6,7 +6,8 @@ const authMiddleware = require("../middlewares/authMiddleware");
 // Payment routes
 router.get("/config", authMiddleware, PaymentController.getConfigPaypal);
 router.post("/create-order", authMiddleware, PaymentController.createOrderPaypal);
-router.post("/update-order-status", authMiddleware, PaymentController.updateOrderStatus);
+router.post("/confirm-order", authMiddleware, PaymentController.confirmOrderPaypal);
+router.post("/cancel-order", authMiddleware, PaymentController.cancleOrderPaypal);
 
 
 module.exports = router;

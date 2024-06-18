@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
+      locked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     }); 
   
     Cart.associate = (models) => {

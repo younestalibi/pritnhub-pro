@@ -6,7 +6,7 @@ import { resetStateCartsCollection } from "../../../provider/features/cart/CartS
 import PayPal from "../../../components/PaymentMethods/Paypal";
 // import { createOrder } from "../../../provider/features/order/OrderSlice";
 
-const CheckoutStepFour = ({ checkoutData }) => {
+const CheckoutStepFour = ({ checkoutData, prev }) => {
   const { orders, createOrderState } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
@@ -44,9 +44,16 @@ const CheckoutStepFour = ({ checkoutData }) => {
   }, [createOrderState.isSuccess, createOrderState.isError]);
 
   return (
-    <Card>
-      <PayPal />
-    </Card>
+    <>
+      <Card>
+        <PayPal orderData={checkoutData}/>
+      </Card>
+      <div style={{ marginTop: "40px" }}>
+        <Button type="primary" onClick={() => prev()}>
+          Previous
+        </Button>
+      </div>
+    </>
   );
 };
 

@@ -32,7 +32,16 @@ exports.addToCart = async (req, res) => {
     const userId = req.userId;
     const { productId, quantity, customizations } = req.body;
 
-    let [cart] = await Cart.findOrCreate({ where: { user_id: userId } });
+    const [cart, created] = await Cart.findOrCreate({
+      where: { user_id: userId },
+    });
+
+    if (cart.locked) {
+      return res.status(400).json({
+        error:
+          "Your Cart is locked, you can't add any product. Please contact support!",
+      });
+    }
 
     const newCartItem = await CartItem.create({
       cart_id: cart.id,
@@ -40,17 +49,17 @@ exports.addToCart = async (req, res) => {
       quantity,
       customizations,
     });
-
     const cartItem = await CartItem.findOne({
       where: { id: newCartItem.id },
       include: {
         model: Product,
       },
     });
-
-    res
-      .status(201)
-      .json({ message: "Item added to cart successfully", cartItem });
+    res.status(201).json({
+      message: "Item added to cart successfully",
+      cart,
+      cartItem,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -113,5 +122,24 @@ exports.clearCart = async (req, res) => {
     res.status(200).json({ message: "Cart cleared successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.lockCart = async (userId) => {
+  const cart = await Cart.findOne({ where: { user_id: userId } });
+  if (cart) {
+    cart.locked = true;
+    await cart.save();
+  } else {
+    throw new Error("Cart not found");
+  }
+};
+exports.unLockCart = async (userId) => {
+  const cart = await Cart.findOne({ where: { user_id: userId } });
+  if (cart) {
+    cart.locked = false;
+    await cart.save();
+  } else {
+    throw new Error("Cart not found");
   }
 };

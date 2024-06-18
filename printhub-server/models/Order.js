@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      address: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
       status: {
         type: DataTypes.ENUM("pending", "completed", "cancelled"),
         allowNull: false,
@@ -37,10 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "order_id",
         onDelete: "CASCADE",
       });
-      Order.hasOne(models.Payment, {
-        foreignKey: "order_id",
-        onDelete: "CASCADE",
-      });
+      // Order.hasOne(models.Payment, {
+      //   foreignKey: "order_id",
+      //   onDelete: "CASCADE",
+      // });
     };
   
     return Order;

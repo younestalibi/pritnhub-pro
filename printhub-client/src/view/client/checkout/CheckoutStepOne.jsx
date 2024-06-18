@@ -23,7 +23,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 const { Meta } = Card;
 
-const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
+const CheckoutStepOne = ({ setCheckoutData, checkoutData, next }) => {
   const { addresses, getAddressesState, createAddressState } = useSelector(
     (state) => state.address
   );
@@ -42,15 +42,18 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
       dispatch(resetStateAddress());
     }
   }, []);
-  const address = addresses.find((e) => e.id == checkoutData.addressId);
+  const address = addresses.find(
+    (e) => JSON.stringify(e) == JSON.stringify(checkoutData.shippingAddress)
+  );
   const [showForm, setShowForm] = useState(false);
 
   const options = addresses?.map((address, i) => {
     return {
-      value: address.id,
+      value: JSON.stringify(address),
       label: address.address1,
     };
   });
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -109,13 +112,15 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
         <Select
           loading={getAddressesState.isLoading}
           style={{ width: "100%" }}
-          defaultValue={checkoutData.addressId}
-          allowClear
+          defaultValue={
+            checkoutData.shippingAddress &&
+            JSON.stringify(checkoutData.shippingAddress)
+          }
           placeholder="select shipping address"
           onChange={(e) => {
             setCheckoutData((prev) => ({
               ...prev,
-              addressId: e,
+              shippingAddress: JSON.parse(e),
             }));
           }}
           options={options}
@@ -336,6 +341,15 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData }) => {
             <small>Postal Code: {address.postal_code}</small>
           </Card>
         )}
+      </div>
+      <div style={{ marginTop: "40px" }}>
+        <Button
+          disabled={!checkoutData.shippingAddress}
+          type="primary"
+          onClick={() => next()}
+        >
+          Next
+        </Button>
       </div>
     </>
   );
