@@ -38,7 +38,6 @@ exports.getConfigPaypal = (req, res) => {
 
 exports.createOrderPaypal = async (req, res) => {
   const { shippingAddress } = req.body;
-  
 
   const request = new paypal.orders.OrdersCreateRequest();
   const userId = req.userId;
@@ -110,7 +109,7 @@ exports.createOrderPaypal = async (req, res) => {
               {
                 order_id: createdOrder.id,
                 product_id: item.Product.id,
-                product: item.Product, 
+                product: item.Product,
                 quantity: item.quantity,
                 customizations: item.customizations,
                 price: calculateItemTotal(item),
@@ -171,7 +170,7 @@ exports.confirmOrderPaypal = async (req, res) => {
                 item.quantity,
                 transaction
               );
-              // await item.destroy({ transaction });
+              await item.destroy({ transaction });
             })
           );
           await unLockCart(userId);
@@ -222,3 +221,67 @@ exports.cancleOrderPaypal = async (req, res) => {
   }
 };
 //==================Paypal payment==================
+
+//==================Cih payment==================
+exports.confirmOrderCih = async (req, res) => {
+  const { shippingAddress, referenceId } = req.body;
+
+  // const request = new paypal.orders.OrdersCreateRequest();
+  const userId = req.userId;
+  try {
+    const cart = await Cart.findOne({
+      where: { user_id: userId },
+      include: {
+        model: CartItem,
+        include: {
+          model: Product,
+        },
+      },
+    });
+
+    if (!cart) {
+      res.status(404).json({ error: "Cart items not found!" });
+    }
+
+    const trackingId = uuid.v4();
+    const transaction = await sequelize.transaction();
+    try {
+      const createdOrder = await Order.create(
+        {
+          user_id: userId,
+          tracking_id: trackingId,
+          order_payment_id: referenceId,
+          payment_method: "bank transfer",
+          address: shippingAddress,
+        },
+        { transaction }
+      );
+      await Promise.all(
+        cart.CartItems.map(async (item) => {
+          await OrderItem.create(
+            {
+              order_id: createdOrder.id,
+              product_id: item.Product.id,
+              product: item.Product,
+              quantity: item.quantity,
+              customizations: item.customizations,
+              price: calculateItemTotal(item),
+            },
+            { transaction }
+          );
+          await item.destroy({ transaction });
+        })
+      );
+
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+    res.json({ message: "Order was created successfully" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e.message });
+  }
+};
+//==================Cih payment==================

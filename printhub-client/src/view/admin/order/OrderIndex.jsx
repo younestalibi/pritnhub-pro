@@ -3,7 +3,7 @@ import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
-import { Button, Select, Table, notification } from "antd";
+import { Button, Input, Select, Space, Table, notification } from "antd";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
 import {
   deleteOrderById,
@@ -13,6 +13,7 @@ import {
 } from "../../../provider/features/order/OrderSlice";
 import OrderView from "./OrderView";
 import { calculateTotalPrice } from "../../../utils/functions";
+import { SearchOutlined } from "@ant-design/icons";
 
 const OrderIndex = () => {
   const [deleteId, setDeleteId] = useState(null);
@@ -62,22 +63,43 @@ const OrderIndex = () => {
     setOpen(true);
     setDeleteId(e);
   };
-  const getDisplayStatus = (status) => {
-    return status === "pending"
-      ? <b style={{ color: "red" }}>Pending</b>
-      : status === "completed"
-      ? <b style={{ color: "green" }}>Completed</b>
-      : status === "cancelled"
-      ? <b style={{ color: "black" }}>Cancelled</b>
-      : "unkonwn";
-  };
+
   for (let i = 0; i < orders.length; i++) {
     data.push({
       key: orders[i].id,
-      tracking_id: orders[i].tracking_id,
+      payment_id: orders[i].order_payment_id,
       total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
       items: `${orders[i].OrderItems.length} items`,
-      status: getDisplayStatus(orders[i].status),
+      // status: getDisplayStatus(orders[i].status),
+      status: (
+        <Select
+          defaultValue={orders[i].status}
+          loading={updateOrderStatusState.isLoading && orders[i].id == editId}
+          style={{
+            width: 120,
+          }}
+          onChange={(status) => {
+            setEditId(orders[i].id);
+            dispatch(
+              updateOrderStatus({ id: orders[i].id, status: { status } })
+            );
+          }}
+          options={[
+            {
+              value: "pending",
+              label: <b style={{ color: "red" }}>Pending</b>,
+            },
+            {
+              value: "completed",
+              label: <b style={{ color: "green" }}>Completed</b>,
+            },
+            {
+              value: "cancelled",
+              label: <b style={{ color: "black" }}>Cancelled</b>,
+            },
+          ]}
+        />
+      ),
       action: (
         <>
           <span
@@ -155,8 +177,65 @@ const columns = [
     dataIndex: "key",
   },
   {
-    title: "Tracking-Id",
-    dataIndex: "tracking_id",
+    title: "Payment-Id",
+    dataIndex: "payment_id",
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => {
+              clearFilters();
+              confirm();
+            }}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) => record.payment_id.indexOf(value) === 0,
   },
   {
     title: "Total Amount",

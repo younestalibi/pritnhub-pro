@@ -1,0 +1,26 @@
+/* PayPalButton.css */
+
+.cih-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #b7b7b7;
+  color: black;
+  font-size: 19px;
+  font-weight: bold;
+  gap: 20px;
+  cursor: pointer;
+  outline:none
+}
+
+.cih-button:hover {
+  background-color: #aaa9a9;
+}
+
+.cih-logo {
+  width: 100px;
+}

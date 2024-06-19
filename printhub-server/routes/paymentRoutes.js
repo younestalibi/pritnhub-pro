@@ -8,6 +8,7 @@ router.get("/config", authMiddleware, PaymentController.getConfigPaypal);
 router.post("/create-order", authMiddleware, PaymentController.createOrderPaypal);
 router.post("/confirm-order", authMiddleware, PaymentController.confirmOrderPaypal);
 router.post("/cancel-order", authMiddleware, PaymentController.cancleOrderPaypal);
+router.post("/confirm-order-cih", authMiddleware, PaymentController.confirmOrderCih);
 
 
 module.exports = router;

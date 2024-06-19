@@ -91,7 +91,7 @@ const CartMenu = (props) => {
                   title={item.Product.name}
                   description={`Quantity: ${
                     item.quantity
-                  } - Price: ${calculateItemTotal(item)}`}
+                  } - Price: ${calculateItemTotal(item).toFixed(2)}$`}
                 />
               </Flex>
             </List.Item>
@@ -99,7 +99,7 @@ const CartMenu = (props) => {
         />
         <hr />
         <Flex justify="center" align="center">
-          <h3>Total: {calculateTotal(carts)} DH</h3>
+          <h3>Total: {calculateTotal(carts).toFixed(2)}$</h3>
         </Flex>
         <Link to={"/cart"}>
           <Button

@@ -33,23 +33,32 @@ exports.index = async (req, res) => {
 
 // Create a new product
 exports.createProduct = [
-  upload.single("image"),
+  upload.array("images", 10),
   async (req, res) => {
     try {
       const { catalog_id, name, options, quantity, price, description } =
         req.body;
-      let imagePath = null;
-      if (req.file) {
-        imagePath = req.file.path;
+
+      // res
+      // .status(201)
+      // .json({ message: options})
+      // return ;
+      let imagesPath = [];
+      if (req.files) {
+        req.files.forEach((image) => {
+          if (image.path) {
+            imagesPath.push(image.path);
+          }
+        });
       }
       const product = await Product.create({
         catalog_id,
         name,
-        options,
-        quantity,
+        options: JSON.parse(options),
+        quantity: JSON.parse(quantity),
         price,
         description,
-        image: imagePath,
+        image: imagesPath,
       });
       res
         .status(201)
@@ -81,34 +90,67 @@ exports.getProductById = async (req, res) => {
 
 // Update a product
 exports.updateProduct = [
-  upload.single("image"),
+  upload.array("images", 10),
   async (req, res) => {
     const productId = req.params.id;
     try {
-      const { catalog_id, name, options, quantity, price, description } =
-        req.body;
+      const {
+        catalog_id,
+        deletedImages,
+        name,
+        options,
+        quantity,
+        price,
+        description,
+      } = req.body;
       const product = await Product.findByPk(productId);
 
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
-      if (req.file) {
+      let imagesPath = [];
+      if (req.files) {
         if (product.image) {
-          const oldImagePath = product.image;
-          fs.unlink(oldImagePath, (err) => {
-            if (err) {
-              console.error("Error deleting old image:", err);
+          imagesPath = [...product.image];
+          imagesPath.forEach((imagePath, index) => {
+            if (JSON.parse(deletedImages).includes(imagePath)) {
+              fs.unlink(imagePath, (err) => {
+                if (err) {
+                  console.error("Error deleting image file:", err);
+                }
+              });
+              imagesPath.splice(imagesPath.indexOf(imagePath), 1);
             }
           });
         }
-        product.image = req.file.path;
+        req.files.forEach((image) => {
+          if (image.path) {
+            imagesPath.push(image.path);
+          }
+        });
+      } else {
+        if (product.image && JSON.parse(deletedImages).length > 0) {
+          imagesPath = [...product.image];
+          imagesPath.forEach((imagePath, index) => {
+            if (JSON.parse(deletedImages).includes(imagePath)) {
+              fs.unlink(imagePath, (err) => {
+                if (err) {
+                  console.error("Error deleting image file:", err);
+                }
+              });
+              imagesPath.splice(imagesPath.indexOf(imagePath), 1);
+            }
+          });
+        }
       }
+
       product.name = name;
       product.catalog_id = catalog_id;
-      product.options = options;
-      product.quantity = quantity;
+      product.options = JSON.parse(options);
+      product.quantity = JSON.parse(quantity);
       product.price = price;
       product.description = description;
+      product.image = imagesPath;
 
       await product.save();
       res
@@ -128,15 +170,17 @@ exports.deleteProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
-    const imagePath = product.image;
+    const imagesPath = product.image;
 
     const deleted = await Product.destroy({ where: { id: productId } });
     if (deleted) {
-      if (imagePath) {
-        fs.unlink(imagePath, (err) => {
-          if (err) {
-            console.error("Error deleting image file:", err);
-          }
+      if (imagesPath) {
+        imagesPath.forEach((imagePath) => {
+          fs.unlink(imagePath, (err) => {
+            if (err) {
+              console.error("Error deleting image file:", err);
+            }
+          });
         });
       }
 

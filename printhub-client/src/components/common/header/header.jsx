@@ -12,21 +12,37 @@ import {
 } from "../../../provider/features/cart/CartSlice";
 import useAuth from "../../../hooks/useAuth";
 import CartMenu from "../../../view/client/cart/CartMenu";
-
+import {
+  getCatalogs,
+  resetStateCatalog,
+} from "../../../provider/features/catalog/CatalogSlice";
 
 export default function AppHeader() {
   const [current, setCurrent] = useState("mail");
   const { carts, addCartItemState } = useSelector((state) => state.cart);
+  const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
   const { settings } = useSelector((state) => state.setting);
-
   const { user } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const items = [];
 
   const onClick = (e) => {
     setCurrent(e.key);
   };
-  const dispatch = useDispatch();
+  for (let i = 0; i < catalogs.length; i++) {
+    items.push({
+      key: catalogs[i].id,
+      label: catalogs[i].name,
+      children: catalogs[i].Products.map((product) => {
+        return {
+          key: product.id,
+          label: product.name,
+        };
+      }),
+    });
+  }
   useEffect(() => {
     if (carts.length == 0 && isAuthenticated) {
       dispatch(getCartItems());
@@ -34,9 +50,17 @@ export default function AppHeader() {
       dispatch(resetStateCart());
     }
   }, [user]);
-  const onSearch=(e)=>{
-    console.log(e)
-  }
+  useEffect(() => {
+    if (catalogs.length == 0) {
+      dispatch(getCatalogs());
+    } else {
+      dispatch(resetStateCatalog());
+    }
+  }, []);
+
+  const onSearch = (e) => {
+    console.log(e);
+  };
 
   return (
     <>
@@ -44,9 +68,7 @@ export default function AppHeader() {
         <div className="container-fluid">
           <div className="headerMain">
             <div className="logo">
-              <strong>
-                {settings&&settings.website_name}
-              </strong>
+              <strong>{settings && settings.website_name}</strong>
             </div>
             <div className="SearchInput">
               <Search
@@ -95,158 +117,3 @@ export default function AppHeader() {
     </>
   );
 }
-
-const items = [
-  {
-    label: (
-      <span>
-        Business Cards <CaretDownOutlined />
-      </span>
-    ),
-    key: "BusinessCards",
-    children: [
-      {
-        type: "group",
-        label: "Standard Cards",
-        children: [
-          {
-            label: "Standard Matte",
-            key: "product:1",
-          },
-          {
-            label: "Standard Glossy",
-            key: "product:2",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Premium Cards",
-        children: [
-          {
-            label: "Premium Matte",
-            key: "product:3",
-          },
-          {
-            label: "Premium Glossy",
-            key: "product:4",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: (
-      <span>
-        Flyers <CaretDownOutlined />
-      </span>
-    ),
-    key: "Flyers",
-    children: [
-      {
-        type: "group",
-        label: "Standard Flyers",
-        children: [
-          {
-            label: "A5 Flyers",
-            key: "product:5",
-          },
-          {
-            label: "A4 Flyers",
-            key: "product:6",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Folded Flyers",
-        children: [
-          {
-            label: "Tri-Fold Flyers",
-            key: "product:7",
-          },
-          {
-            label: "Z-Fold Flyers",
-            key: "product:8",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: (
-      <span>
-        Posters <CaretDownOutlined />
-      </span>
-    ),
-    key: "Posters",
-    children: [
-      {
-        type: "group",
-        label: "Standard Posters",
-        children: [
-          {
-            label: "A2 Posters",
-            key: "product:9",
-          },
-          {
-            label: "A1 Posters",
-            key: "product:10",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Large Format Posters",
-        children: [
-          {
-            label: "B1 Posters",
-            key: "product:11",
-          },
-          {
-            label: "B0 Posters",
-            key: "product:12",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: (
-      <span>
-        Brochures <CaretDownOutlined />
-      </span>
-    ),
-    key: "Brochures",
-    children: [
-      {
-        type: "group",
-        label: "Bi-Fold Brochures",
-        children: [
-          {
-            label: "A4 Bi-Fold",
-            key: "product:13",
-          },
-          {
-            label: "A3 Bi-Fold",
-            key: "product:14",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Tri-Fold Brochures",
-        children: [
-          {
-            label: "A4 Tri-Fold",
-            key: "product:15",
-          },
-          {
-            label: "A3 Tri-Fold",
-            key: "product:16",
-          },
-        ],
-      },
-    ],
-  },
-];

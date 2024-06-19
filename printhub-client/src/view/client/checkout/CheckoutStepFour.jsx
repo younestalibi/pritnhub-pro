@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../../provider/features/order/OrderSlice";
 import { resetStateCartsCollection } from "../../../provider/features/cart/CartSlice";
 import PayPal from "../../../components/PaymentMethods/Paypal";
+import BankTransferPayment from "../../../components/PaymentMethods/BankTransferPayment";
 // import { createOrder } from "../../../provider/features/order/OrderSlice";
 
 const CheckoutStepFour = ({ checkoutData, prev }) => {
@@ -46,10 +47,14 @@ const CheckoutStepFour = ({ checkoutData, prev }) => {
   return (
     <>
       <Card>
-        <PayPal orderData={checkoutData}/>
+        {checkoutData.paymentMethod == "paypal" ? (
+          <PayPal orderData={checkoutData} />
+        ) : (
+          <BankTransferPayment orderData={checkoutData} />
+        )}
       </Card>
       <div style={{ marginTop: "40px" }}>
-        <Button type="primary" onClick={() => prev()}>
+        <Button onClick={() => prev()}>
           Previous
         </Button>
       </div>

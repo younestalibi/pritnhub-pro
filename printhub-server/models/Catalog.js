@@ -10,5 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  Catalog.associate = (models) => {
+    Catalog.hasMany(models.Product, {
+      foreignKey: "catalog_id",
+      onDelete: "CASCADE",
+    });
+  };
+
   return Catalog;
 };

@@ -39,15 +39,15 @@ const PaymentMethods = ({ setCheckoutData, checkoutData }) => {
             className="radio-input"
             type="radio"
             name="paymentMethod"
-            value="creditCard"
-            checked={checkoutData.paymentMethod === "creditCard"}
+            value="bankTransferPayment"
+            checked={checkoutData.paymentMethod === "bankTransferPayment"}
             onChange={handlePaymentChange}
           />
           <span className="radio-tile">
             <span className="radio-icon">
               <ImCreditCard />
             </span>
-            <span className="radio-label">Credit Card</span>
+            <span className="radio-label">Bank Transfer</span>
           </span>
         </label>
       </div>

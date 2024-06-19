@@ -1,5 +1,13 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Flex, Input, InputNumber, Modal, Select, Upload, notification } from "antd";
+import {
+  Flex,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Upload,
+  notification,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import {
   getCatalogs,
@@ -59,7 +67,7 @@ const ProductCreate = (props) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      image: [],
+      images: [],
       catalog_id: null,
       options: null,
       quantity: {
@@ -78,8 +86,9 @@ const ProductCreate = (props) => {
         .min(1, "Please add at least 1")
         .required("Options is required*"),
       catalog_id: Yup.number().required("Catalog is required*"),
-      image: Yup.array()
-        .length(1, "Please upload only one image")
+      images: Yup.array()
+        .max(10, "You can only upload up to 10 images")
+        .min(1, "Please upload only one image")
         .required("Image is required*"),
       quantity: Yup.object({
         max: Yup.number().required("Max quantity is required"),
@@ -88,19 +97,24 @@ const ProductCreate = (props) => {
       }),
     }),
     onSubmit: (values) => {
-      const formData = {
-        name: values.name,
-        catalog_id: values.catalog_id,
-        options: values.options,
-        quantity: values.quantity,
-        price: values.price,
-        description: values.description,
-        image: values.image[0].originFileObj,
-      };
+      const formData = new FormData();
+      console.log(values)
+      formData.append("name", values.name);
+      formData.append("catalog_id", values.catalog_id);
+      formData.append("options", JSON.stringify(values.options))
+      formData.append("quantity", JSON.stringify(values.quantity));
+      formData.append("price", values.price);
+      formData.append("description", values.description);
+      values.images.forEach((image) => {
+        if (image.originFileObj) {
+          formData.append("images", image.originFileObj);
+        }
+      });   
+      console.log(formData.getAll('image'))
       dispatch(createProduct(formData));
     },
   });
-
+console.log(formik.errors)
   const handleOk = () => {
     formik.handleSubmit();
   };
@@ -157,51 +171,71 @@ const ProductCreate = (props) => {
             Quantity <span>*</span>
           </label>
           <Flex gap={10}>
-          <div>
-            <InputNumber
-              placeholder="Max quantity to buy"
-              id="quantity.max"
-              name="quantity.max"
-              style={{ display: "block", width: "100%", marginBottom: "10px" }}
-              min={0}
-              value={formik.values.quantity.max}
-              onChange={(value) => formik.setFieldValue("quantity.max", value)}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.quantity?.max && formik.errors.quantity?.max ? (
-              <div style={{ color: "red" }}>{formik.errors.quantity.max}</div>
-            ) : null}
-          </div>
-          <div>
-            <InputNumber
-              placeholder="Min quantity to buy"
-              id="quantity.min"
-              name="quantity.min"
-              style={{ display: "block", width: "100%", marginBottom: "10px" }}
-              min={0}
-              value={formik.values.quantity.min}
-              onChange={(value) => formik.setFieldValue("quantity.min", value)}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.quantity?.min && formik.errors.quantity?.min ? (
-              <div style={{ color: "red" }}>{formik.errors.quantity.min}</div>
-            ) : null}
-          </div>
-          <div>
-            <InputNumber
-              placeholder="Step amount"
-              id="quantity.step"
-              name="quantity.step"
-              style={{ display: "block", width: "100%", marginBottom: "10px" }}
-              min={0}
-              value={formik.values.quantity.step}
-              onChange={(value) => formik.setFieldValue("quantity.step", value)}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.quantity?.step && formik.errors.quantity?.step ? (
-              <div style={{ color: "red" }}>{formik.errors.quantity.step}</div>
-            ) : null}
-          </div>
+            <div>
+              <InputNumber
+                placeholder="Max quantity to buy"
+                id="quantity.max"
+                name="quantity.max"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.max}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.max", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.max && formik.errors.quantity?.max ? (
+                <div style={{ color: "red" }}>{formik.errors.quantity.max}</div>
+              ) : null}
+            </div>
+            <div>
+              <InputNumber
+                placeholder="Min quantity to buy"
+                id="quantity.min"
+                name="quantity.min"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.min}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.min", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.min && formik.errors.quantity?.min ? (
+                <div style={{ color: "red" }}>{formik.errors.quantity.min}</div>
+              ) : null}
+            </div>
+            <div>
+              <InputNumber
+                placeholder="Step amount"
+                id="quantity.step"
+                name="quantity.step"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                min={0}
+                value={formik.values.quantity.step}
+                onChange={(value) =>
+                  formik.setFieldValue("quantity.step", value)
+                }
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity?.step && formik.errors.quantity?.step ? (
+                <div style={{ color: "red" }}>
+                  {formik.errors.quantity.step}
+                </div>
+              ) : null}
+            </div>
           </Flex>
         </div>
         <div>
@@ -276,7 +310,7 @@ const ProductCreate = (props) => {
             onSave={(options) => {
               formik.setFieldValue("options", options);
             }}
-            options={formik.getFieldProps('options').value}
+            options={formik.getFieldProps("options").value}
             id="options"
             name="options"
           />
@@ -287,26 +321,27 @@ const ProductCreate = (props) => {
         </div>
 
         <div>
-          <label htmlFor="image">
-            Image <span>*</span>
+          <label htmlFor="images">
+            Images <span>*</span>
           </label>
           <Upload
             customRequest={({ onSuccess }) => {
               onSuccess("success");
             }}
             type="drag"
+            multiple={true}
             listType="picture-card"
-            maxCount={1}
-            fileList={formik.getFieldProps("image").value}
+            maxCount={10}
+            fileList={formik.getFieldProps("images").value}
             onPreview={handlePreview}
             onChange={({ fileList: newFileList }) => {
-              formik.setFieldValue("image", newFileList);
+              formik.setFieldValue("images", newFileList);
             }}
           >
             {uploadButton}
           </Upload>
-          {formik.errors.image && formik.touched.image && (
-            <div style={{ color: "red" }}>{formik.errors.image}</div>
+          {formik.errors.images && formik.touched.images && (
+            <div style={{ color: "red" }}>{formik.errors.images}</div>
           )}
         </div>
       </form>

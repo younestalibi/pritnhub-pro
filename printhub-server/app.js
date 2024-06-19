@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.APP_CLIENT,
+    origin: process.env.APP_CLIENT
   })
 );
 app.use("/api/auth", authRoutes);

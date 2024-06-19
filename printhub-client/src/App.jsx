@@ -25,6 +25,7 @@ import OrderIndex from "./view/admin/order/OrderIndex";
 import { getSettings } from "./provider/features/setting/SettingSlice";
 import SettingIndex from "./view/admin/setting/SettingIndex";
 import PayPal from "./components/PaymentMethods/Paypal";
+import CheckoutSuccess from "./view/client/checkout/CheckoutSuccess";
 
 function App() {
   const {getUserState } = useSelector((state) => state.auth);
@@ -61,7 +62,8 @@ function App() {
       { path: "product/:id/:productName", element: <ProductDetail /> },
       { path: "login", element: <Authentication /> },
       { path: "contact", element: <ContactApp /> },
-      { path: "paypal", element: <PayPal /> },
+      { path: "paypal", element: <PayPal /> }, 
+      { path: "success-payment", element: <CheckoutSuccess /> }, 
     ];
 
     return (

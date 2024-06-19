@@ -88,10 +88,10 @@ const CartIndex = () => {
         {carts.length > 0 && (
           <Button
             danger
-            style={{ 
-              paddingLeft:'0px',
-              marginBottom:'10px',
-             }}
+            style={{
+              paddingLeft: "0px",
+              marginBottom: "10px",
+            }}
             type="link"
             onClick={() => {
               dispatch(clearCart());
@@ -124,7 +124,11 @@ const CartIndex = () => {
                     deleteItemByIdState.isLoading && item.id == loadingItemId
                   }
                   disabled={deleteItemByIdState.isLoading}
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px",
+                  }}
                 >
                   <AiFillDelete
                     size={22}
@@ -142,7 +146,7 @@ const CartIndex = () => {
                   alt={item.Product.name}
                   width={200}
                   height={200}
-                  style={{ objectFit: "cover"}}
+                  style={{ objectFit: "cover" }}
                   crossOrigin={import.meta.env.VITE_CLIENT_URL}
                   loading="lazy"
                   src={`${import.meta.env.VITE_SERVER_URL}/${
@@ -189,7 +193,7 @@ const CartIndex = () => {
                   },
                 ]}
               />
-              <h3>Total: {calculateItemTotal(item)}</h3>
+              <h3>Total: {calculateItemTotal(item).toFixed(2)}$</h3>
             </List.Item>
           )}
         />
@@ -201,7 +205,7 @@ const CartIndex = () => {
               <h1>Total Price</h1>
             </Col>
             <Col>
-              <h1>{calculateTotal(carts)}</h1>
+              <h1>{calculateTotal(carts).toFixed(2)}$</h1>
             </Col>
           </Row>
           <Link to={"/checkout"}>

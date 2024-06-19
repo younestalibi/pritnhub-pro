@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, Upload, notification } from "antd";
+import { Button, Divider, Input, Modal, Upload, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   createCatalog,
@@ -70,12 +70,11 @@ const OrderView = (props) => {
       open={open}
       footer={
         <Button type="primary" onClick={handleOk}>
-          Reload
+          Close
         </Button>
       }
       onCancel={handleCancel}
     >
-      <h1>Order Details</h1>
       {order && (
         <Space direction="vertical" style={{ width: "100%" }}>
           <Card title={`Order ID: ${order.id}`}>
@@ -168,23 +167,20 @@ const OrderView = (props) => {
           <Card title="Order Items">
             {order.OrderItems.map((item, index) => (
               <>
+                <Divider orientation="left">{item.product.name}</Divider>
                 <Descriptions
                   bordered
-                  title={item.product.name}
                   size={"small"}
                   items={[
                     {
                       key: index,
                       label: "Name",
                       children: item.product.name,
-                      span:3,
-                      colon:false
                     },
                     {
                       key: index,
                       label: "Quantity",
                       children: item.quantity,
-                      colon:true
                     },
                     {
                       key: index,

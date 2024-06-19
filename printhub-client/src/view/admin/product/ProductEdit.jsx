@@ -59,17 +59,19 @@ const ProductEdit = (props) => {
         formik.setFieldValue("catalog_id", product.catalog_id);
         formik.setFieldValue("options", product.options);
         formik.setFieldValue("quantity", product.quantity);
-        formik.setFieldValue("image", [
-          {
-            name: product.name,
-            status: "done",
-            originFileObj: null,
-            crossOrigin: import.meta.env.VITE_CLIENT_URL,
-            url: `${import.meta.env.VITE_SERVER_URL}/${product.image}`,
-          },
-        ]);
-        setPreviewImage(`${import.meta.env.VITE_SERVER_URL}/${product.image}`);
-        setPreviewTitle(product.name);
+        formik.setFieldValue("deletedImages", []);
+        formik.setFieldValue(
+          "image",
+          product.image.map((image, index) => {
+            return {
+              name: product.name,
+              status: "done",
+              originFileObj: null,
+              crossOrigin: import.meta.env.VITE_CLIENT_URL,
+              url: `${import.meta.env.VITE_SERVER_URL}/${image}`,
+            };
+          })
+        );
       }
     }
   }, [open, product]);
@@ -102,6 +104,7 @@ const ProductEdit = (props) => {
     initialValues: {
       name: "",
       image: [],
+      deletedImages: [],
       catalog_id: null,
       options: null,
       quantity: {
@@ -113,32 +116,37 @@ const ProductEdit = (props) => {
       description: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Name is required*"),
-      description: Yup.string().required("Description is required*"),
-      price: Yup.number().required("Price is required*"),
-      options: Yup.array()
-        .min(1, "Please add at least 1")
-        .required("Options is required*"),
-      catalog_id: Yup.number().required("Catalog is required*"),
-      image: Yup.array()
-        .length(1, "Please upload only one image")
-        .required("Image is required*"),
-      quantity: Yup.object({
-        max: Yup.number().required("Max quantity is required"),
-        min: Yup.number().required("Min quantity is required"),
-        step: Yup.number().required("Step amount is required"),
-      }),
+      // name: Yup.string().required("Name is required*"),
+      // description: Yup.string().required("Description is required*"),
+      // price: Yup.number().required("Price is required*"),
+      // options: Yup.array()
+      //   .min(1, "Please add at least 1")
+      //   .required("Options is required*"),
+      // catalog_id: Yup.number().required("Catalog is required*"),
+      // image: Yup.array()
+      //   .max(10, "You can only upload up to 10 images")
+      //   .min(1, "Please upload only one image")
+      //   .required("Image is required*"),
+      // quantity: Yup.object({
+      //   max: Yup.number().required("Max quantity is required"),
+      //   min: Yup.number().required("Min quantity is required"),
+      //   step: Yup.number().required("Step amount is required"),
+      // }),
     }),
     onSubmit: (values) => {
-      const formData = {
-        name: values.name,
-        catalog_id: values.catalog_id,
-        options: values.options,
-        quantity: values.quantity,
-        price: values.price,
-        description: values.description,
-        image: values.image[0].originFileObj,
-      };
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("catalog_id", values.catalog_id);
+      formData.append("options", JSON.stringify(values.options));
+      formData.append("quantity", JSON.stringify(values.quantity));
+      formData.append("price", values.price);
+      formData.append("description", values.description);
+      formData.append("deletedImages", JSON.stringify(values.deletedImages));
+      values.image.forEach((image) => {
+        if (image.originFileObj) {
+          formData.append("images", image.originFileObj);
+        }
+      });
       dispatch(updateProduct({ id, product: formData }));
     },
   });
@@ -359,9 +367,28 @@ const ProductEdit = (props) => {
             }}
             type="drag"
             listType="picture-card"
-            maxCount={1}
+            maxCount={10}
+            multiple={true}
             fileList={formik.getFieldProps("image").value}
             onPreview={handlePreview}
+            onRemove={(file) => {
+              console.log(file);
+              const updatedFileList = formik.values.image.filter(
+                (item) => item.uid !== file.uid
+              );
+              formik.setFieldValue("image", updatedFileList);
+
+              if (file.url) {
+                let deletedImagePath = file.url.replace(
+                  `${import.meta.env.VITE_SERVER_URL}/`,
+                  ""
+                );
+                formik.setFieldValue("deletedImages", [
+                  ...formik.values.deletedImages,
+                  deletedImagePath,
+                ]);
+              }
+            }}
             onChange={({ fileList: newFileList }) => {
               formik.setFieldValue("image", newFileList);
             }}
@@ -381,6 +408,7 @@ const ProductEdit = (props) => {
         onCancel={handleCancelPreview}
       >
         <img
+          crossOrigin={import.meta.env.VITE_CLIENT_URL}
           alt={previewTitle}
           className="preview-image-creation"
           src={previewImage}

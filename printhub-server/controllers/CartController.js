@@ -4,6 +4,7 @@ const { Cart, CartItem, Product } = require("../models");
 exports.index = async (req, res) => {
   try {
     const userId = req.userId;
+    
     const cart = await Cart.findOne({
       where: { user_id: userId },
       include: {

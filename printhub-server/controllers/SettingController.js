@@ -17,9 +17,9 @@ const upload = multer({ storage });
 exports.index = async (req, res) => {
   try {
     const settings = await Setting.findByPk(1);
-    console.log('==================')
-    console.log(settings)
-    console.log('==================')
+    console.log("==================");
+    console.log(settings);
+    console.log("==================");
     if (settings) {
       return res
         .status(200)
@@ -84,21 +84,20 @@ exports.resetSetting = async (req, res) => {
     if (!setting) {
       return res.status(404).json({ error: "Setting not found" });
     }
-    const newSetting = { 
-      phone_number: "123-456-7890",
-      address: "123 Main St, Anytown, USA",
-      contact_email: "contact@example.com",
-      favicon: "/path/to/favicon.ico",
+    const newSetting = {
+      phone_number: "+212600000000",
+      address: "Tangier, Morocco",
+      contact_email: "contact@printhub-pro.com",
       logo: "/path/to/logo.png",
-      website_name: "My Awesome Website",
+      website_name: "Printhub-Pro",
       social_media_links: {
-        facebook: "https://facebook.com/myprofile",
-        twitter: "https://twitter.com/myprofile",
-        instagram: "https://instagram.com/myprofile",
+        facebook: "https://facebook.com/",
+        twitter: "https://twitter.com/",
+        instagram: "https://instagram.com/",
       },
-      whatsapp_chat_url: "https://wa.me/1234567890",
+      whatsapp_chat_url: "https://wa.me/+2126000000000",
     };
- 
+
     await setting.update(newSetting);
     res.status(200).json({ message: "Setting rested successfully", setting });
   } catch (err) {

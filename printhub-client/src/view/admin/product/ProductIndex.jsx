@@ -27,7 +27,9 @@ const ProductIndex = () => {
   const [open, setOpen] = useState(false);
   const [createProductModal, setCreateProductModal] = useState(false);
   const [editProductModal, setEditProductModal] = useState(false);
-  const { products, getProductsState, deleteProductByIdState } = useSelector((state) => state.product);
+  const { products, getProductsState, deleteProductByIdState } = useSelector(
+    (state) => state.product
+  );
   const { catalogs } = useSelector((state) => state.catalog);
   const data = [];
   const dispatch = useDispatch();
@@ -72,10 +74,11 @@ const ProductIndex = () => {
     setOpen(true);
     setDeleteId(e);
   };
+  console.log(products);
 
   for (let i = 0; i < products.length; i++) {
     data.push({
-      key:  products[i].id,
+      key: products[i].id,
       name: products[i].name,
       description: (
         <Popover
@@ -91,9 +94,9 @@ const ProductIndex = () => {
       quantity: products[i].quantity.max,
       options: (
         <Popover
-          // content={products[i].options.map((option, i) => (
-          //   <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
-          // ))}
+          content={products[i].options.map((option, i) => (
+            <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
+          ))}
           title="Form Details"
           trigger="hover"
         >
@@ -101,15 +104,26 @@ const ProductIndex = () => {
         </Popover>
       ),
       image: (
-        <Image
-          alt={products[i].name}
-          width={60}
-          height={60}
-          style={{ objectFit: "contain" }}
-          crossOrigin={import.meta.env.VITE_CLIENT_URL}
-          loading="lazy"
-          src={`${import.meta.env.VITE_SERVER_URL}/${products[i].image}`}
-        />
+        <Image.PreviewGroup
+          items={products[i].image.map((image, index) => {
+            return {
+              src: `${import.meta.env.VITE_SERVER_URL}/${image}`,
+              crossOrigin: import.meta.env.VITE_CLIENT_URL,
+              loading: "lazy",
+              alt: products[i].name,
+            };
+          })}
+        >
+          <Image
+            alt={products[i].name}
+            width={60}
+            height={60}
+            style={{ objectFit: "contain" }}
+            crossOrigin={import.meta.env.VITE_CLIENT_URL}
+            loading="lazy"
+            src={`${import.meta.env.VITE_SERVER_URL}/${products[i].image[0]}`}
+          />
+        </Image.PreviewGroup>
       ),
       action: (
         <>

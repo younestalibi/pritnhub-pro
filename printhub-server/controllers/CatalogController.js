@@ -1,8 +1,8 @@
-const { Catalog } = require("../models");
+const { Catalog,Product } = require("../models");
 const multer = require("multer");
 const fs = require("fs");
 
-const storage = multer.diskStorage({    
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
   },
@@ -18,7 +18,6 @@ exports.createCatalog = [
   upload.single("image"),
   async (req, res) => {
     try {
-
       const { name } = req.body;
       let imagePath = null;
       if (req.file) {
@@ -40,7 +39,12 @@ exports.createCatalog = [
 // Get all catalogs
 exports.index = async (req, res) => {
   try {
-    const catalogs = await Catalog.findAll({ order: [["id", "desc"]] });
+    const catalogs = await Catalog.findAll({
+      order: [["id", "desc"]],
+      include: {
+        model: Product,
+      },
+    });
     if (catalogs) {
       return res
         .status(200)

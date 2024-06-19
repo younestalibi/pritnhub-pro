@@ -70,7 +70,6 @@ const SettingEdit = (props) => {
       phone_number: "",
       address: "",
       contact_email: "",
-      favicon: null,
       logo: null,
       website_name: "",
       social_media_links: {
@@ -86,7 +85,6 @@ const SettingEdit = (props) => {
       contact_email: Yup.string()
         .email("Invalid email address")
         .required("Contact email is required*"),
-      favicon: Yup.mixed().required("Favicon is required*"),
       logo: Yup.mixed().required("Logo is required*"),
       website_name: Yup.string().required("Website name is required*"),
       social_media_links: Yup.object({
@@ -109,13 +107,6 @@ const SettingEdit = (props) => {
       formData.append("phone_number", values.phone_number);
       formData.append("address", values.address);
       formData.append("contact_email", values.contact_email);
-      if (
-        values.favicon &&
-        values.favicon[0] &&
-        values.favicon[0].originFileObj
-      ) {
-        formData.append("favicon", values.favicon[0].originFileObj);
-      }
       if (values.logo && values.logo[0] && values.logo[0].originFileObj) {
         formData.append("logo", values.logo[0].originFileObj);
       }
@@ -133,12 +124,14 @@ const SettingEdit = (props) => {
         values.social_media_links.instagram
       );
       formData.append("whatsapp_chat_url", values.whatsapp_chat_url);
+      console.log(values)
       dispatch(updateSetting(formData));
     },
   });
 
   const handleOk = () => {
     formik.handleSubmit();
+    console.log(formik.errors)
   };
 
   const handleCancel = () => {

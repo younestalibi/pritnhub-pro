@@ -18,8 +18,8 @@ import {
 } from "../../../provider/features/cart/CartSlice";
 import CheckoutStepOne from "./CheckoutStepOne";
 import CheckoutStepTwo from "./CheckoutStepTwo";
-import CheckoutStepThree from "./CheckoutStepThree"; // New step component
-import CheckoutStepFour from "./CheckoutStepFour"; // New step component
+import CheckoutStepThree from "./CheckoutStepThree";
+import CheckoutStepFour from "./CheckoutStepFour";
 import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
 
 const CheckoutIndex = () => {
@@ -33,17 +33,11 @@ const CheckoutIndex = () => {
   const [current, setCurrent] = useState(0);
   const next = () => {
     setCurrent(current + 1);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo(0, 0);
   };
   const prev = () => {
     setCurrent(current - 1);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -54,6 +48,14 @@ const CheckoutIndex = () => {
     }
   }, []);
 
+  if (carts.length === 0) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <h1>No items in cart</h1>
+        <p>Please add items to your cart to proceed with checkout.</p>
+      </div>
+    );
+  }
   const steps = [
     {
       title: "Address Informations",
@@ -101,9 +103,9 @@ const CheckoutIndex = () => {
 
   return (
     <div style={{ width: "80%", minHeight: "80vh", margin: "auto" }}>
-      <Steps type="navigation" current={current} items={items} />
+      <Steps current={current} items={items} />
       <Row gutter={50} justify={"space-evenly"}>
-        <Col md={{ span: 7 }}>
+        <Col span={24} sm={24} md={{ span: 12 }} lg={{ span: 9 }}>
           <div style={{ position: "sticky", top: "0px" }}>
             <h1>Total Price</h1>
             <Button
@@ -111,7 +113,7 @@ const CheckoutIndex = () => {
               block
               type="primary"
             >
-              {calculateTotal(carts)} DH
+              {calculateTotal(carts).toFixed(2)}$
             </Button>
             <h3>Order Summary:</h3>
             <List
@@ -139,7 +141,7 @@ const CheckoutIndex = () => {
                       title={item.Product.name}
                       description={`Quantity: ${
                         item.quantity
-                      } - Price: ${calculateItemTotal(item)}`}
+                      } - Price: ${calculateItemTotal(item).toFixed(2)}$`}
                     />
                   </Flex>
                 </List.Item>
@@ -147,7 +149,7 @@ const CheckoutIndex = () => {
             />
           </div>
         </Col>
-        <Col md={{ span: 17 }}>
+        <Col span={24} sm={24} md={{ span: 12 }} lg={{ span: 15 }}>
           <div style={{ padding: "40px 0px" }}>{steps[current].content}</div>
         </Col>
       </Row>
