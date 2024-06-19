@@ -34,7 +34,7 @@ header
   padding:0;
   margin: 0;
   padding-bottom: 10px !important;
-  border-bottom: 2px solid #ccc !important; 
+  /* border-bottom: 2px solid #ccc !important;  */
 }
 /* .ant-menu-horizontal {
 

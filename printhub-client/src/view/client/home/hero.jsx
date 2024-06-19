@@ -1,43 +1,19 @@
-import { Carousel ,Button} from 'antd';
+import { Carousel, Button, Row, Col, Flex } from "antd";
 import { Link } from "react-router-dom";
-const contentStyle = {
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
-};
-export default function AppHero(){
-   const items = 
-   [
-    {
-      key: '1',
-      title :'Excellence in Printing Services',
-      content :'Bringing your visions to life with precision and care. Explore our range of printing solutions tailored to exceed your expectations.'
-    },
-   ];
-    return (
-        <div className="heroBlock">  
-        <Carousel>
-        {items.map(item=> {
-          return (
-            <div key={item.key} className='container-fluid' >
-              
-              <div className='content' >
-                <h3 >{item.title}</h3>
-                <p>{item.content}</p>
-                <div className='btnHolder'>
 
-                  <Link to="/all-products">
-                  <Button type="primary" size='large'>Discover our products</Button>
-                </Link>
-                </div>
-              </div>
-              </div>
-            
-            );
-          })}
-        </Carousel>
-        </div>
-    );
+export default function AppHero() {
+  return (
+    <div className="hero-container">
+      <h1>Enhance Your Brand with Our Digital Printing Services</h1>
+      <p>
+        Discover our top-tier digital printing services designed to elevate your
+        brand. We specialize in delivering high-quality print materials that
+        stand out and make an impact.
+      </p>
+      <div>
+        <button className="home-btn">Get Started</button>
+        <button className="home-btn btn-white">Learn More?</button>
+      </div>
+    </div>
+  );
 }

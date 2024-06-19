@@ -15,7 +15,7 @@ function DefaultLayout() {
         <AppHeader />
       </Header>
 
-      <Content style={{ padding: "50px 0px" }}>
+      <Content>
         <Outlet />
       </Content>
 
@@ -25,14 +25,14 @@ function DefaultLayout() {
       <FloatButton.Group
         shape="circle"
         style={{
-          right: 0,
+          right: 20,
         }}
       >
         {settings && (
           <FloatButton
             tooltip="Whatsapp"
             href={`https://wa.me/${settings.whatsapp_chat_url}`}
-            icon={<FaWhatsapp color="green" />}
+            icon={<FaWhatsapp color="green"  />}
           />
         )}
         <FloatButton.BackTop tooltip="Back to top" />

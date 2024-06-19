@@ -1,0 +1,72 @@
+/* hero */
+.hero-container {
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-image: url("https://livewp.site/html/copy-printing/img/content/home_page.png");
+  background-repeat: no-repeat;
+  background-position: "center";
+  background-size: cover;
+}
+.hero-container > p {
+  width: 70%;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 0px;
+  color: #595959;
+}
+.hero-container > h1 {
+  margin: 0px;
+  font-size: 36px;
+  width: 45%;
+}
+.home-btn {
+  background-color: #00bfa6;
+  padding: 14px 40px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2px dashed #00bfa6;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transition: 0.4s;
+  margin: 10px 10px;
+}
+.btn-white {
+  background-color: white;
+  color: black;
+  border: 2px dashed black;
+}
+.home-btn span:last-child {
+  display: none;
+}
+
+.home-btn:hover {
+  transition: 0.4s;
+  border: 2px dashed #00bfa6;
+  background-color: #fff;
+  color: #00bfa6;
+}
+
+.home-btn:active {
+  background-color: #87dbd0;
+}
+
+/* Tablets (portrait and landscape) */
+@media (max-width: 768px) {
+  .hero-container > h1 {
+    font-size: 27px;
+    width: 100%;
+  }
+  .hero-container > p {
+    font-size: 17px;
+    width: 100%;
+  }
+}
+
+/* hero */

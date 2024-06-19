@@ -27,7 +27,7 @@ body {
 }
 
 .mainLayout .ant-layout-header {
-  background: #f8f8f8;
+  background: #ffff;
   padding: 0;
   height: auto;
   line-height: 1.6;
@@ -76,26 +76,29 @@ hero
 ---- 
 */
 .heroBlock {
-  background: url("assets/images/bg-hero.jpg") no-repeat;
-  background-position: 50% 100%;
+  background-image: url("https://livewp.site/html/copy-printing/img/content/home_page.png");
+  backgroun-repeat:no-repeat;
+  background-position:'center';
   background-size: cover;
   height: 90vh;
+  display:'flex';
+  justify-content:'center'
 }
 
-.heroBlock .container-fluid {
+/* .heroBlock .container-fluid {
   display: block !important;
-}
+} */
 
-.heroBlock .ant-carousel,
+/* .heroBlock .ant-carousel,
 .heroBlock .ant-carousel div {
   height: 100%;
-}
+} */
 
-.heroBlock .slick-dots li button {
+/* .heroBlock .slick-dots li button {
   background: #000 !important;
-}
+} */
 
-.heroBlock .slick-dots li.slick-active button {
+/* .heroBlock .slick-dots li.slick-active button {
   background: #1890ff !important;
   justify-content: center;
 }
@@ -126,7 +129,7 @@ hero
 .heroBlock .btnHolder button,
 .heroBlock .btnHolder .fas {
   margin: 0 10px 0 0;
-}
+} */
 
 /* 
 block
