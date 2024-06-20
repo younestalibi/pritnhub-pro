@@ -4,6 +4,7 @@ import AppAbout from './about';
 import AppService from './services';
 import AppCategory from './category';
 import AppTestimonial from './testimonial';
+
 import './home.css'
 function Home() {
   return (
