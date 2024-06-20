@@ -11,9 +11,9 @@ function Home() {
         <AppHero/>
         <AppAbout/>
         <AppCategory/>
-        {/* <AppFeature/> */}
-        {/* <AppService/> */}
-        {/* <AppTestimonial/> */}
+        <AppService/>
+        <AppFeature/>
+        <AppTestimonial/>
       </>
   );
 }
