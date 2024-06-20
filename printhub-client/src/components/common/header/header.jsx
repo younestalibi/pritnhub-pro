@@ -21,11 +21,11 @@ export default function AppHeader() {
   const [current, setCurrent] = useState("mail");
   const { carts, addCartItemState } = useSelector((state) => state.cart);
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
+  const dispatch = useDispatch();
   const { settings } = useSelector((state) => state.setting);
   const { user } = useSelector((state) => state.auth);
   const isAuthenticated = useAuth();
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
   const items = [];
 
   const onClick = (e) => {
@@ -38,7 +38,7 @@ export default function AppHeader() {
       children: catalogs[i].Products.map((product) => {
         return {
           key: product.id,
-          label: product.name,
+          label: <Link to={`/product/${product.id}`}>{product.name}</Link>,
         };
       }),
     });

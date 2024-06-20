@@ -9,11 +9,11 @@ function Home() {
   return (
       <>
         <AppHero/>
-        <AppFeature/>
         <AppAbout/>
         <AppCategory/>
-        <AppService/>
-        <AppTestimonial/>
+        {/* <AppFeature/> */}
+        {/* <AppService/> */}
+        {/* <AppTestimonial/> */}
       </>
   );
 }

@@ -32,7 +32,7 @@ import { Link, useParams } from "react-router-dom";
 import { getProductById } from "../../../provider/features/product/ProductSlice";
 const { Title, Paragraph } = Typography;
 const ProductDetail = () => {
-  const { id, productName } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { getProductByIdState } = useSelector((state) => state.product);
   const { product } = getProductByIdState;
@@ -109,7 +109,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     dispatch(getProductById(id));
-  }, []);
+  }, [id]);
 
   ////
   const formik = useFormik({

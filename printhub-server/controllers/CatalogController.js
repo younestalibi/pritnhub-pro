@@ -18,13 +18,14 @@ exports.createCatalog = [
   upload.single("image"),
   async (req, res) => {
     try {
-      const { name } = req.body;
+      const { name,description } = req.body;
       let imagePath = null;
       if (req.file) {
         imagePath = req.file.path;
       }
       const catalog = await Catalog.create({
         name,
+        description,
         image: imagePath,
       });
       res
@@ -77,7 +78,7 @@ exports.updateCatalog = [
   async (req, res) => {
     const catalogId = req.params.id;
     try {
-      const { name } = req.body;
+      const { name,description } = req.body;
       const catalog = await Catalog.findByPk(catalogId);
       if (!catalog) {
         return res.status(404).json({ error: "Catalog not found" });
@@ -95,6 +96,7 @@ exports.updateCatalog = [
       }
 
       catalog.name = name;
+      catalog.description = description;
       await catalog.save();
       res
         .status(200)

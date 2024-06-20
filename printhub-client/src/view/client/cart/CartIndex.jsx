@@ -142,17 +142,39 @@ const CartIndex = () => {
                 </Button>,
               ]}
               extra={
-                <Image
-                  alt={item.Product.name}
-                  width={200}
-                  height={200}
-                  style={{ objectFit: "cover" }}
-                  crossOrigin={import.meta.env.VITE_CLIENT_URL}
-                  loading="lazy"
-                  src={`${import.meta.env.VITE_SERVER_URL}/${
-                    item.Product.image
-                  }`}
-                />
+                // <Image
+                //   alt={item.Product.name}
+                //   width={200}
+                //   height={200}
+                //   style={{ objectFit: "cover" }}
+                //   crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                //   loading="lazy"
+                //   src={`${import.meta.env.VITE_SERVER_URL}/${
+                //     item.Product.image
+                //   }`}
+                // />
+                <Image.PreviewGroup
+                  items={item.Product.image.map((image, index) => {
+                    return {
+                      src: `${import.meta.env.VITE_SERVER_URL}/${image}`,
+                      crossOrigin: import.meta.env.VITE_CLIENT_URL,
+                      loading: "lazy",
+                      alt: item.Product.name,
+                    };
+                  })}
+                >
+                  <Image
+                    alt={item.Product.name}
+                    width={200}
+                    height={200}
+                    style={{ objectFit: "contain" }}
+                    crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                    loading="lazy"
+                    src={`${import.meta.env.VITE_SERVER_URL}/${
+                      item.Product.image[0]
+                    }`}
+                  />
+                </Image.PreviewGroup>
               }
             >
               <List.Item.Meta

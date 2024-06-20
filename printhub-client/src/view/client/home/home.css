@@ -56,8 +56,6 @@
 .home-btn:active {
   background-color: #87dbd0;
 }
-
-/* Tablets (portrait and landscape) */
 @media (max-width: 768px) {
   .hero-container > h1 {
     font-size: 27px;
@@ -70,3 +68,10 @@
 }
 
 /* hero */
+.home-card {
+  transition: 0.2s;
+  cursor: pointer;
+}
+.home-card:hover {
+  scale: 1.05;
+}

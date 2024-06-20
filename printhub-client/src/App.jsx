@@ -58,8 +58,7 @@ function App() {
     const publicRoutes = [
       { path: "/", element: <Home /> },
       { path: "category/:category", element: <ProductList /> },
-      { path: "product/:product", element: <ProductDetail /> },
-      { path: "product/:id/:productName", element: <ProductDetail /> },
+      { path: "product/:id", element: <ProductDetail /> },
       { path: "login", element: <Authentication /> },
       { path: "contact", element: <ContactApp /> },
       { path: "paypal", element: <PayPal /> }, 

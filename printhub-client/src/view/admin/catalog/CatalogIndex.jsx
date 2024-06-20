@@ -69,6 +69,7 @@ const CatalogIndex = () => {
     data.push({
       key: i,
       name: catalogs[i].name,
+      description: catalogs[i].description,
       image: (
         <Image
           alt={catalogs[i].name}
@@ -171,6 +172,10 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
   },
   {
     title: "Image",

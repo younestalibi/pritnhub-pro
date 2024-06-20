@@ -73,7 +73,7 @@ header
 }
   
 .header .ant-anchor-wrapper {
-    background: none;
+    /* background: none; */
 }
   
   .header .ant-anchor {
@@ -93,7 +93,7 @@ header
   .header .ant-anchor-link:before,
   .header .ant-anchor-link:after {
     content: '';
-    background: #1890ff;
+    /* background: #1890ff; */
     width: 1px;
     position: absolute;
     top: 2px;
@@ -128,7 +128,7 @@ header
   /* ant menu */
 .header .ant-menu {
     border: 0;
-    background: none !important;
+    /* background: none !important; */
     /* margin-left: auto; */
   }
   
@@ -140,7 +140,7 @@ header
   .header .ant-menu li.ant-menu-item:before,
   .header .ant-menu li.ant-menu-item:after {
     content: '';
-    background: #1890ff;
+    /* background: #1890ff; */
     width: 1px;
     position: absolute;
     top: 2px;
@@ -163,7 +163,7 @@ header
   .header .ant-menu li.ant-menu-item-selected,
   .header .ant-menu li.ant-menu-item:hover {
     color: #1890ff;
-    background: none;
+    /* background: none; */
   }
   
   .header .ant-menu li.ant-menu-item-selected:before,

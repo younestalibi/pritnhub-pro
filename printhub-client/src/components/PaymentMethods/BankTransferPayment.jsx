@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Button, notification } from "antd";
+import { Button, Divider, Flex, notification, Typography } from "antd";
 import "./BankTransferPayment.css";
 import CihLogo from "../../assets/images/cih-logo.png";
 import axiosHttp from "../../utils/axios-client";
 import { useDispatch } from "react-redux";
 import { resetStateCartsCollection } from "../../provider/features/cart/CartSlice";
 import { useNavigate } from "react-router-dom";
+const { Text, Paragraph } = Typography;
+
 const BankTransferPayment = ({ orderData }) => {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const generateUniqueId = () => {
     return Math.random().toString(36).substr(2, 9).toUpperCase();
   };
@@ -18,7 +20,6 @@ const BankTransferPayment = ({ orderData }) => {
   });
 
   const handleConfirm = () => {
-    console.log(transferDetails);
     axiosHttp
       .post("paypal/confirm-order-cih", {
         ...transferDetails,
@@ -31,8 +32,7 @@ const BankTransferPayment = ({ orderData }) => {
           type: "success",
         });
         dispatch(resetStateCartsCollection());
-        navigate('/success-payment', { state: { success:true } });
-
+        navigate("/success-payment", { state: { success: true } });
       })
       .catch((error) => {
         const message = error.response.data;
@@ -44,7 +44,6 @@ const BankTransferPayment = ({ orderData }) => {
           });
         }
       });
-    // dispatch(confirmBankTransfer(orderDetails.orderId, transferDetails));
   };
 
   return (
@@ -54,27 +53,38 @@ const BankTransferPayment = ({ orderData }) => {
         <img src={CihLogo} alt="Cih Logo" className="cih-logo" />
         <span className="cih-button-loader"></span>
       </button>
-      <h2>Bank Transfer Payment</h2>
-      <p>
+      <Typography.Title level={3}>Bank Transfer Payment</Typography.Title>
+      <Text>
         Please transfer the amount to the account below and do not forget to
         send us a screenshot of the transfer with the reference ID to out email
         or contact us via whatsApp
-      </p>
-      <hr />
+      </Text>
+      <Divider orientation="left">Bank info</Divider>
       <div>
-        <p>
-          Your unique reference ID:{" "}
-          <strong>{transferDetails.referenceId}</strong>
-        </p>
-        <p>
-          Full Name: <strong>Printhub Pro</strong>
-        </p>
-        <p>
-          RIB: <strong>{transferDetails.referenceId}</strong>
-        </p>
-        <p>
-          Email: <strong>payments@yourcompany.com</strong>
-        </p>
+        <Flex gap={20}>
+          <Text>Your unique reference ID: </Text>
+          <Paragraph strong={true} copyable>
+            {transferDetails.referenceId}
+          </Paragraph>
+        </Flex>
+        <Flex gap={20}>
+          <Text>Full Name:</Text>
+          <Paragraph strong={true} copyable>
+            Printhub Pro
+          </Paragraph>
+        </Flex>
+        <Flex gap={20}>
+          <Text>RIB:</Text>
+          <Paragraph strong={true} copyable>
+            {transferDetails.referenceId}
+          </Paragraph>
+        </Flex>
+        <Flex gap={20}>
+          <Text>Email:</Text>
+          <Paragraph strong={true} copyable>
+            payments@yourcompany.com
+          </Paragraph>
+        </Flex>
       </div>
       <Button type="primary" onClick={handleConfirm}>
         Confirm Your Order

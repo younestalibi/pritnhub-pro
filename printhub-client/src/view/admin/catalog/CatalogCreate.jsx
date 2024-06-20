@@ -43,10 +43,12 @@ const CatalogCreate = (props) => {
   const formik = useFormik({
     initialValues: {
       name: "",
+      description: "",
       image: [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required*"),
+      description: Yup.string().required("Description is required*"),
       image: Yup.array()
         .length(1, "Please upload only one image")
         .required("Image is required*"),
@@ -54,6 +56,7 @@ const CatalogCreate = (props) => {
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append("name", values.name);
+      formData.append("description", values.description);
       formData.append("image", values.image[0].originFileObj);
       dispatch(createCatalog(formData));
     },
@@ -101,6 +104,20 @@ const CatalogCreate = (props) => {
           />
           {formik.errors.name && formik.touched.name && (
             <div style={{ color: "red" }}>{formik.errors.name}</div>
+          )}
+        </div>
+        <div>
+          <label htmlFor="description">
+            Description <span>*</span>
+          </label>
+          <Input
+            id="description"
+            name="description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+          />
+          {formik.errors.description && formik.touched.description && (
+            <div style={{ color: "red" }}>{formik.errors.description}</div>
           )}
         </div>
 
