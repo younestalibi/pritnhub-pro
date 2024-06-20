@@ -3,7 +3,7 @@ import config from '../../../utils/config'
 
 const addCartItem = async (cart) => {
   try {
-    const response = await axiosHttp.post(`/cart`,cart);
+    const response = await axiosHttp.post(`/cart`,cart,config);
     return response.data;
   } catch (error) {
     throw error.response.data;

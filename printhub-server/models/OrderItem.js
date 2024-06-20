@@ -9,24 +9,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
-    //   product_id: {
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    //     references: {
-    //       model: "Products",
-    //       key: "id",
-    //     },
-    //     onDelete: "CASCADE",
-    //   },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
       },
-   
+      image: { 
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
       price: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: false, 
       },
       customizations: {
         type: DataTypes.JSON,

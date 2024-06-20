@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import axiosHttp from "../../utils/axios-client";
-import { notification } from "antd";
+import { notification, Typography } from "antd";
 import { useDispatch } from "react-redux";
 import { resetStateCartsCollection } from "../../provider/features/cart/CartSlice";
 import { useNavigate } from "react-router-dom";
 
 const PayPal = ({ orderData }) => {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [paypalClientId, setPaypalClientId] = useState("");
 
   useEffect(() => {
@@ -66,8 +66,7 @@ const PayPal = ({ orderData }) => {
                       type: "success",
                     });
                     dispatch(resetStateCartsCollection());
-                    navigate('/success-payment', { state: { success:true } });
-
+                    navigate("/success-payment", { state: { success: true } });
                   })
                   .catch((error) => {
                     const message = error.response.data;
@@ -114,11 +113,11 @@ const PayPal = ({ orderData }) => {
       {paypalClientId ? (
         <>
           <div id="paypal-button-container"></div>
-          <p>
+          <Typography.Paragraph strong>
             You personal data will be used to process your order, support your
             experience throughout this website, and for other purposes descibed
-            in our privacy policy{" "}
-          </p>
+            in our privacy policy.
+          </Typography.Paragraph>
         </>
       ) : (
         <p>Loading PayPal Button...</p>

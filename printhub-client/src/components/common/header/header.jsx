@@ -68,7 +68,9 @@ export default function AppHeader() {
         <div className="container-fluid">
           <div className="headerMain">
             <div className="logo">
-              <strong>{settings && settings.website_name}</strong>
+              <Link to={'/'}>
+                <strong>{settings && settings.website_name}</strong>
+              </Link>
             </div>
             <div className="SearchInput">
               <Search

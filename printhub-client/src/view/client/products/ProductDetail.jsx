@@ -3,11 +3,13 @@ import {
   Button,
   Col,
   Descriptions,
+  Image,
   Result,
   Row,
   Skeleton,
   Tag,
   Typography,
+  Upload,
   notification,
 } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -30,6 +32,7 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { Link, useParams } from "react-router-dom";
 import { getProductById } from "../../../provider/features/product/ProductSlice";
+import { PlusOutlined } from "@ant-design/icons";
 const { Title, Paragraph } = Typography;
 const ProductDetail = () => {
   const { id } = useParams();
@@ -115,6 +118,7 @@ const ProductDetail = () => {
   const formik = useFormik({
     initialValues: product
       ? {
+          images: [],
           quantity: null,
           ...product.options.reduce(
             (acc, option) => ({ ...acc, [option.name]: null }),
@@ -130,6 +134,10 @@ const ProductDetail = () => {
               .min(product.quantity.min, `Minimum ${product.quantity.min}`)
               .max(product.quantity.max, `Maximum ${product.quantity.max}`)
               .required("Quantity is required"),
+            images: Yup.array()
+              .max(10, "You can only upload up to 10 images")
+              .min(1, "Please upload at least one images")
+              .required("Image is required*"),
             ...product.options.reduce((acc, option) => {
               switch (option.type) {
                 case "text":
@@ -158,11 +166,20 @@ const ProductDetail = () => {
           })
         : {},
     onSubmit: (values) => {
-      const productId = id;
-      const customizations = { ...values };
-      const quantity = customizations.quantity;
+      let customizations = { ...values };
       delete customizations.quantity;
-      dispatch(addCartItem({ productId, quantity, customizations }));
+      delete customizations.images;
+
+      const formData = new FormData();
+      formData.append("productId", id);
+      formData.append("customizations", JSON.stringify(customizations));
+      formData.append("quantity", values.quantity);
+      values.images.forEach((image) => {
+        if (image.originFileObj) {
+          formData.append("images", image.originFileObj);
+        }
+      });
+      dispatch(addCartItem(formData));
     },
   });
 
@@ -219,6 +236,15 @@ const ProductDetail = () => {
     dispatch(resetStateCart());
   }, [addCartItemState.isSuccess, addCartItemState.isError]);
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
   return getProductByIdState.isLoading ? (
     <Row
       justify={"space-evenly"}
@@ -292,7 +318,7 @@ const ProductDetail = () => {
             items={images.length > 0 ? images : placeholderImage}
           />
           <Descriptions
-            style={{ marginTop: "10px" }}
+            style={{ margin: "20px 0px" }}
             title="Customization info"
             size="small"
             column={1}
@@ -413,6 +439,42 @@ const ProductDetail = () => {
                   return null;
               }
             })}
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess("success");
+              }}
+              listType="picture-card"
+              type="drag"
+              style={{
+                margin: "10px 0px",
+              }}
+              
+              multiple={true}
+              maxCount={8}
+              fileList={formik.getFieldProps("images").value}
+              onChange={({ fileList: newFileList }) => {
+                formik.setFieldValue("images", newFileList);
+              }}
+              onPreview={handlePreview}
+            >
+              {uploadButton}
+            </Upload>
+            {formik.errors.images && formik.touched.images && (
+              <div style={{ color: "red" }}>{formik.errors.images}</div>
+            )}
+            {previewImage && (
+              <Image
+                wrapperStyle={{
+                  display: "none",
+                }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+              />
+            )}
             {isAuthenticated ? (
               <Button
                 type="primary"
@@ -490,3 +552,30 @@ const placeholderImage = [
       "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=1024x1024&w=is&k=20&c=Bs1RdueQnaAcO888WBIQsC6NvA7aVTzeRVzSd8sJfUg=",
   },
 ];
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const uploadButton = (
+  <button
+    style={{
+      border: 0,
+      background: "none",
+    }}
+    type="button"
+  >
+    <PlusOutlined />
+    <div
+      style={{
+        marginTop: 8,
+      }}
+    >
+      Upload files for printing
+    </div>
+  </button>
+);

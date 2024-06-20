@@ -1,23 +1,15 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Divider, Input, Modal, Upload, notification } from "antd";
+import { Button, Divider, Flex, Image, Modal } from "antd";
 import React, { useEffect, useState } from "react";
-import {
-  createCatalog,
-  resetStateCatalog,
-  updateCatalog,
-} from "../../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import {
   getOrders,
   resetStateOrder,
 } from "../../../provider/features/order/OrderSlice";
-import { Card, Descriptions, Spin, Space } from "antd";
+import { Card, Descriptions, Space } from "antd";
+import DownloadImages from "../../../components/Downloader/DownloadImages";
 
 const OrderView = (props) => {
   const { open, setOpen, id } = props;
-
   const { orders, getOrdersState } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const [order, setOrder] = useState(null);
@@ -48,20 +40,6 @@ const OrderView = (props) => {
   const handleCancel = () => {
     setOpen(false);
   };
-  // <Descriptions bordered>
-  //   <Descriptions.Item label="Order Payment ID">
-  //     {order.order_payment_id}
-  //   </Descriptions.Item>
-  //   <Descriptions.Item label="Status">{order.status}</Descriptions.Item>
-  //   <Descriptions.Item label="Payment Method">
-  //     {order.payment_method}
-  //   </Descriptions.Item>
-  //   <Descriptions.Item label="Tracking ID">
-  //     {order.tracking_id}
-  //   </Descriptions.Item>
-  //   <Descriptions.Item label="Created At">{order.createdAt}</Descriptions.Item>
-  //   <Descriptions.Item label="Updated At">{order.updatedAt}</Descriptions.Item>
-  // </Descriptions>;
 
   return (
     <Modal
@@ -181,6 +159,37 @@ const OrderView = (props) => {
                       key: index,
                       label: "Quantity",
                       children: item.quantity,
+                    },
+                    {
+                      key: index,
+                      label: "Images",
+                      children: (
+                        <Flex justify="space-around" align="center">
+                          <Image.PreviewGroup
+                            items={item.image.map((image, index) => {
+                              return {
+                                src: `${
+                                  import.meta.env.VITE_SERVER_URL
+                                }/${image}`,
+                                crossOrigin: import.meta.env.VITE_CLIENT_URL,
+                                loading: "lazy",
+                              };
+                            })}
+                          >
+                            <Image
+                              width={60}
+                              height={60}
+                              style={{ objectFit: "contain" }}
+                              crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                              loading="lazy"
+                              src={`${import.meta.env.VITE_SERVER_URL}/${
+                                item.image[0]
+                              }`}
+                            />
+                          </Image.PreviewGroup>
+                          <DownloadImages imageUrls={item.image} />
+                        </Flex>
+                      ),
                     },
                     {
                       key: index,

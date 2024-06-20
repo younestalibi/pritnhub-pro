@@ -210,6 +210,30 @@ const CartIndex = () => {
                             <span>{item.customizations[key]}</span>
                           </li>
                         ))}
+                        <li>
+                          <Image.PreviewGroup
+                            items={item.image.map((image, index) => {
+                              return {
+                                src: `${
+                                  import.meta.env.VITE_SERVER_URL
+                                }/${image}`,
+                                crossOrigin: import.meta.env.VITE_CLIENT_URL,
+                                loading: "lazy",
+                              };
+                            })}
+                          >
+                            <Image
+                              width={60}
+                              height={60}
+                              style={{ objectFit: "contain" }}
+                              crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                              loading="lazy"
+                              src={`${import.meta.env.VITE_SERVER_URL}/${
+                                item.image[0]
+                              }`}
+                            />
+                          </Image.PreviewGroup>
+                        </li>
                       </ul>
                     ),
                   },

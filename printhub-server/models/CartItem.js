@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
+      image: { 
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
