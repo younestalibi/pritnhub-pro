@@ -8,6 +8,10 @@ const CheckoutSuccess = () => {
   }
   return (
     <Result
+      style={{
+        minHeight: "90vh",
+        alignContent: "center",
+      }}
       status="success"
       title="Order Successfully Placed!"
       subTitle={`Thank you for your purchase. Your items will be delivered within 1-3 business days.`}

@@ -26,13 +26,14 @@ import { getSettings } from "./provider/features/setting/SettingSlice";
 import SettingIndex from "./view/admin/setting/SettingIndex";
 import PayPal from "./components/PaymentMethods/Paypal";
 import CheckoutSuccess from "./view/client/checkout/CheckoutSuccess";
+import OrderIndexUser from "./view/client/order/OrderIndexUser";
 
 function App() {
-  const {getUserState } = useSelector((state) => state.auth);
-  const {settings } = useSelector((state) => state.setting);
+  const { getUserState } = useSelector((state) => state.auth);
+  const { settings } = useSelector((state) => state.setting);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getSettings())
+    dispatch(getSettings());
     dispatch(getUser());
   }, []);
 
@@ -46,13 +47,13 @@ function App() {
       { path: "contact", element: <ContactIndex /> },
       { path: "order", element: <OrderIndex /> },
       { path: "setting", element: <SettingIndex /> },
-
     ];
 
     const authRoutes = [
       { path: "cart", element: <CartIndex /> },
       { path: "checkout", element: <CheckoutIndex /> },
       { path: "profile", element: <ProfileIndex /> },
+      { path: "order", element: <OrderIndexUser /> },
     ];
 
     const publicRoutes = [
@@ -61,8 +62,8 @@ function App() {
       { path: "product/:id", element: <ProductDetail /> },
       { path: "login", element: <Authentication /> },
       { path: "contact", element: <ContactApp /> },
-      { path: "paypal", element: <PayPal /> }, 
-      { path: "success-payment", element: <CheckoutSuccess /> }, 
+      { path: "paypal", element: <PayPal /> },
+      { path: "success-payment", element: <CheckoutSuccess /> },
     ];
 
     return (

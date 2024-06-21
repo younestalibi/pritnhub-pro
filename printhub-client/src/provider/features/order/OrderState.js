@@ -1,5 +1,12 @@
 export const initialOrderState = {
   orders: [],
+  userOrders: [],
+  getUserOrdersState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    message: "",
+  },
   getOrdersState: {
     isLoading: false,
     isError: false,
@@ -12,12 +19,6 @@ export const initialOrderState = {
     isSuccess: false,
     message: "",
   },
-  // getProductByIdState: {
-  //   isLoading: false,
-  //   isError: false,
-  //   isSuccess: false,
-  //   message: "",
-  // },
   createOrderState: {
     isLoading: false,
     isError: false,
@@ -33,8 +34,10 @@ export const initialOrderState = {
 };
 export const resetOrderState = (state) => {
   state.getOrdersState = { ...initialOrderState.getOrdersState };
-  state.deleteOrderByIdState = {...initialOrderState.deleteOrderByIdState};
-  // state.getProductByIdState = { ...initialOrderState.getProductByIdState };
+  state.getUserOrdersState = { ...initialOrderState.getUserOrdersState };
+  state.deleteOrderByIdState = { ...initialOrderState.deleteOrderByIdState };
   state.createOrderState = { ...initialOrderState.createOrderState };
-  state.updateOrderStatusState = { ...initialOrderState.updateOrderStatusState };
+  state.updateOrderStatusState = {
+    ...initialOrderState.updateOrderStatusState,
+  };
 };

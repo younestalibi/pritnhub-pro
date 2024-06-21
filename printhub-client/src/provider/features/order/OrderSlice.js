@@ -2,13 +2,26 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { initialOrderState, resetOrderState } from "./OrderState";
 import OrderServices from "./OrderServices";
 
-export const getOrders = createAsyncThunk("order/get-all", async (_,thunkAPI) => {
-  try {
-    return await OrderServices.getOrders();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getOrders = createAsyncThunk(
+  "order/get-all",
+  async (_, thunkAPI) => {
+    try {
+      return await OrderServices.getOrders();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
+export const getUserOrders = createAsyncThunk(
+  "order/get-all-user-order",
+  async (_, thunkAPI) => {
+    try {
+      return await OrderServices.getUserOrders();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const createOrder = createAsyncThunk(
   "order/create-one",
   async (order, thunkAPI) => {
@@ -69,6 +82,26 @@ export const OrderSlice = createSlice({
       })
       // get-all-orders
       //   =========================================================================
+      // get-user-orders
+      .addCase(getUserOrders.pending, (state) => {
+        resetOrderState(state);
+        state.getUserOrdersState.isLoading = true;
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.getUserOrdersState.isError = false;
+        state.getUserOrdersState.isLoading = false;
+        state.getUserOrdersState.isSuccess = true;
+        state.getUserOrdersState.message = action.payload.message;
+        state.userOrders = action.payload.orders;
+      })
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.getUserOrdersState.isError = true;
+        state.getUserOrdersState.isLoading = false;
+        state.getUserOrdersState.isSuccess = false;
+        state.getUserOrdersState.message = action.payload.error;
+      })
+      // get-user-orders
+      //   =========================================================================
       // delete-one-by-id
       .addCase(deleteOrderById.pending, (state) => {
         resetOrderState(state);
@@ -88,7 +121,6 @@ export const OrderSlice = createSlice({
         state.deleteOrderByIdState.isLoading = false;
         state.deleteOrderByIdState.isSuccess = false;
         state.deleteOrderByIdState.message = action.payload.error;
-
       })
       // delete-one-by-id
       //   =========================================================================

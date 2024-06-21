@@ -1,8 +1,11 @@
 import {
   Badge,
   Button,
+  Card,
   Col,
   Descriptions,
+  Divider,
+  Flex,
   Image,
   Result,
   Row,
@@ -31,17 +34,24 @@ import {
 } from "../../../provider/features/cart/CartSlice";
 import useAuth from "../../../hooks/useAuth";
 import { Link, useParams } from "react-router-dom";
-import { getProductById } from "../../../provider/features/product/ProductSlice";
+import {
+  getProductById,
+  getProducts,
+  resetStateProduct,
+} from "../../../provider/features/product/ProductSlice";
 import { PlusOutlined } from "@ant-design/icons";
+import { Fade } from "react-awesome-reveal";
+import AppService from "../home/services";
+import ProductCard from "./productCard";
 const { Title, Paragraph } = Typography;
+const { Meta } = Card;
 const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { getProductByIdState } = useSelector((state) => state.product);
   const { product } = getProductByIdState;
-
   const [expanded, setExpanded] = useState(false);
-  const { carts, addCartItemState } = useSelector((state) => state.cart);
+  const { addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
   const calculateTotalPrice = (formValues) => {
@@ -112,6 +122,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     dispatch(getProductById(id));
+    window.scrollTo(0, 0);
   }, [id]);
 
   ////
@@ -234,6 +245,7 @@ const ProductDetail = () => {
     }
     formik.resetForm();
     dispatch(resetStateCart());
+    window.scrollTo(0, 0);
   }, [addCartItemState.isSuccess, addCartItemState.isError]);
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -245,6 +257,16 @@ const ProductDetail = () => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
+  const { products, getProductsState } = useSelector((state) => state.product);
+
+  useEffect(() => {
+    if (products.length == 0) {
+      dispatch(getProducts());
+    } else {
+      dispatch(resetStateProduct());
+    }
+  }, []);
+
   return getProductByIdState.isLoading ? (
     <Row
       justify={"space-evenly"}
@@ -305,211 +327,252 @@ const ProductDetail = () => {
       </Col>
     </Row>
   ) : getProductByIdState.product ? (
-    <Row justify={"space-evenly"} align={"stretch"}>
-      <Col md={{ span: 11 }} sm={{ span: 24 }}>
-        <BreadCrumb titles={["home", product.Catalog.name, product.name]} />
-        <div style={{ position: "sticky", top: "-175px" }}>
-          <ImageGallery
-            showNav={true}
-            showPlayButton={false}
-            lazyLoad={true}
-            showIndex={true}
-            thumbnailPosition="left"
-            items={images.length > 0 ? images : placeholderImage}
-          />
-          <Descriptions
-            style={{ margin: "20px 0px" }}
-            title="Customization info"
-            size="small"
-            column={1}
-            colon={false}
-            bordered
-            items={customization}
-          />
-        </div>
-      </Col>
-      <Col md={{ span: 11 }} sm={{ span: 24 }}>
-        <div>
-          <Title level={3}>{product.name}</Title>
-          <Paragraph
-            ellipsis={{
-              rows: 3,
-              expandable: "collapsible",
-              expanded: expanded,
-              onExpand: (_, info) => {
-                setExpanded(info.expanded);
-              },
-            }}
-          >
-            {product.description}
-          </Paragraph>
-
-          <form onSubmit={formik.handleSubmit}>
-            <RadioInput
-              value={formik.values["quantity"]}
-              setFormValues={formik.setFieldValue}
-              error={formik.touched["quantity"] && formik.errors["quantity"]}
-              tooltip={"Select the number of business cards you want to print"}
-              label={"Quantity"}
-              name={"quantity"}
-              choices={quantities}
+    <>
+      <Row
+        justify={"space-evenly"}
+        align={"stretch"}
+        style={{
+          margin: "40px 0px",
+        }}
+      >
+        <Col md={{ span: 11 }} sm={{ span: 24 }}>
+          <BreadCrumb titles={["home", product.Catalog.name, product.name]} />
+          <div style={{ position: "sticky", top: "-175px" }}>
+            <ImageGallery
+              showNav={true}
+              showPlayButton={false}
+              lazyLoad={true}
+              showIndex={true}
+              thumbnailPosition="left"
+              items={images.length > 0 ? images : placeholderImage}
             />
-
-            {product.options.map((option, index) => {
-              switch (option.type) {
-                case "text":
-                  return (
-                    <TextInput
-                      value={formik.values[option.name]}
-                      setFormValues={formik.setFieldValue}
-                      error={
-                        formik.touched[option.name] &&
-                        formik.errors[option.name]
-                      }
-                      tooltip={option.tooltip}
-                      key={index}
-                      label={option.label}
-                      name={option.name}
-                    />
-                  );
-                case "number":
-                  return (
-                    <NumberInput
-                      value={formik.values[option.name]}
-                      setFormValues={formik.setFieldValue}
-                      error={
-                        formik.touched[option.name] &&
-                        formik.errors[option.name]
-                      }
-                      tooltip={option.tooltip}
-                      key={index}
-                      label={option.label}
-                      name={option.name}
-                    />
-                  );
-                case "select":
-                  return (
-                    <SelectInput
-                      value={formik.values[option.name]}
-                      setFormValues={formik.setFieldValue}
-                      error={
-                        formik.touched[option.name] &&
-                        formik.errors[option.name]
-                      }
-                      tooltip={option.tooltip}
-                      key={index}
-                      label={option.label}
-                      name={option.name}
-                      choices={option.choices}
-                    />
-                  );
-                case "radio":
-                  return (
-                    <RadioInput
-                      value={formik.values[option.name]}
-                      setFormValues={formik.setFieldValue}
-                      error={
-                        formik.touched[option.name] &&
-                        formik.errors[option.name]
-                      }
-                      tooltip={option.tooltip}
-                      key={index}
-                      label={option.label}
-                      name={option.name}
-                      choices={option.choices}
-                    />
-                  );
-                case "checkbox":
-                  return (
-                    <CheckBoxInput
-                      value={formik.values[option.name]}
-                      setFormValues={formik.setFieldValue}
-                      error={
-                        formik.touched[option.name] &&
-                        formik.errors[option.name]
-                      }
-                      tooltip={option.tooltip}
-                      key={index}
-                      label={option.label}
-                      name={option.name}
-                      choices={option.choices}
-                    />
-                  );
-                default:
-                  return null;
-              }
-            })}
-            <Upload
-              customRequest={({ onSuccess }) => {
-                onSuccess("success");
+            <Descriptions
+              style={{ margin: "20px 0px" }}
+              title="Customization info"
+              size="small"
+              column={1}
+              colon={false}
+              bordered
+              items={customization}
+            />
+          </div>
+        </Col>
+        <Col md={{ span: 11 }} sm={{ span: 24 }}>
+          <div>
+            <Title level={3}>{product.name}</Title>
+            <Paragraph
+              ellipsis={{
+                rows: 3,
+                expandable: "collapsible",
+                expanded: expanded,
+                onExpand: (_, info) => {
+                  setExpanded(info.expanded);
+                },
               }}
-              listType="picture-card"
-              type="drag"
-              style={{
-                margin: "10px 0px",
-              }}
-              
-              multiple={true}
-              maxCount={8}
-              fileList={formik.getFieldProps("images").value}
-              onChange={({ fileList: newFileList }) => {
-                formik.setFieldValue("images", newFileList);
-              }}
-              onPreview={handlePreview}
             >
-              {uploadButton}
-            </Upload>
-            {formik.errors.images && formik.touched.images && (
-              <div style={{ color: "red" }}>{formik.errors.images}</div>
-            )}
-            {previewImage && (
-              <Image
-                wrapperStyle={{
-                  display: "none",
-                }}
-                preview={{
-                  visible: previewOpen,
-                  onVisibleChange: (visible) => setPreviewOpen(visible),
-                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
-                }}
-                src={previewImage}
+              {product.description}
+            </Paragraph>
+
+            <form onSubmit={formik.handleSubmit}>
+              <RadioInput
+                value={formik.values["quantity"]}
+                setFormValues={formik.setFieldValue}
+                error={formik.touched["quantity"] && formik.errors["quantity"]}
+                tooltip={
+                  "Select the number of business cards you want to print"
+                }
+                label={"Quantity"}
+                name={"quantity"}
+                choices={quantities}
               />
-            )}
-            {isAuthenticated ? (
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{
-                  backgroundColor: "#c43b53",
-                  padding: "19px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+
+              {product.options.map((option, index) => {
+                switch (option.type) {
+                  case "text":
+                    return (
+                      <TextInput
+                        value={formik.values[option.name]}
+                        setFormValues={formik.setFieldValue}
+                        error={
+                          formik.touched[option.name] &&
+                          formik.errors[option.name]
+                        }
+                        tooltip={option.tooltip}
+                        key={index}
+                        label={option.label}
+                        name={option.name}
+                      />
+                    );
+                  case "number":
+                    return (
+                      <NumberInput
+                        value={formik.values[option.name]}
+                        setFormValues={formik.setFieldValue}
+                        error={
+                          formik.touched[option.name] &&
+                          formik.errors[option.name]
+                        }
+                        tooltip={option.tooltip}
+                        key={index}
+                        label={option.label}
+                        name={option.name}
+                      />
+                    );
+                  case "select":
+                    return (
+                      <SelectInput
+                        value={formik.values[option.name]}
+                        setFormValues={formik.setFieldValue}
+                        error={
+                          formik.touched[option.name] &&
+                          formik.errors[option.name]
+                        }
+                        tooltip={option.tooltip}
+                        key={index}
+                        label={option.label}
+                        name={option.name}
+                        choices={option.choices}
+                      />
+                    );
+                  case "radio":
+                    return (
+                      <RadioInput
+                        value={formik.values[option.name]}
+                        setFormValues={formik.setFieldValue}
+                        error={
+                          formik.touched[option.name] &&
+                          formik.errors[option.name]
+                        }
+                        tooltip={option.tooltip}
+                        key={index}
+                        label={option.label}
+                        name={option.name}
+                        choices={option.choices}
+                      />
+                    );
+                  case "checkbox":
+                    return (
+                      <CheckBoxInput
+                        value={formik.values[option.name]}
+                        setFormValues={formik.setFieldValue}
+                        error={
+                          formik.touched[option.name] &&
+                          formik.errors[option.name]
+                        }
+                        tooltip={option.tooltip}
+                        key={index}
+                        label={option.label}
+                        name={option.name}
+                        choices={option.choices}
+                      />
+                    );
+                  default:
+                    return null;
+                }
+              })}
+              <Upload
+                customRequest={({ onSuccess }) => {
+                  onSuccess("success");
                 }}
-                block={true}
-                loading={addCartItemState.isLoading}
-              >
-                Add To Cart
-              </Button>
-            ) : (
-              <Link
+                listType="picture-card"
+                type="drag"
                 style={{
-                  backgroundColor: "#c43b53",
-                  padding: "19px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
+                  margin: "10px 0px",
                 }}
-                to={"/login"}
+                multiple={true}
+                maxCount={8}
+                fileList={formik.getFieldProps("images").value}
+                onChange={({ fileList: newFileList }) => {
+                  formik.setFieldValue("images", newFileList);
+                }}
+                onPreview={handlePreview}
               >
-                Add To Cart
-              </Link>
-            )}
-          </form>
-        </div>
-      </Col>
-    </Row>
+                {uploadButton}
+              </Upload>
+              {formik.errors.images && formik.touched.images && (
+                <div style={{ color: "red" }}>{formik.errors.images}</div>
+              )}
+              {previewImage && (
+                <Image
+                  wrapperStyle={{
+                    display: "none",
+                  }}
+                  preview={{
+                    visible: previewOpen,
+                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                    afterOpenChange: (visible) =>
+                      !visible && setPreviewImage(""),
+                  }}
+                  src={previewImage}
+                />
+              )}
+              {isAuthenticated ? (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    backgroundColor: "#c43b53",
+                    padding: "19px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  block={true}
+                  loading={addCartItemState.isLoading}
+                >
+                  Add To Cart
+                </Button>
+              ) : (
+                <Link
+                  style={{
+                    backgroundColor: "#c43b53",
+                    padding: "19px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                  }}
+                  to={"/login"}
+                >
+                  Add To Cart
+                </Link>
+              )}
+            </form>
+          </div>
+        </Col>
+      </Row>
+      <AppService />
+      <Fade triggerOnce direction="up">
+        <Flex
+          justify="center"
+          align="center"
+          vertical={true}
+          style={{ padding: "10px 40px" }}
+        >
+          <Divider>
+            <Typography.Title>Related Printing Items</Typography.Title>
+          </Divider>
+          <Typography.Paragraph style={{ fontSize: "20px" }}>
+            High-quality solutions tailored to meet your needs.
+          </Typography.Paragraph>
+        </Flex>
+      </Fade>
+      <Row
+        style={{ margin: "40px 0px" }}
+        justify={"center"}
+        align={"middle"}
+        gutter={[40, 40]}
+      >
+        {products.length > 0 &&
+          products.slice(0, 4).map((product, index) => (
+            <Col key={index}>
+              <Fade triggerOnce direction="up">
+                <ProductCard product={product} />
+              </Fade>
+            </Col>
+          ))}
+      </Row>
+    </>
   ) : (
     <Result
       status="404"

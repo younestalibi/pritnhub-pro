@@ -1,9 +1,16 @@
 import axiosHttp from "../../../utils/axios-client";
-import config from '../../../utils/config'
 
 const getOrders = async () => {
   try {
     const response = await axiosHttp.get(`/order`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+const getUserOrders = async () => {
+  try {
+    const response = await axiosHttp.get(`/order/view`);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -17,14 +24,6 @@ const deleteOrderById = async (id) => {
     throw error.response.data;
   }
 };
-// const getProductById = async (id) => {
-//   try {
-//     const response = await axiosHttp.get(`/product/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response.data;
-//   }
-// };
 const createOrder = async (order) => {
   try {
     const response = await axiosHttp.post(`/order`,order);
@@ -48,7 +47,7 @@ const OrderServices = {
   deleteOrderById,
   createOrder,
   updateOrderStatus,
-  // getProductById
+  getUserOrders
 };
 
 export default OrderServices;

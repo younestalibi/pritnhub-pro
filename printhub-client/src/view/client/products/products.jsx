@@ -1,11 +1,18 @@
-import { Col, Row, Empty } from "antd";
-import { useParams } from "react-router-dom";
+import { Col, Row, Empty, Card } from "antd";
+import { Link, useParams } from "react-router-dom";
 import "./products.css";
 import "../../../App.css";
 import image2 from "../../../assets/images/roll-ups.jpg";
 import image1 from "../../../assets/images/t-shirt.avif";
 import ProductCard from "./productCard";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getCatalogs,
+  resetStateCatalog,
+} from "../../../provider/features/catalog/CatalogSlice";
+import { Fade } from "react-awesome-reveal";
+const { Meta } = Card;
 const items = [
   {
     //
@@ -102,12 +109,24 @@ const items = [
 ];
 
 export default function ProductList() {
+  const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (catalogs.length == 0) {
+      dispatch(getCatalogs());
+    } else {
+      dispatch(resetStateCatalog());
+    }
+  }, []);
   const { category } = useParams();
-  const categoryItem = items.find((item) => item.key === category);
+  const categoryItem = catalogs?.find((item) => item.id == category);
+  console.log(categoryItem);
   if (
     !categoryItem ||
-    !categoryItem.products ||
-    categoryItem.products.length === 0
+    !categoryItem.Products ||
+    categoryItem.Products.length === 0
   ) {
     return (
       <div className="no-data">
@@ -124,12 +143,20 @@ export default function ProductList() {
         </div>
       </div>
       <div className="container">
-        <Row gutter={[32, 32]}>
-          {categoryItem.products.map((product) => (
-            <Col span={6} key={product.key}>
-              <ProductCard product={product} />
-            </Col>
-          ))}
+        <Row
+          style={{ margin: "40px 0px" }}
+          justify={"center"}
+          align={"middle"}
+          gutter={[40, 40]}
+        >
+          {categoryItem.Products.length > 0 &&
+            categoryItem.Products.map((product, index) => (
+              <Col key={index}>
+                <Fade triggerOnce direction="up">
+                  <ProductCard product={product} />
+                </Fade>
+              </Col>
+            ))}
         </Row>
       </div>
     </div>

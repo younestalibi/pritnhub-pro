@@ -4,7 +4,6 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
-
 import {
   deleteArticleById,
   getArticles,
@@ -12,10 +11,8 @@ import {
 } from "../../../provider/features/article/ArticleSlice";
 import { Button, Table, notification } from "antd";
 import { Image } from "antd";
-import { Link } from "react-router-dom";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
 import ArticleCreate from "./ArticleCreate";
-import { icons } from "antd/es/image/PreviewGroup";
 import ArticleEdit from "./ArticleEdit";
 
 const ArticleIndex = () => {
@@ -142,7 +139,7 @@ const ArticleIndex = () => {
         columns={columns}
         dataSource={data}
         loading={getArticlesState.isLoading}
-        scroll={{ x: 1000}}
+        scroll={{ x: 1000 }}
       />
       <Confirmation
         setOpen={setOpen}

@@ -16,6 +16,7 @@ import {
   resetStateProduct,
 } from "../../../provider/features/product/ProductSlice";
 import { Fade } from "react-awesome-reveal";
+import ProductCard from "../products/productCard";
 
 const { Meta } = Card;
 
@@ -56,34 +57,7 @@ export default function AppFeature() {
           products.slice(0, 6).map((product, index) => (
             <Col key={index}>
               <Fade triggerOnce direction="up">
-                <Link to={`/product/${product.id}`}>
-                  <Card
-                    className="home-card"
-                    cover={
-                      <img
-                        alt={product.name}
-                        style={{
-                          aspectRatio: "1 / 1",
-                          height: "200px",
-                          width: "250px",
-                          objectFit: "cover",
-                        }}
-                        crossOrigin={import.meta.env.VITE_CLIENT_URL}
-                        src={`${import.meta.env.VITE_SERVER_URL}/${
-                          product.image[0]
-                        }`}
-                      />
-                    }
-                  >
-                    <Meta
-                      style={{
-                        textAlign: "center",
-                      }}
-                      title={product.name}
-                      // description={product.description}
-                    />
-                  </Card>
-                </Link>
+                <ProductCard product={product} />
               </Fade>
             </Col>
           ))}

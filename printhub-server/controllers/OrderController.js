@@ -17,7 +17,7 @@ exports.index = async (req, res) => {
     const orders = await Order.findAll({
       //   where: { user_id: userId },
       include: {
-        model: OrderItem
+        model: OrderItem,
       },
     });
 
@@ -75,7 +75,7 @@ exports.createOrder = async (req, res) => {
                 customizations: item.customizations,
                 price: calculateItemTotal(item),
               },
-              { transaction } 
+              { transaction }
             );
             // let product = await Product.findByPk(item.Product.id);
             // let newMaxValue = String(Number(product.quantity.max)-item.quantity);
@@ -136,7 +136,6 @@ exports.updateOrderStatus = async (req, res) => {
       where: { id: orderId },
       include: {
         model: OrderItem,
-        
       },
     });
     if (!order) {
@@ -164,7 +163,29 @@ exports.deleteOrder = async (req, res) => {
 
     await Order.destroy({ where: { id: orderId } });
 
-    res.status(200).json({ message: "Order deleted successfully", id: orderId });
+    res
+      .status(200)
+      .json({ message: "Order deleted successfully", id: orderId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// View orders for the current user
+exports.viewOrders = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const orders = await Order.findAll({
+      where: { user_id: userId, status: ["pending", "completed"] },
+      include: {
+        model: OrderItem,
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    return res
+      .status(200)
+      .json({ orders, message: "Returned orders successfully!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

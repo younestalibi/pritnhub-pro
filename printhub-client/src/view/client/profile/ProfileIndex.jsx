@@ -1,12 +1,15 @@
 import React from "react";
-import { Tabs, Flex } from "antd";
+import { Tabs, Flex, Divider, Typography } from "antd";
 import ProfileInformation from "./ProfileInformation";
 import ProfilePassword from "./ProfilePassword";
 import ProfileAddress from "./ProfileAddress";
+import Container from "../../../components/common/container/Container";
 
 const ProfileIndex = () => (
-  <div style={{ width: "80%", margin: "auto" }}>
-    <h2>Profile</h2>
+  <Container>
+    <Divider orientation="left">
+      <Typography.Title>Profile</Typography.Title>
+    </Divider>
     <Flex style={{ minHeight: "80vh" }} justify="center">
       <Tabs
         animated
@@ -15,7 +18,7 @@ const ProfileIndex = () => (
         items={items}
       />
     </Flex>
-  </div>
+  </Container>
 );
 export default ProfileIndex;
 
