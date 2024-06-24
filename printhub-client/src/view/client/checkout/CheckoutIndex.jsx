@@ -21,6 +21,7 @@ import CheckoutStepTwo from "./CheckoutStepTwo";
 import CheckoutStepThree from "./CheckoutStepThree";
 import CheckoutStepFour from "./CheckoutStepFour";
 import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
+import useAuth from "../../../hooks/useAuth";
 
 const CheckoutIndex = () => {
   const { carts } = useSelector((state) => state.cart);
@@ -39,9 +40,10 @@ const CheckoutIndex = () => {
     setCurrent(current - 1);
     window.scrollTo(0, 0);
   };
+  const isAuthenticated = useAuth();
 
   useEffect(() => {
-    if (carts.length == 0) {
+    if (carts.length == 0 && isAuthenticated) {
       dispatch(getCartItems());
     } else {
       dispatch(resetStateCart());

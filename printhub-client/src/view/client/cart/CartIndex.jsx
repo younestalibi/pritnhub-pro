@@ -23,6 +23,7 @@ import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
+import useAuth from "../../../hooks/useAuth";
 
 const { Title, Paragraph } = Typography;
 
@@ -47,8 +48,11 @@ const CartIndex = () => {
         }),
       ]
     : [];
+
+  const isAuthenticated = useAuth();
+
   useEffect(() => {
-    if (carts.length == 0) {
+    if (carts.length == 0 && isAuthenticated) {
       dispatch(getCartItems());
     } else {
       dispatch(resetStateCart());

@@ -564,13 +564,17 @@ const ProductDetail = () => {
         gutter={[40, 40]}
       >
         {products.length > 0 &&
-          products.slice(0, 4).map((product, index) => (
-            <Col key={index}>
-              <Fade triggerOnce direction="up">
-                <ProductCard product={product} />
-              </Fade>
-            </Col>
-          ))}
+          products.slice(0, 4).map((product, index) => {
+            if (product.id != id) {
+              return (
+                <Col key={index}>
+                  <Fade triggerOnce direction="up">
+                    <ProductCard product={product} />
+                  </Fade>
+                </Col>
+              );
+            }
+          })}
       </Row>
     </>
   ) : (

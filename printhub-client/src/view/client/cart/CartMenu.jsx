@@ -7,6 +7,7 @@ import {
 } from "../../../provider/features/cart/CartSlice";
 import { calculateItemTotal, calculateTotal } from "../../../utils/functions";
 import { Link } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 const CartMenu = (props) => {
   const { open, setOpen } = props;
   const [loading, setLoading] = useState(false);
@@ -31,8 +32,11 @@ const CartMenu = (props) => {
         }),
       ]
     : [];
+
+  const isAuthenticated = useAuth();
+
   useEffect(() => {
-    if (carts.length == 0) {
+    if (carts.length == 0 && isAuthenticated) {
       dispatch(getCartItems());
     } else {
       dispatch(resetStateCart());
@@ -98,7 +102,7 @@ const CartMenu = (props) => {
                     }`}
                   />
                 </Image.PreviewGroup>
-                
+
                 <List.Item.Meta
                   title={item.Product.name}
                   description={`Quantity: ${

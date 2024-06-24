@@ -21,6 +21,7 @@ import {
 } from "../../../provider/features/cart/CartSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useAuth from "../../../hooks/useAuth";
 const { Meta } = Card;
 
 const CheckoutStepOne = ({ setCheckoutData, checkoutData, next }) => {
@@ -29,9 +30,10 @@ const CheckoutStepOne = ({ setCheckoutData, checkoutData, next }) => {
   );
   const { carts } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const isAuthenticated = useAuth();
 
   useEffect(() => {
-    if (carts.length == 0) {
+    if (carts.length == 0 && isAuthenticated) {
       dispatch(getCartItems());
     } else {
       dispatch(resetStateCart());
