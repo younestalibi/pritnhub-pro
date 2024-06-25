@@ -17,6 +17,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const settingRoutes = require('./routes/settingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const { defaultSetting } = require("./controllers/SettingController");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,6 +44,7 @@ sequelize
   .sync()
   .then(() => {
     console.log("Database synchronized");
+    defaultSetting()
   })
   .catch((err) => {
     console.error("Database synchronization error:", err);

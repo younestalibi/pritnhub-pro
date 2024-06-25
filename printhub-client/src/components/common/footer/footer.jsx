@@ -1,65 +1,85 @@
-import { Row, Col } from "antd";
-import "./footer.css";
+// src/components/Footer.js
+import React from "react";
+import { Layout, Row, Col, Divider } from "antd";
+import {
+  FacebookOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
+  LinkedinOutlined,
+  MailOutlined,
+  PhoneOutlined,
+} from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
-export default function AppFooter() {
-  return (
-    <div className="container-fluid">
-      <div className="footer ">
-        <Row>
-          <Col span={12}>
-            <div className="logoSocials">
-              <div className="logo">
-                <strong>
-                  <span>PrintHub</span>-Pro
-                </strong>
-              </div>
-              <ul className="socials">
-                <li>
-                  <a href="https://www.pinterest.com">
-                    <i className="fab fa-pinterest-p"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.facebook.com">
-                    <i className="fab fa-facebook-f"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.linkedin.com">
-                    <i className="fab fa-linkedin-in"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.instagram.com">
-                    <i className="fab fa-instagram"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className="menu">
-              <h5>Site Map</h5>
-              <div className="sitemap">
-                <ul>
-                  <li>
-                    <a href="about.html">About us</a>
-                  </li>
+const { Footer } = Layout;
 
-                  <li>
-                    <a href="#">Our Products</a>
-                  </li>
-
-                  <li>
-                    <a href="#">Contact</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <div className="copyright">Copyright &copy; 2024 PrintHub-Pro </div>
-      </div>
-    </div>
-  );
+const AppFooter = () => {
+  const { settings } = useSelector((state) => state.setting);
+if(settings){
+  // console.log(settings.w)
 }
+  return (
+    <Footer className="footer">
+      <Row justify="center" gutter={[16, 16]}>
+        <Col xs={24} sm={12} md={8}>
+          <h3>About Us</h3>
+          <p>
+            Printhub-Pro is dedicated to providing high-quality printing
+            services. Our mission is to deliver exceptional value and customer
+            satisfaction.
+          </p>
+        </Col>
+        <Col xs={24} sm={12} md={8}>
+          <h3>Contact Us</h3>
+          <p>
+            <PhoneOutlined /> {settings && settings.phone_number}
+          </p>
+          <p>
+            <MailOutlined /> {settings && settings.contact_email}
+          </p>
+          <p>{settings && settings.address}</p>
+        </Col>
+        <Col xs={24} sm={12} md={8}>
+          <h3>Follow Us</h3>
+          <p>
+            <a
+              href={settings && settings.social_media_links.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FacebookOutlined
+                style={{ fontSize: "24px", marginRight: "10px" }}
+              />
+            </a>
+            <a
+              href={settings && settings.social_media_links.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <TwitterOutlined
+                style={{ fontSize: "24px", marginRight: "10px" }}
+              />
+            </a>
+            <a
+              href={settings && settings.social_media_links.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <InstagramOutlined
+                style={{ fontSize: "24px", marginRight: "10px" }}
+              />
+            </a>
+          </p>
+        </Col>
+      </Row>
+      <Divider />
+      <Row justify="center">
+        <Col>
+          <p>{settings && settings.website_name} ©2024 Created by UpNetwork team</p>
+        </Col>
+      </Row>
+    </Footer>
+  );
+};
+
+export default AppFooter;

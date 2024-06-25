@@ -104,3 +104,25 @@ exports.resetSetting = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.defaultSetting = async () => {
+  const setting = await Setting.findByPk(1);
+  if (!setting) {
+    console.log('created setting------------')
+    const newSetting = {
+      phone_number: "+212600000000",
+      address: "Tangier, Morocco",
+      contact_email: "contact@printhub-pro.com",
+      logo: "/path/to/logo.png",
+      website_name: "Printhub-Pro", 
+      social_media_links: {
+        facebook: "https://facebook.com/",
+        twitter: "https://twitter.com/",
+        instagram: "https://instagram.com/", 
+      },
+      whatsapp_chat_url: "https://wa.me/+2126000000000",
+    };
+    await Setting.create(newSetting);
+  }
+  return;
+};
