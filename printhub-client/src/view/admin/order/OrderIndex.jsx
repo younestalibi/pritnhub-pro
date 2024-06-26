@@ -79,7 +79,6 @@ const OrderIndex = () => {
       payment_id: orders[i].order_payment_id,
       total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
       items: `${orders[i].OrderItems.length} items`,
-      // status: getDisplayStatus(orders[i].status),
       status:
         orders[i].status == "completed" ? (
           <b style={{ color: "green" }}>Confirmed</b>
@@ -125,9 +124,14 @@ const OrderIndex = () => {
           >
             <IoEyeOutline title="view" />
           </span>
-          <span className="btn-delete" onClick={() => showModal(orders[i].id)}>
-            <AiFillDelete title="delete" />
-          </span>
+          {!["completed", "pending"].includes(orders[i].status) && (
+            <span
+              className="btn-delete"
+              onClick={() => showModal(orders[i].id)}
+            >
+              <AiFillDelete title="delete" />
+            </span>
+          )}
         </>
       ),
     });

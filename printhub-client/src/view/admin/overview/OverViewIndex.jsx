@@ -1,42 +1,95 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, Statistic, Row, Col, Card, Table, Tag } from "antd";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getOrders,
+  resetStateOrder,
+} from "../../../provider/features/order/OrderSlice";
+import { calculateTotalPrice } from "../../../utils/functions";
 
 const { Title } = Typography;
 
 const OverViewPage = () => {
+  const { orders, getOrdersState } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (orders.length == 0) {
+      dispatch(getOrders());
+    } else {
+      dispatch(resetStateOrder());
+    }
+  }, []);
+
+  const totalPriceCompletedOrders = orders.reduce((total, order) => {
+    if (order.status === "completed") {
+      return total + calculateTotalPrice(order.OrderItems);
+    }
+    return total;
+  }, 0);
+  const completedOrdersCount = orders.filter(order => order.status === 'completed').length;
+  const pendingOrdersCount = orders.filter(order => order.status === 'pending').length;
+
   return (
     <div className="overview-page">
       <BreadCrumb titles={["Home", "Overview"]} />
       <Title level={2}>Overview</Title>
       <div className="site-layout-content">
-        <Row gutter={16}>
-          <Col span={6}>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="Total Orders" value={152} />
+              <Statistic
+                title="Pending Orders"
+                value={pendingOrdersCount && pendingOrdersCount}
+                suffix="orders"
+                valueStyle={{
+                    color: '#cf1322',
+                  }}
+              />
             </Card>
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="Total Revenue" value={25678.45} precision={2} />
+              <Statistic
+                title="Confirmed Orders"
+                value={completedOrdersCount && completedOrdersCount}
+                suffix="orders"
+                valueStyle={{
+                    color: '#3f8600',
+                  }}
+              />
             </Card>
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+            <Card>
+              <Statistic
+                title="Total Revenue"
+                value={
+                  totalPriceCompletedOrders &&
+                  totalPriceCompletedOrders.toFixed(2)
+                }
+                suffix="$"
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
               <Statistic title="Active Users" value={312} />
             </Card>
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="New Contacts" value={12} />
+              <Statistic title="New Messages" value={12} />
             </Card>
           </Col>
         </Row>
 
-        <Row gutter={16} style={{ marginTop: "24px" }}>
-          <Col span={12}>
+        <Row gutter={[16, 16]} style={{ marginTop: "24px" }}>
+          <Col xs={24} lg={12}>
             <Card title="Recent Orders">
               <Table
+                scroll={{ x: 1000 }}
                 dataSource={[
                   {
                     key: "1",
@@ -83,9 +136,10 @@ const OverViewPage = () => {
               />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Card title="Popular Products">
               <Table
+                scroll={{ x: 1000 }}
                 dataSource={[
                   {
                     key: "1",

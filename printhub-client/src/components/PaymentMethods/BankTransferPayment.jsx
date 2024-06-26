@@ -56,7 +56,7 @@ const BankTransferPayment = ({ orderData }) => {
       <Typography.Title level={3}>Bank Transfer Payment</Typography.Title>
       <Text>
         Please transfer the amount to the account below and do not forget to
-        send us a screenshot of the transfer with the reference ID to out email
+        send us a screenshot of the transfer with the reference ID through email
         or contact us via whatsApp
       </Text>
       <Divider orientation="left">Bank info</Divider>
