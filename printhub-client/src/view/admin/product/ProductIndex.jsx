@@ -96,7 +96,7 @@ const ProductIndex = () => {
       quantity: products[i].quantity.max,
       options: (
         <Popover
-          content={JSON.parse(products[i].options).map((option, i) => (
+          content={products[i].options.map((option, i) => (
             <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
           ))}
           title="Form Details"
@@ -107,7 +107,7 @@ const ProductIndex = () => {
       ),
       image: (
         <Image.PreviewGroup
-          items={JSON.parse(products[i].image).map((image, index) => {
+          items={products[i].image.map((image, index) => {
             return {
               src: `${import.meta.env.VITE_SERVER_URL}/${image}`,
               crossOrigin: import.meta.env.VITE_CLIENT_URL,
@@ -123,7 +123,7 @@ const ProductIndex = () => {
             style={{ objectFit: "contain" }}
             crossOrigin={import.meta.env.VITE_CLIENT_URL}
             loading="lazy"
-            src={`${import.meta.env.VITE_SERVER_URL}/${JSON.parse(products[i].image)[0]}`}
+            src={`${import.meta.env.VITE_SERVER_URL}/${products[i].image[0]}`}
           />
         </Image.PreviewGroup>
       ),
