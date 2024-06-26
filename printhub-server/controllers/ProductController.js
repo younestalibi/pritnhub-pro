@@ -214,12 +214,11 @@ exports.updateProductQuantity = async function (
       parseInt(product.quantity.max) - quantityBought
     ).toString();
     product.quantity = { ...product.quantity, max: newQuantity };
-
+    product.sold = product.sold + quantityBought;
     await product.save({ transaction });
 
     return;
-  } catch (error) {
+  } catch (error) { 
     throw error;
   }
 };
-

@@ -10,7 +10,7 @@ import {
   getCatalogs,
   resetStateCatalog,
 } from "../../../provider/features/catalog/CatalogSlice";
-import { Button, Table, notification } from "antd";
+import { Button, Table, Typography, notification } from "antd";
 import { Image } from "antd";
 import { Link } from "react-router-dom";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
@@ -55,6 +55,8 @@ const CatalogIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateCatalog());
+
   }, [deleteCatalogByIdState.isSuccess, deleteCatalogByIdState.isError]);
 
   const deleteRecord = (e) => {
@@ -109,7 +111,7 @@ const CatalogIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Catalog"]} />
-      <h1>Catalogs</h1>
+      <Typography.Title level={2}>Catalogs</Typography.Title>
       <div
         style={{
           marginBottom: 16,

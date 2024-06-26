@@ -87,7 +87,7 @@ const CartIndex = () => {
   const [loadingItemId, setLoadingItemId] = useState(null);
 
   return (
-    <Row justify={"space-evenly"} align={"stretch"}>
+    <Row justify={"space-evenly"} align={"stretch"} style={{ minHeight:'100vh' }}>
       <Col lg={{ span: 14 }} md={{ span: 24 }}>
         {carts.length > 0 && (
           <Button

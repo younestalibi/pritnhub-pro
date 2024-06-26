@@ -9,7 +9,7 @@ import {
   getArticles,
   resetStateArticle,
 } from "../../../provider/features/article/ArticleSlice";
-import { Button, Table, notification } from "antd";
+import { Button, Table, Typography, notification } from "antd";
 import { Image } from "antd";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
 import ArticleCreate from "./ArticleCreate";
@@ -52,6 +52,8 @@ const ArticleIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateArticle());
+
   }, [deleteArticleByIdState.isSuccess, deleteArticleByIdState.isError]);
 
   const deleteRecord = (e) => {
@@ -109,7 +111,7 @@ const ArticleIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Article"]} />
-      <h1>Articles</h1>
+      <Typography.Title level={2}>Articles</Typography.Title>
       <div
         style={{
           marginBottom: 16,

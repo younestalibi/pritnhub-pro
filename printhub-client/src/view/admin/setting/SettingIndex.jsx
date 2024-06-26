@@ -3,7 +3,7 @@ import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { BiEdit } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { IoReload } from "react-icons/io5";
-import { Button, Table, notification } from "antd";
+import { Button, Popover, Table, Typography, notification } from "antd";
 import { Image } from "antd";
 import {
   getSettings,
@@ -42,6 +42,8 @@ const SettingIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateSetting());
+
   }, [resetSettingState.isSuccess, resetSettingState.isError]);
 
   if (settings) {
@@ -51,7 +53,17 @@ const SettingIndex = () => {
       address: settings.address,
       contact_email: settings.contact_email,
       website_name: settings.website_name,
-      social_media_links: settings.social_media_links,
+      social_media_links: (
+        <Popover
+          content={
+            <pre>{JSON.stringify(settings.social_media_links, null, 2)}</pre>
+          }
+          title="Social media links"
+          trigger="hover"
+        >
+          Social Media
+        </Popover>
+      ),
       whatsapp_chat_url: settings.whatsapp_chat_url,
       logo: (
         <Image
@@ -86,7 +98,8 @@ const SettingIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Settings"]} />
-      <h1>Settings</h1>
+      <Typography.Title level={2}>Settings</Typography.Title>
+
       <div
         style={{
           marginBottom: 16,

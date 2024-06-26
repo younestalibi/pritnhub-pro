@@ -3,7 +3,15 @@ import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { AiFillDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
-import { Button, Input, Select, Space, Table, notification } from "antd";
+import {
+  Button,
+  Input,
+  Select,
+  Space,
+  Table,
+  Typography,
+  notification,
+} from "antd";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
 import {
   deleteOrderById,
@@ -53,6 +61,7 @@ const OrderIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateOrder());
   }, [updateOrderStatusState.isSuccess, updateOrderStatusState.isError]);
 
   const deleteRecord = (e) => {
@@ -71,35 +80,40 @@ const OrderIndex = () => {
       total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
       items: `${orders[i].OrderItems.length} items`,
       // status: getDisplayStatus(orders[i].status),
-      status: (
-        <Select
-          defaultValue={orders[i].status}
-          loading={updateOrderStatusState.isLoading && orders[i].id == editId}
-          style={{
-            width: 120,
-          }}
-          onChange={(status) => {
-            setEditId(orders[i].id);
-            dispatch(
-              updateOrderStatus({ id: orders[i].id, status: { status } })
-            );
-          }}
-          options={[
-            {
-              value: "pending",
-              label: <b style={{ color: "red" }}>Pending</b>,
-            },
-            {
-              value: "completed",
-              label: <b style={{ color: "green" }}>Completed</b>,
-            },
-            {
-              value: "cancelled",
-              label: <b style={{ color: "black" }}>Cancelled</b>,
-            },
-          ]}
-        />
-      ),
+      status:
+        orders[i].status == "completed" ? (
+          <b style={{ color: "green" }}>Confirmed</b>
+        ) : orders[i].status == "cancelled" ? (
+          <b style={{ color: "black" }}>Cancelled</b>
+        ) : (
+          <Select
+            defaultValue={orders[i].status}
+            loading={updateOrderStatusState.isLoading && orders[i].id == editId}
+            style={{
+              width: 120,
+            }}
+            onChange={(status) => {
+              setEditId(orders[i].id);
+              dispatch(
+                updateOrderStatus({ id: orders[i].id, status: { status } })
+              );
+            }}
+            options={[
+              {
+                value: "pending",
+                label: <b style={{ color: "red" }}>Pending</b>,
+              },
+              {
+                value: "completed",
+                label: <b style={{ color: "green" }}>Confirmed</b>,
+              },
+              {
+                value: "cancelled",
+                label: <b style={{ color: "black" }}>Cancelled</b>,
+              },
+            ]}
+          />
+        ),
       action: (
         <>
           <span
@@ -125,7 +139,7 @@ const OrderIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Order"]} />
-      <h1>Orders</h1>
+      <Typography.Title level={2}>Orders</Typography.Title>
       <div
         style={{
           marginBottom: 16,

@@ -43,6 +43,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Fade } from "react-awesome-reveal";
 import AppService from "../home/services";
 import ProductCard from "./productCard";
+import ProductGallery from "../../../components/ProductGallery/ProductGallery";
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
 const ProductDetail = () => {
@@ -51,7 +52,7 @@ const ProductDetail = () => {
   const { getProductByIdState } = useSelector((state) => state.product);
   const { product } = getProductByIdState;
   const [expanded, setExpanded] = useState(false);
-  const { addCartItemState } = useSelector((state) => state.cart);
+  const { carts,addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
   const calculateTotalPrice = (formValues) => {
@@ -266,7 +267,11 @@ const ProductDetail = () => {
       dispatch(resetStateProduct());
     }
   }, []);
-
+  console.log(
+    product?.image.map((e, i) => {
+      return `${import.meta.env.VITE_SERVER_URL}/${e}`;
+    })
+  );
   return getProductByIdState.isLoading ? (
     <Row
       justify={"space-evenly"}
@@ -335,17 +340,21 @@ const ProductDetail = () => {
           margin: "40px 0px",
         }}
       >
-        <Col md={{ span: 11 }} sm={{ span: 24 }}>
+        <Col
+          md={{ span: 11 }}
+          sm={{ span: 24 }}
+          style={{
+            width: "100%",
+          }}
+        >
           <BreadCrumb titles={["home", product.Catalog.name, product.name]} />
           <div style={{ position: "sticky", top: "-175px" }}>
-            <ImageGallery
-              showNav={true}
-              showPlayButton={false}
-              lazyLoad={true}
-              showIndex={true}
-              thumbnailPosition="left"
-              items={images.length > 0 ? images : placeholderImage}
+            <ProductGallery
+              images={product?.image.map((e, i) => {
+                return `${import.meta.env.VITE_SERVER_URL}/${e}`;
+              })}
             />
+
             <Descriptions
               style={{ margin: "20px 0px" }}
               title="Customization info"
@@ -541,7 +550,7 @@ const ProductDetail = () => {
           </div>
         </Col>
       </Row>
-      <AppService />
+      {/* <AppService /> */}
       <Fade triggerOnce direction="up">
         <Flex
           justify="center"
@@ -549,12 +558,12 @@ const ProductDetail = () => {
           vertical={true}
           style={{ padding: "10px 40px" }}
         >
-          <Divider>
+          {/* <Divider>
             <Typography.Title>Related Printing Items</Typography.Title>
-          </Divider>
-          <Typography.Paragraph style={{ fontSize: "20px" }}>
+          </Divider> */}
+          {/* <Typography.Paragraph style={{ fontSize: "20px" }}>
             High-quality solutions tailored to meet your needs.
-          </Typography.Paragraph>
+          </Typography.Paragraph> */}
         </Flex>
       </Fade>
       <Row

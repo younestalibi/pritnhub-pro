@@ -34,7 +34,7 @@ const DasbhoardLayout = () => {
           }}
           items={[
             {
-              key: "overview",
+              key: "",
               icon: <UserOutlined />,
               label: "OverView",
             },
@@ -60,7 +60,6 @@ const DasbhoardLayout = () => {
             },
             { key: "order", icon: <StockOutlined />, label: "Order" },
             { key: "setting", icon: <StockOutlined />, label: "Settings" },
-
           ]}
         />
       </Sider>
@@ -104,8 +103,10 @@ const DasbhoardLayout = () => {
 };
 function getSelectedDefault() {
   const location = useLocation();
-  const currentPath = location.pathname;
-  const parts = currentPath.split("/");
-  return currentPath;
+  const path = location.pathname;
+  const basePath = "/admin/";
+  return path.startsWith(basePath)
+    ? path.slice(basePath.length)
+    : "";
 }
 export default DasbhoardLayout;

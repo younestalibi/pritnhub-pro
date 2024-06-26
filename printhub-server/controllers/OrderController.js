@@ -9,6 +9,7 @@ const {
 } = require("../models");
 const uuid = require("uuid");
 const { calculateItemTotal } = require("../services/CalculationService");
+const { updateProductQuantity } = require("./ProductController");
 
 // Get all orders
 exports.index = async (req, res) => {
@@ -132,6 +133,8 @@ exports.updateOrderStatus = async (req, res) => {
   try {
     const orderId = req.params.id;
     const { status } = req.body;
+    const transaction = await sequelize.transaction();
+
     const order = await Order.findOne({
       where: { id: orderId },
       include: {
@@ -141,7 +144,24 @@ exports.updateOrderStatus = async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
-    await order.update({ status });
+    try {
+      if(status=='completed'){
+        await Promise.all(
+          order.OrderItems?.map(async (item) => {
+            await updateProductQuantity(
+              item.product.id,
+              item.quantity,
+              transaction
+            );
+          })
+        );
+      }
+      await order.update({ status }, { transaction });
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
 
     res
       .status(200)

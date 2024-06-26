@@ -53,7 +53,7 @@ exports.createOrderPaypal = async (req, res) => {
     });
 
     if (cart) {
-      await lockCart(userId);
+      // await lockCart(userId);
       const total = calculateTotal(cart.CartItems);
       request.prefer("return=representation");
       request.requestBody({
@@ -108,10 +108,9 @@ exports.createOrderPaypal = async (req, res) => {
             await OrderItem.create(
               {
                 order_id: createdOrder.id,
-                product_id: item.Product.id,
                 product: item.Product,
                 quantity: item.quantity,
-                image:item.image,
+                image: item.image,
                 customizations: item.customizations,
                 price: calculateItemTotal(item),
               },
@@ -140,6 +139,9 @@ exports.confirmOrderPaypal = async (req, res) => {
   try {
     const order = await Order.findOne({
       where: { order_payment_id: orderId, user_id: userId },
+      include: {
+        model: OrderItem,
+      },
     });
 
     if (!order) {
@@ -163,19 +165,36 @@ exports.confirmOrderPaypal = async (req, res) => {
           },
         });
 
-        if (cart) {
-          await Promise.all(
-            cart.CartItems.map(async (item) => {
-              await updateProductQuantity(
-                item.Product.id,
-                item.quantity,
-                transaction
-              );
-              await item.destroy({ transaction });
-            })
-          );
-          await unLockCart(userId);
-        }
+        await Promise.all(
+          order.OrderItems?.map(async (item) => {
+            await updateProductQuantity(
+              item.product.id,
+              item.quantity,
+              transaction
+            );
+          })
+        );
+
+        // if (cart) {
+        // await Promise.all(
+        //   cart.CartItems.map(async (item) => {
+        //     await updateProductQuantity(
+        //       item.Product.id,
+        //       item.quantity,
+        //       transaction
+        //     );
+        await CartItem.destroy(
+          {
+            where: {
+              cart_id: cart.id,
+            },
+          },
+          { transaction }
+        );
+        //   })
+        // );
+        // await unLockCart(userId);
+        // }
         await transaction.commit();
 
         res.json({
@@ -208,7 +227,7 @@ exports.cancleOrderPaypal = async (req, res) => {
     const transaction = await sequelize.transaction();
     try {
       await order.update({ status: "cancelled" }, { transaction });
-      await unLockCart(userId);
+      // await unLockCart(userId);
       await transaction.commit();
       res.json({
         message: "Order cancelled successfully",
@@ -226,8 +245,6 @@ exports.cancleOrderPaypal = async (req, res) => {
 //==================Cih payment==================
 exports.confirmOrderCih = async (req, res) => {
   const { shippingAddress, referenceId } = req.body;
-
-  // const request = new paypal.orders.OrdersCreateRequest();
   const userId = req.userId;
   try {
     const cart = await Cart.findOne({
@@ -262,10 +279,9 @@ exports.confirmOrderCih = async (req, res) => {
           await OrderItem.create(
             {
               order_id: createdOrder.id,
-              product_id: item.Product.id,
               product: item.Product,
               quantity: item.quantity,
-              image:item.image,
+              image: item.image,
               customizations: item.customizations,
               price: calculateItemTotal(item),
             },

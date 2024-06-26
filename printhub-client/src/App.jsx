@@ -27,6 +27,7 @@ import SettingIndex from "./view/admin/setting/SettingIndex";
 import PayPal from "./components/PaymentMethods/Paypal";
 import CheckoutSuccess from "./view/client/checkout/CheckoutSuccess";
 import OrderIndexUser from "./view/client/order/OrderIndexUser";
+import OverViewIndex from "./view/admin/overview/OverViewIndex";
 
 function App() {
   const { getUserState } = useSelector((state) => state.auth);
@@ -47,6 +48,7 @@ function App() {
       { path: "contact", element: <ContactIndex /> },
       { path: "order", element: <OrderIndex /> },
       { path: "setting", element: <SettingIndex /> },
+      { path: '', element: <OverViewIndex /> },
     ];
 
     const authRoutes = [

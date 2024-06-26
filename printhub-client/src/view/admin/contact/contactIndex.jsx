@@ -10,7 +10,7 @@ import {
   getContacts,
   resetStateContact,
 } from "../../../provider/features/contact/ContactSlice";
-import { Button, Table, notification } from "antd";
+import { Button, Table, Typography, notification } from "antd";
 import { Image } from "antd";
 import { Link } from "react-router-dom";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
@@ -52,6 +52,8 @@ const ContactIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateContact());
+
   }, [deleteContactState.isSuccess, deleteContactState.isError]);
 
   const deleteRecord = (e) => {
@@ -101,7 +103,8 @@ const ContactIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Contact"]} />
-      <h1>Contacts</h1>
+      <Typography.Title level={2}>Contacts</Typography.Title>
+
       <div
         style={{
           marginBottom: 16,

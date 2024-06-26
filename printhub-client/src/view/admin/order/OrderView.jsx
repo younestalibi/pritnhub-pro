@@ -196,13 +196,26 @@ const OrderView = (props) => {
                       label: "Price",
                       children: `${item.price}$`,
                     },
-                    ...Object.keys(item.customizations).map((key) => {
-                      return {
-                        key: key,
-                        label: key,
-                        children: item.customizations[key],
-                      };
-                    }),
+                    {
+                      key: index,
+                      label: "Customizations",
+                      children: Object.keys(item.customizations).map((key) => {
+                        return (
+                          <>
+                            <div>
+                              <b>{key}</b>: {item.customizations[key]}
+                            </div>
+                          </>
+                        );
+                      }),
+                    },
+                    // ...Object.keys(item.customizations).map((key) => {
+                    //   return {
+                    //     key: key,
+                    //     label: key,
+                    //     children: item.customizations[key],
+                    //   };
+                    // }),
                   ]}
                 />
               </>

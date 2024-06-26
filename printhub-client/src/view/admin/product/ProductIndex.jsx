@@ -9,7 +9,7 @@ import {
   getCatalogs,
   resetStateCatalog,
 } from "../../../provider/features/catalog/CatalogSlice";
-import { Button, Popover, Table, notification } from "antd";
+import { Button, Popover, Table, Typography, notification } from "antd";
 import { Image } from "antd";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
 
@@ -65,6 +65,8 @@ const ProductIndex = () => {
         type: "error",
       });
     }
+    dispatch(resetStateProduct());
+
   }, [deleteProductByIdState.isSuccess, deleteProductByIdState.isError]);
   const deleteRecord = (e) => {
     dispatch(deleteProductById(deleteId));
@@ -90,7 +92,7 @@ const ProductIndex = () => {
         </Popover>
       ),
       catalog: catalogs.find((e) => e.id == products[i].catalog_id)?.name,
-      price: products[i].price,
+      price: `${products[i].price}$`,
       quantity: products[i].quantity.max,
       options: (
         <Popover
@@ -125,6 +127,7 @@ const ProductIndex = () => {
           />
         </Image.PreviewGroup>
       ),
+      sold: products[i].sold,
       action: (
         <>
           <span
@@ -153,7 +156,7 @@ const ProductIndex = () => {
   return (
     <div>
       <BreadCrumb titles={["Home", "Product"]} />
-      <h1>Products</h1>
+      <Typography.Title level={2}>Products</Typography.Title>
       <div
         style={{
           marginBottom: 16,
@@ -244,6 +247,10 @@ const columns = [
   {
     title: "Price",
     dataIndex: "price",
+  },
+  {
+    title: "Sold",
+    dataIndex: "sold",
   },
   {
     title: "Actions",
