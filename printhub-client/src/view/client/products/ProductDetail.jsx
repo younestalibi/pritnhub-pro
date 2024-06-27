@@ -560,22 +560,24 @@ const ProductDetail = () => {
           </div>
         </Col>
       </Row>
-      {/* <AppService /> */}
-      <Fade triggerOnce direction="up">
-        <Flex
-          justify="center"
-          align="center"
-          vertical={true}
-          style={{ padding: "10px 40px" }}
-        >
-          {/* <Divider>
-            <Typography.Title>Related Printing Items</Typography.Title>
-          </Divider> */}
-          {/* <Typography.Paragraph style={{ fontSize: "20px" }}>
-            High-quality solutions tailored to meet your needs.
-          </Typography.Paragraph> */}
-        </Flex>
-      </Fade>
+      <AppService />
+      {products.length > 1 && (
+        <Fade triggerOnce direction="up">
+          <Flex
+            justify="center"
+            align="center"
+            vertical={true}
+            style={{ padding: "10px 40px" }}
+          >
+            <Divider style={{ width: "100%" }}>
+              <Typography.Title>Related Printing Items</Typography.Title>
+            </Divider>
+            <Typography.Paragraph style={{ fontSize: "20px" }}>
+              High-quality solutions tailored to meet your needs.
+            </Typography.Paragraph>
+          </Flex>
+        </Fade>
+      )}
       <Row
         style={{ margin: "40px 0px" }}
         justify={"center"}
