@@ -62,13 +62,15 @@ export default function AppCategory() {
                 <Link to={`/category/${catalog.id}`}>
                   <Card
                     className="home-card"
+                    style={{ 
+                      width:'250px',
+                     }}
                     cover={
                       <img
                         alt={catalog.name}
                         style={{
                           aspectRatio: "1 / 1",
-                          height: "200px",
-                          width: "250px",
+                          width: "100%",
                           objectFit: "cover",
                         }}
                         crossOrigin={import.meta.env.VITE_CLIENT_URL}

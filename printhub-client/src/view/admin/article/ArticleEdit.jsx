@@ -32,6 +32,7 @@ const ArticleEdit = (props) => {
         formik.setFieldValue("name", article.name);
         formik.setFieldValue("description", article.description);
         formik.setFieldValue("unit_price", article.unit_price);
+        formik.setFieldValue("min_quantity", article.min_quantity);
         formik.setFieldValue("quantity", article.quantity);
         formik.setFieldValue("image", [
           {
@@ -68,13 +69,16 @@ const ArticleEdit = (props) => {
       });
       formik.resetForm();
       dispatch(resetStateArticle());
-
     }
   }, [updateArticleState.isSuccess, updateArticleState.isError]);
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      description: "",
+      unit_price: null,
+      min_quantity: null,
+      quantity: null,
       image: [],
     },
     validationSchema: Yup.object({
@@ -82,14 +86,17 @@ const ArticleEdit = (props) => {
       description: Yup.string().required("Description is required*"),
       unit_price: Yup.number().required("Unit Price is required*"),
       quantity: Yup.number().required("Quantity is required*"),
+      min_quantity: Yup.number().required("Min Quantity is required*"),
       image: Yup.array()
         .length(1, "Please upload only one image")
         .required("Image is required*"),
     }),
     onSubmit: (values) => {
       const formData = new FormData();
+      console.log(values)
       formData.append("name", values.name);
-      formData.append("descritption", values.description);
+      formData.append("description", values.description);
+      formData.append("min_quantity", values.min_quantity);
       formData.append("unit_price", values.unit_price);
       formData.append("quantity", values.quantity);
       formData.append("image", values.image[0].originFileObj);
@@ -157,7 +164,7 @@ const ArticleEdit = (props) => {
         </div>
         <div>
           <label htmlFor="unit_price">
-          Unit price <span>*</span>
+            Unit price <span>*</span>
           </label>
           <InputNumber
             id="unit_price"
@@ -176,21 +183,39 @@ const ArticleEdit = (props) => {
         <div>
           <label htmlFor="quantity">
             Quantity <span>*</span>
-            </label>
-            <InputNumber
-              placeholder="the quantity available"
-              id="quantity"
-              name="quantity"
-              style={{ display: "block", width: "100%", marginBottom: "10px" }}
-              min={0}
-              value={formik.values.quantity}
-              onChange={(value) => formik.setFieldValue("quantity", value)}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.quantity && formik.errors.quantity && (
-              <div style={{ color: "red" }}>{formik.errors.quantity}</div>
-            )}
-          </div>
+          </label>
+          <InputNumber
+            placeholder="the quantity available"
+            id="quantity"
+            name="quantity"
+            style={{ display: "block", width: "100%", marginBottom: "10px" }}
+            min={0}
+            value={formik.values.quantity}
+            onChange={(value) => formik.setFieldValue("quantity", value)}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.quantity && formik.errors.quantity && (
+            <div style={{ color: "red" }}>{formik.errors.quantity}</div>
+          )}
+        </div>
+        <div>
+          <label htmlFor="min_quantity">
+            min_quantity <span>*</span>
+          </label>
+          <InputNumber
+            placeholder="the min quantity for this article"
+            id="min_quantity"
+            name="min_quantity"
+            style={{ display: "block", width: "100%", marginBottom: "10px" }}
+            min={0}
+            value={formik.values.min_quantity}
+            onChange={(value) => formik.setFieldValue("min_quantity", value)}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.min_quantity && formik.errors.min_quantity && (
+            <div style={{ color: "red" }}>{formik.errors.min_quantity}</div>
+          )}
+        </div>
         <div>
           <label htmlFor="image">
             Image <span>*</span>

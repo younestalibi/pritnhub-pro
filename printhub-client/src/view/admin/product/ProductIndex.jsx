@@ -76,7 +76,6 @@ const ProductIndex = () => {
     setOpen(true);
     setDeleteId(e);
   };
-  console.log(products);
 
   for (let i = 0; i < products.length; i++) {
     data.push({

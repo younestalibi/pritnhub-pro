@@ -10,17 +10,21 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import {
-  createCatalog,
   getCatalogs,
   resetStateCatalog,
-  updateCatalog,
 } from "../../../provider/features/catalog/CatalogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ProductCustomization from "./ProductCustomization";
-import { updateProduct } from "../../../provider/features/product/ProductSlice";
-import { resetProductState } from "../../../provider/features/product/ProductState";
+import {
+  resetStateProduct,
+  updateProduct,
+} from "../../../provider/features/product/ProductSlice";
+import {
+  getArticles,
+  resetStateArticle,
+} from "../../../provider/features/article/ArticleSlice";
 
 const ProductEdit = (props) => {
   const { open, setOpen, id } = props;
@@ -34,8 +38,14 @@ const ProductEdit = (props) => {
   );
 
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
+  const { articles, getArticlesState } = useSelector((state) => state.article);
 
   useEffect(() => {
+    if (articles.length == 0) {
+      dispatch(getArticles());
+    } else {
+      dispatch(resetStateArticle());
+    }
     if (catalogs.length == 0) {
       dispatch(getCatalogs());
     } else {
@@ -44,12 +54,14 @@ const ProductEdit = (props) => {
   }, []);
 
   const [product, setProduct] = useState(null);
+  const [article, setArticle] = useState(null);
 
   useEffect(() => {
     if (id) {
       const foundProduct = products.find((e) => e.id === id);
       if (foundProduct) {
         setProduct(foundProduct);
+        setArticle(articles.find((e) => e.id === foundProduct.article_id));
       }
       if (product) {
         formik.setFieldValue("name", product.name);
@@ -95,7 +107,7 @@ const ProductEdit = (props) => {
         type: "error",
       });
       formik.resetForm();
-      dispatch(resetProductState());
+      dispatch(resetStateProduct());
     }
   }, [updateProductstate.isSuccess, updateProductstate.isError]);
 
@@ -116,22 +128,22 @@ const ProductEdit = (props) => {
       description: "",
     },
     validationSchema: Yup.object({
-      // name: Yup.string().required("Name is required*"),
-      // description: Yup.string().required("Description is required*"),
-      // price: Yup.number().required("Price is required*"),
-      // options: Yup.array()
-      //   .min(1, "Please add at least 1")
-      //   .required("Options is required*"),
-      // catalog_id: Yup.number().required("Catalog is required*"),
-      // image: Yup.array()
-      //   .max(10, "You can only upload up to 10 images")
-      //   .min(1, "Please upload only one image")
-      //   .required("Image is required*"),
-      // quantity: Yup.object({
-      //   max: Yup.number().required("Max quantity is required"),
-      //   min: Yup.number().required("Min quantity is required"),
-      //   step: Yup.number().required("Step amount is required"),
-      // }),
+      name: Yup.string().required("Name is required*"),
+      description: Yup.string().required("Description is required*"),
+      price: Yup.number().required("Price is required*"),
+      options: Yup.array()
+        .min(1, "Please add at least 1")
+        .required("Options is required*"),
+      catalog_id: Yup.number().required("Catalog is required*"),
+      image: Yup.array()
+        .max(10, "You can only upload up to 10 images")
+        .min(1, "Please upload only one image")
+        .required("Image is required*"),
+      quantity: Yup.object({
+        max: Yup.number().required("Max quantity is required"),
+        min: Yup.number().required("Min quantity is required"),
+        step: Yup.number().required("Step amount is required"),
+      }),
     }),
     onSubmit: (values) => {
       const formData = new FormData();
@@ -178,6 +190,7 @@ const ProductEdit = (props) => {
       label: catalogs[i].name,
     });
   }
+  console.log(article);
   return (
     <Modal
       title="Edit Product"
@@ -209,6 +222,7 @@ const ProductEdit = (props) => {
           <Flex gap={10}>
             <div>
               <InputNumber
+                // max={article?.quantity}
                 placeholder="Max quantity to buy"
                 id="quantity.max"
                 name="quantity.max"
@@ -282,7 +296,7 @@ const ProductEdit = (props) => {
             id="price"
             name="price"
             style={{ display: "block", width: "100%" }}
-            min={0}
+            min={article?.unit_price || 0}
             value={formik.values.price}
             onChange={(price) => {
               formik.setFieldValue("price", price);

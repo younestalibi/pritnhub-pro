@@ -29,6 +29,7 @@ const CatalogEdit = (props) => {
       }
       if (catalog) {
         formik.setFieldValue("name", catalog.name);
+        formik.setFieldValue("description", catalog.description);
         formik.setFieldValue("image", [
           {
             name: catalog.name,

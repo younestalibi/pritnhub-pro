@@ -21,6 +21,10 @@ import {
   resetStateProduct,
 } from "../../../provider/features/product/ProductSlice";
 import ProductCustomization from "./ProductCustomization";
+import {
+  getArticles,
+  resetStateArticle,
+} from "../../../provider/features/article/ArticleSlice";
 
 const ProductCreate = (props) => {
   const { open, setOpen } = props;
@@ -30,16 +34,25 @@ const ProductCreate = (props) => {
   const { TextArea } = Input;
 
   const { createProductstate } = useSelector((state) => state.product);
-
+  const [maxQantity, setMaxQantity] = useState(null);
+  const [minPrice, setMinPrice] = useState(null);
   const dispatch = useDispatch();
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
-
+  const { articles, getArticlesState } = useSelector((state) => state.article);
   useEffect(() => {
+    if (articles.length == 0) {
+      dispatch(getArticles());
+    } else {
+      dispatch(resetStateArticle());
+    }
+    
     if (catalogs.length == 0) {
       dispatch(getCatalogs());
     } else {
       dispatch(resetStateCatalog());
     }
+    setMaxQantity(null);
+    setMinPrice(null);
   }, []);
 
   useEffect(() => {
@@ -68,6 +81,7 @@ const ProductCreate = (props) => {
     initialValues: {
       name: "",
       images: [],
+      article_id: null,
       catalog_id: null,
       options: null,
       quantity: {
@@ -86,6 +100,7 @@ const ProductCreate = (props) => {
         .min(1, "Please add at least 1")
         .required("Options is required*"),
       catalog_id: Yup.number().required("Catalog is required*"),
+      article_id: Yup.number().required("Article is required*"),
       images: Yup.array()
         .max(10, "You can only upload up to 10 images")
         .min(1, "Please upload only one image")
@@ -98,10 +113,11 @@ const ProductCreate = (props) => {
     }),
     onSubmit: (values) => {
       const formData = new FormData();
-      console.log(values)
+      console.log(values);
       formData.append("name", values.name);
       formData.append("catalog_id", values.catalog_id);
-      formData.append("options", JSON.stringify(values.options))
+      formData.append("article_id", values.article_id);
+      formData.append("options", JSON.stringify(values.options));
       formData.append("quantity", JSON.stringify(values.quantity));
       formData.append("price", values.price);
       formData.append("description", values.description);
@@ -109,12 +125,10 @@ const ProductCreate = (props) => {
         if (image.originFileObj) {
           formData.append("images", image.originFileObj);
         }
-      });   
-      console.log(formData.getAll('image'))
+      });
       dispatch(createProduct(formData));
     },
   });
-console.log(formik.errors)
   const handleOk = () => {
     formik.handleSubmit();
   };
@@ -137,10 +151,31 @@ console.log(formik.errors)
   const options = [];
   for (let i = 0; i < catalogs.length; i++) {
     options.push({
+      key: i,
       value: catalogs[i].id,
       label: catalogs[i].name,
     });
   }
+  const optionsArticle = [];
+  for (let i = 0; i < articles.length; i++) {
+    if (articles[i].quantity > 0) {
+      optionsArticle.push({
+        key: i,
+        value: articles[i].id,
+        label: articles[i].name,
+      });
+    }
+  }
+
+  useEffect(() => {
+    const selectedArticle = articles.find(
+      (article) => article.id === formik.values.article_id
+    );
+    if (selectedArticle) {
+      setMaxQantity(selectedArticle.quantity);
+      setMinPrice(selectedArticle.unit_price);
+    }
+  }, [formik.values.article_id]);
 
   return (
     <Modal
@@ -166,6 +201,32 @@ console.log(formik.errors)
             <div style={{ color: "red" }}>{formik.errors.name}</div>
           )}
         </div>
+
+        <div>
+          <label htmlFor="article_id">
+            Type of Article <span>*</span>
+          </label>
+          <Select
+            id="article_id"
+            name="article_id"
+            size="middle"
+            value={formik.values.article_id}
+            onChange={(article_id) => {
+              formik.setFieldValue("article_id", article_id);
+            }}
+            loading={getArticlesState.isLoading}
+            style={{
+              width: "100%",
+              display: "block",
+            }}
+            options={optionsArticle}
+          />
+
+          {formik.errors.article_id && formik.touched.article_id && (
+            <div style={{ color: "red" }}>{formik.errors.article_id}</div>
+          )}
+        </div>
+
         <div>
           <label htmlFor="quantity">
             Quantity <span>*</span>
@@ -173,6 +234,8 @@ console.log(formik.errors)
           <Flex gap={10}>
             <div>
               <InputNumber
+                disabled={!maxQantity}
+                max={maxQantity}
                 placeholder="Max quantity to buy"
                 id="quantity.max"
                 name="quantity.max"
@@ -243,10 +306,12 @@ console.log(formik.errors)
             Price <span>*</span>
           </label>
           <InputNumber
+            disabled={!minPrice}
+            min={minPrice}
             id="price"
             name="price"
+            placeholder="Price for one Unit"
             style={{ display: "block", width: "100%" }}
-            min={0}
             value={formik.values.price}
             onChange={(price) => {
               formik.setFieldValue("price", price);
@@ -256,6 +321,7 @@ console.log(formik.errors)
             <div style={{ color: "red" }}>{formik.errors.price}</div>
           )}
         </div>
+
         <div>
           <label htmlFor="catalog_id">
             Catalog <span>*</span>
@@ -280,6 +346,7 @@ console.log(formik.errors)
             <div style={{ color: "red" }}>{formik.errors.catalog_id}</div>
           )}
         </div>
+
         <div>
           <label htmlFor="description">
             Description <span>*</span>

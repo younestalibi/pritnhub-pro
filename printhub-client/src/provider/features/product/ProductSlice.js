@@ -67,6 +67,7 @@ export const ProductSlice = createSlice({
         state.getProductsState.isLoading = true;
       })
       .addCase(getProducts.fulfilled, (state, action) => {
+        console.log(action)
         state.getProductsState.isError = false;
         state.getProductsState.isLoading = false;
         state.getProductsState.isSuccess = true;
@@ -74,6 +75,7 @@ export const ProductSlice = createSlice({
         state.products = action.payload.products;
       })
       .addCase(getProducts.rejected, (state, action) => {
+        console.log(action)
         state.getProductsState.isError = true;
         state.getProductsState.isLoading = false;
         state.getProductsState.isSuccess = false;
@@ -130,6 +132,7 @@ export const ProductSlice = createSlice({
         state.updateProductstate.isLoading = true;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
+        console.log(action)
         state.updateProductstate.isError = false;
         state.updateProductstate.isLoading = false;
         state.updateProductstate.isSuccess = true;
@@ -140,6 +143,7 @@ export const ProductSlice = createSlice({
         }
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        console.log(action)
         state.updateProductstate.isError = true;
         state.updateProductstate.isLoading = false;
         state.updateProductstate.isSuccess = false;

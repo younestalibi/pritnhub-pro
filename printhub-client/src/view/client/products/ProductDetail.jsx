@@ -52,7 +52,7 @@ const ProductDetail = () => {
   const { getProductByIdState } = useSelector((state) => state.product);
   const { product } = getProductByIdState;
   const [expanded, setExpanded] = useState(false);
-  const { carts,addCartItemState } = useSelector((state) => state.cart);
+  const { carts, addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
   const calculateTotalPrice = (formValues) => {
@@ -99,8 +99,10 @@ const ProductDetail = () => {
       };
     }
     return {
-      totalPrice: "-----------",
-      totalUnit: "-----------",
+      // totalPrice: "-----------",
+      // totalUnit: "-----------",
+      totalPrice: null,
+      totalUnit: null,
     };
   };
 
@@ -213,7 +215,9 @@ const ProductDetail = () => {
           label: <span style={{ color: "red" }}>Total Unit</span>,
           children: (
             <span style={{ color: "red" }}>
-              {calculateTotalPrice(formik.values).totalUnit}
+              {calculateTotalPrice(formik.values).totalUnit
+                ? `${calculateTotalPrice(formik.values).totalUnit.toFixed(2)}$`
+                : "------------"}
             </span>
           ),
         },
@@ -222,7 +226,13 @@ const ProductDetail = () => {
           label: <b style={{ color: "red" }}>Total Price</b>,
           children: (
             <Tag bordered={false} color="magenta">
-              <b>{calculateTotalPrice(formik.values).totalPrice}</b>
+              <b>
+                {calculateTotalPrice(formik.values).totalPrice
+                  ? `${calculateTotalPrice(formik.values).totalPrice.toFixed(
+                      2
+                    )}$`
+                  : "------------"}
+              </b>
             </Tag>
           ),
         },

@@ -1,6 +1,7 @@
-const { Product } = require("../models");
+const { Product, sequelize } = require("../models");
 const multer = require("multer");
 const fs = require("fs");
+const { updateArticleQuantity } = require("./ArticleController");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,13 +37,16 @@ exports.createProduct = [
   upload.array("images", 10),
   async (req, res) => {
     try {
-      const { catalog_id, name, options, quantity, price, description } =
-        req.body;
+      const {
+        catalog_id,
+        name,
+        options,
+        quantity,
+        price,
+        description,
+        article_id,
+      } = req.body;
 
-      // res
-      // .status(201)
-      // .json({ message: options})
-      // return ;
       let imagesPath = [];
       if (req.files) {
         req.files.forEach((image) => {
@@ -51,15 +55,33 @@ exports.createProduct = [
           }
         });
       }
-      const product = await Product.create({
-        catalog_id,
-        name,
-        options: JSON.parse(options),
-        quantity: JSON.parse(quantity),
-        price,
-        description,
-        image: imagesPath,
-      });
+      const transaction = await sequelize.transaction();
+      let product;
+      try {
+        product = await Product.create(
+          {
+            catalog_id,
+            article_id,
+            name,
+            options: JSON.parse(options),
+            quantity: JSON.parse(quantity),
+            price,
+            description,
+            image: imagesPath,
+          },
+          { transaction }
+        );
+        await updateArticleQuantity(
+          article_id,
+          parseInt(JSON.parse(quantity).max),
+          transaction
+        );
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
+
       res
         .status(201)
         .json({ message: "Product created successfully", product });
@@ -143,16 +165,34 @@ exports.updateProduct = [
           });
         }
       }
+      const transaction = await sequelize.transaction();
 
-      product.name = name;
-      product.catalog_id = catalog_id;
-      product.options = JSON.parse(options);
-      product.quantity = JSON.parse(quantity);
-      product.price = price;
-      product.description = description;
-      product.image = imagesPath;
+      try {
+        if (
+          parseInt(product.quantity.max) != parseInt(JSON.parse(quantity).max)
+        ) {
+          console.log(parseInt(JSON.parse(quantity).max) - parseInt(product.quantity.max))
+          await updateArticleQuantity(
+            product.article_id,
+            parseInt(JSON.parse(quantity).max) - parseInt(product.quantity.max),
+            transaction
+          );
+        }
 
-      await product.save();
+        product.name = name;
+        product.catalog_id = catalog_id;
+        product.options = JSON.parse(options);
+        product.quantity = JSON.parse(quantity);
+        product.price = price;
+        product.description = description;
+        product.image = imagesPath;
+
+        await product.save({ transaction });
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
       res
         .status(200)
         .json({ message: "Product updated successfully", product });
@@ -218,7 +258,7 @@ exports.updateProductQuantity = async function (
     await product.save({ transaction });
 
     return;
-  } catch (error) { 
+  } catch (error) {
     throw error;
   }
 };

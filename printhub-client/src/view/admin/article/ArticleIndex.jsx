@@ -53,7 +53,6 @@ const ArticleIndex = () => {
       });
     }
     dispatch(resetStateArticle());
-
   }, [deleteArticleByIdState.isSuccess, deleteArticleByIdState.isError]);
 
   const deleteRecord = (e) => {
@@ -72,6 +71,7 @@ const ArticleIndex = () => {
       description: articles[i].description,
       unit_price: articles[i].unit_price,
       quantity: articles[i].quantity,
+      min_quantity: articles[i].min_quantity,
       image: (
         <Image
           alt={articles[i].name}
@@ -186,6 +186,10 @@ const columns = [
   {
     title: "Quantity",
     dataIndex: "quantity",
+  },
+  {
+    title: "Min Quantity",
+    dataIndex: "min_quantity",
   },
   {
     title: "Image",

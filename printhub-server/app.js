@@ -54,6 +54,4 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on ${process.env.APP_URL}:${process.env.PORT}`);
-  console.log(process.env.NODE_ENV )
-
 });

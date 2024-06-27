@@ -9,6 +9,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: "CASCADE",
     },
+    article_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Articles",
+        key: "id",
+      }, 
+      onDelete: "CASCADE",
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -43,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = (models) => {
     Product.belongsTo(models.Catalog, {
       foreignKey: "catalog_id",
+      onDelete: "CASCADE",
+    });
+    Product.belongsTo(models.Article, {
+      foreignKey: "article_id",
       onDelete: "CASCADE",
     });
   };

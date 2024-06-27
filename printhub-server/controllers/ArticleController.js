@@ -1,51 +1,53 @@
-const {Article} = require("../models");
+const { Article } = require("../models");
 const multer = require("multer");
 const fs = require("fs");
+const Mail = require("../services/EmailService");
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = `${Date.now()}-${file.originalname}`;
-      cb(null, uniqueSuffix);
-    },
-  });
-  const upload = multer({ storage });
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueSuffix);
+  },
+});
+const upload = multer({ storage });
 
-  // Get all articles
+// Get all articles
 exports.index = async (req, res) => {
-    try {
-      const articles = await Article.findAll({ order: [["id", "desc"]] });
-      if (articles) {
-        return res
-          .status(200)
-          .json({ articles, message: "Returned articles Successfully!" });
-      } else {
-        res.status(404).json({ error: "Articles not found" });
-      }
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+  try {
+    const articles = await Article.findAll({ order: [["id", "desc"]] });
+    if (articles) {
+      return res
+        .status(200)
+        .json({ articles, message: "Returned articles Successfully!" });
+    } else {
+      res.status(404).json({ error: "Articles not found" });
     }
-  };
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 // Create a new article
 exports.createArticle = [
   upload.single("image"),
   async (req, res) => {
     try {
-      const {  name, description,unit_price ,quantity, image } =
+      const { name, description, unit_price, quantity, min_quantity } =
         req.body;
       let imagePath = null;
       if (req.file) {
         imagePath = req.file.path;
       }
-      const article = await Article.create({  
+      const article = await Article.create({
         name,
         description,
+        min_quantity,
         unit_price,
         quantity,
-        image: imagePath
+        image: imagePath,
       });
       res
         .status(201)
@@ -56,16 +58,15 @@ exports.createArticle = [
   },
 ];
 
-
 // Update an article
 exports.updateArticle = [
   upload.single("image"),
   async (req, res) => {
     const articleId = req.params.id;
     try {
-      const { name, description, unit_price,quantity, image } =
+      const { name, description, unit_price, quantity, min_quantity } =
         req.body;
-        const article = await Article.findByPk(articleId);
+      const article = await Article.findByPk(articleId);
 
       if (!article) {
         return res.status(404).json({ error: "Article not found" });
@@ -82,6 +83,7 @@ exports.updateArticle = [
         article.image = req.file.path;
       }
       article.name = name;
+      article.min_quantity = min_quantity;
       article.description = description;
       article.unit_price = unit_price;
       article.quantity = quantity;
@@ -144,3 +146,38 @@ exports.deleteArticle = async (req, res) => {
   }
 };
 
+//update quantity
+exports.updateArticleQuantity = async function (
+  articleId,
+  quantityTaken,
+  transaction
+) {
+  try {
+    console.log(quantityTaken);
+
+    const article = await Article.findByPk(articleId);
+    if (!article) {
+      throw new Error("Article not found");
+    }
+    if (quantityTaken > article.quantity) {
+      throw new Error(
+        `Insufficient quantity available in the article ${article.name}`
+      );
+    }
+    let newQuantity = article.quantity - quantityTaken;
+    article.quantity = newQuantity;
+    if (article.quantity < article.min_quantity) {
+      await Mail.send(
+        process.env.MAIL_APP,
+        `${article.name} is running out of the stock!`,
+        "stock.ejs",
+        { articleName: article.name }
+      );
+    }
+    await article.save({ transaction });
+
+    return;
+  } catch (error) {
+    throw error;
+  }
+};

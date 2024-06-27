@@ -46,6 +46,7 @@ const ArticleCreate = (props) => {
       name: "",
       description: "",
       unit_price: null,
+      min_quantity: null,
       quantity: null,
       image: [],
     },
@@ -54,6 +55,7 @@ const ArticleCreate = (props) => {
       description: Yup.string().required("Description is required*"),
       unit_price: Yup.number().required("Unit Price is required*"),
       quantity: Yup.number().required("Quantity is required*"),
+      min_quantity: Yup.number().required("Min Quantity is required*"),
       image: Yup.array()
         .length(1, "Please upload only one image")
         .required("Image is required*"),
@@ -64,6 +66,7 @@ const ArticleCreate = (props) => {
       formData.append("description", values.description);
       formData.append("unit_price", values.unit_price);
       formData.append("quantity", values.quantity);
+      formData.append("min_quantity", values.min_quantity);
       formData.append("image", values.image[0].originFileObj);
       dispatch(createArticle(formData));
     },
@@ -161,6 +164,24 @@ const ArticleCreate = (props) => {
           />
           {formik.touched.quantity && formik.errors.quantity && (
             <div style={{ color: "red" }}>{formik.errors.quantity}</div>
+          )}
+        </div>
+        <div>
+          <label htmlFor="min_quantity">
+            Min Quantity <span>*</span>
+          </label>
+          <InputNumber
+            placeholder="the min quantity for this article"
+            id="min_quantity"
+            name="min_quantity"
+            style={{ display: "block", width: "100%", marginBottom: "10px" }}
+            min={0}
+            value={formik.values.min_quantity}
+            onChange={(value) => formik.setFieldValue("min_quantity", value)}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.min_quantity && formik.errors.min_quantity && (
+            <div style={{ color: "red" }}>{formik.errors.min_quantity}</div>
           )}
         </div>
         <div>
