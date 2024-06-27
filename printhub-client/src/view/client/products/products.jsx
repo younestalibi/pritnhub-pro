@@ -144,9 +144,9 @@ export default function ProductList() {
       </div>
       <div className="container">
         <Row
-          style={{ margin: "40px 0px" }}
+          style={{ margin: "40px 0px", minHeight: "80vh" }}
           justify={"center"}
-          align={"middle"}
+          align={"top"}
           gutter={[40, 40]}
         >
           {categoryItem.Products.length > 0 &&

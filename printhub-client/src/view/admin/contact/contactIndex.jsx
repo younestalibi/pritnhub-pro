@@ -11,26 +11,23 @@ import {
   resetStateContact,
 } from "../../../provider/features/contact/ContactSlice";
 import { Button, Table, Typography, notification } from "antd";
-import { Image } from "antd";
-import { Link } from "react-router-dom";
 import Confirmation from "../../../components/CustomAlert/Confirmation";
-import { icons } from "antd/es/image/PreviewGroup";
 import ContactRespond from "./respondContact";
-
 
 const ContactIndex = () => {
   const [open, setOpen] = useState(false);
-  const [RespondId, setRespondId] = useState(null);
+  const [email, setEmail] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
-  const [ContactModal, setContactModal] = useState(false);
+  const [contactModal, setContactModal] = useState(false);
+
   const { contacts, getContactsState, deleteContactState } = useSelector(
     (state) => state.contact
   );
-  const data = [];
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (contacts.length == 0) {
+    if (contacts.length === 0) {
       dispatch(getContacts());
     } else {
       dispatch(resetStateContact());
@@ -53,52 +50,45 @@ const ContactIndex = () => {
       });
     }
     dispatch(resetStateContact());
-
   }, [deleteContactState.isSuccess, deleteContactState.isError]);
 
-  const deleteRecord = (e) => {
-    dispatch(deleteContact(deleteId));
+  const deleteRecord = (id) => {
+    dispatch(deleteContact(id));
     setOpen(false);
   };
-  const showModal = (e) => {
+
+  const showModal = (id) => {
     setOpen(true);
-    setDeleteId(e);
+    setDeleteId(id);
   };
 
-  for (let i = 0; i < contacts.length; i++) {
-    data.push({
-      key: i,
-      name: contacts[i].name,
-      email: contacts[i].email,
-      message: contacts[i].message,
-      action: (
-        <>  
-          <span
-            className="btn-delete"
-            onClick={() => showModal(contacts[i].id)}
-          >
-            <AiFillDelete />
-          </span>
-          <span
-            className="btn_respond"
-            onClick={() => {
-              setRespondId(contacts[i].id);
-              setContactModal(true);
-            }}
-          >
-           <Button
-           type="primary"
-           >
-          Respond
-           </Button>
-          </span>
-        </>
-      ),
-    });
-  }
+  const handleRespond = (contactEmail) => {
+    setEmail(contactEmail);
+    setContactModal(true);
+  };
+
   const start = () => {
     dispatch(getContacts());
   };
+
+  const data = contacts.map((contact, index) => ({
+    key: index,
+    name: contact.name,
+    email: contact.email,
+    message: contact.message,
+    action: (
+      <>
+        <span className="btn-delete" onClick={() => showModal(contact.id)}>
+          <AiFillDelete />
+        </span>
+        <span className="btn_respond">
+          <Button type="primary" onClick={() => handleRespond(contact.email)}>
+            Respond
+          </Button>
+        </span>
+      </>
+    ),
+  }));
 
   return (
     <div>
@@ -120,28 +110,29 @@ const ContactIndex = () => {
           Refresh Contacts
         </Button>
       </div>
+
       <Table
         columns={columns}
         dataSource={data}
         loading={getContactsState.isLoading}
-        scroll={{ x: 1000}}
+        scroll={{ x: 1000 }}
       />
+
       <Confirmation
         setOpen={setOpen}
         open={open}
-        performAction={() => {
-          deleteRecord(deleteId);
-        }}
+        performAction={() => deleteRecord(deleteId)}
         okType="danger"
         okText="Delete anyway!"
         description="Are you sure you want to delete this contact?"
         title="Confirmation"
         loading={deleteContactState.isLoading}
       />
-        <ContactRespond
-        open={ContactModal}
+
+      <ContactRespond
+        open={contactModal}
         setOpen={setContactModal}
-        id={RespondId}
+        email={email}
       />
     </div>
   );
@@ -155,14 +146,13 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "email",
+    title: "Email",
     dataIndex: "email",
   },
   {
-    title: "message",
+    title: "Message",
     dataIndex: "message",
   },
-
   {
     title: "Actions",
     dataIndex: "action",

@@ -10,42 +10,31 @@ exports.createContact = async (req, res) => {
       message,
     });
 
-    await Mail.send(email,"Your Contact Submission","welcome.ejs",{name,message})
-    res
-      .status(201)
-      .json({
-        message: "Your message sent successfully!",
-        contact,
-      });
-
+    await Mail.send(email, "Your Contact Submission", "welcome.ejs", {
+      name,
+      message,
+    });
+    res.status(201).json({
+      message: "Your message sent successfully!",
+      contact,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-//respond contact 
+//respond contact
 exports.respondContact = async (req, res) => {
-
-  const contactId = req.params.id;
+  const { email, message } = req.body;
   try {
-    const contact = await Contact.findByPk(contactId);
-    if (contact) {
-      console.log(req.body)
-        const name=contact.name;
-        const email=contact.email;
-        const message = req.body.message;
-        console.log("Received message: ", message); // Add this log
-      await Mail.send(email,"Your Contact Submission","respond.ejs",{message, name})
+    await Mail.send(email, "Your Contact Submission", "respond.ejs", {
+      message,
+    });
 
-      return res .status(201).json({ message: "Your message sent successfully!", contact,});
-
-    } else{
-      return res.status(404).json({ error: "Contact not found  baby!" });
-    }
+    return res.status(201).json({ message: "Your message sent successfully!" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-  
 };
 exports.index = async (req, res) => {
   try {

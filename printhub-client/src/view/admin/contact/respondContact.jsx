@@ -1,25 +1,19 @@
 import { Button, Input, Modal, notification } from "antd";
 import "../../../App.css";
 import TextArea from "antd/es/input/TextArea";
-import { respondContact, resetStateContact } from "../../../provider/features/contact/ContactSlice";
+import {
+  respondContact,
+  resetStateContact,
+} from "../../../provider/features/contact/ContactSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
 
 const ContactRespond = (props) => {
-  const { open, setOpen, id } = props;
-  const { respondContactState , contacts } = useSelector((state) => state.contact);
-  const [contact, setContact] = useState(null);
+  const { open, setOpen, email } = props;
+  const { respondContactState } = useSelector((state) => state.contact);
 
-  useEffect(() => {
-    if (id) {
-      const foundContact = contacts.find((e) => e.id === id);
-      if (foundContact) {
-        setContact(foundContact);
-      }
-    }
-  }, [open, contact]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,21 +32,11 @@ const ContactRespond = (props) => {
         duration: 3,
         type: "error",
       });
-      formik.resetForm();
-      dispatch(resetStateContact());
     }
+    formik.resetForm();
+    dispatch(resetStateContact());
   }, [respondContactState.isSuccess, respondContactState.isError]);
 
-
-
-  
-  const convertFormDataToJSON = (formData) => {
-    const obj = {};
-    formData.forEach((value, key) => {
-      obj[key] = value;
-    });
-    return obj;
-  };
   // Formik setup
   const formik = useFormik({
     initialValues: {
@@ -63,12 +47,11 @@ const ContactRespond = (props) => {
     }),
     onSubmit: (values) => {
       const formData = new FormData();
-      console.log(values)
+      console.log(values);
       formData.append("message", values.message);
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-      dispatch(respondContact({ id, contact: values }));
+      formData.append("email", email);
+      console.log(formData);
+      dispatch(respondContact({email,...values}));
     },
   });
 

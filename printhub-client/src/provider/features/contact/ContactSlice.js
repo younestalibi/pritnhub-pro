@@ -4,7 +4,7 @@ import { initialContactState, resetContactState } from "./ContactState";
 
 export const getContacts = createAsyncThunk(
   "contact/get-all",
-  async (_,thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       return await contactService.getContacts();
     } catch (error) {
@@ -14,7 +14,6 @@ export const getContacts = createAsyncThunk(
 );
 
 export const createContact = createAsyncThunk(
-
   "contact/create-one",
   async (contact, thunkAPI) => {
     try {
@@ -27,9 +26,10 @@ export const createContact = createAsyncThunk(
 
 export const respondContact = createAsyncThunk(
   "contact/respond",
-  async ({ id, contact }, thunkAPI) => {
+  async (contact, thunkAPI) => {
     try {
-      return await contactService.respondContact({ id, contact });
+      // console.log([...contact])
+      return await contactService.respondContact(contact);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -90,26 +90,23 @@ export const ContactSlice = createSlice({
         state.deleteContactState.isSuccess = false;
         state.deleteContactState.message = action.payload.error;
       })
-           //========respond contact state========
-           .addCase(respondContact.pending, (state) => {
-            resetContactState(state);
-            state.respondContactState.isLoading = true;
-          })
-          .addCase(respondContact.fulfilled, (state, action) => {
-            state.respondContactState.isError = false;
-            state.respondContactState.isLoading = false;
-            state.respondContactState.isSuccess = true;
-            state.respondContactState.message = action.payload.message;
-            state.contacts = state.contacts.filter((contact) => {
-              return contact.id != action.payload.id;
-            });
-          })
-          .addCase(respondContact.rejected, (state, action) => {
-            state.respondContactState.isError = true;
-            state.respondContactState.isLoading = false;
-            state.respondContactState.isSuccess = false;
-            state.respondContactState.message = action.payload.error;
-          })
+      //========respond contact state========
+      .addCase(respondContact.pending, (state) => {
+        resetContactState(state);
+        state.respondContactState.isLoading = true;
+      })
+      .addCase(respondContact.fulfilled, (state, action) => {
+        state.respondContactState.isError = false;
+        state.respondContactState.isLoading = false;
+        state.respondContactState.isSuccess = true;
+        state.respondContactState.message = action.payload.message;
+      })
+      .addCase(respondContact.rejected, (state, action) => {
+        state.respondContactState.isError = true;
+        state.respondContactState.isLoading = false;
+        state.respondContactState.isSuccess = false;
+        state.respondContactState.message = action.payload.error;
+      })
       //================create contact =================
       .addCase(createContact.pending, (state) => {
         resetContactState(state);

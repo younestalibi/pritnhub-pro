@@ -15,8 +15,7 @@ import {
   Upload,
   notification,
 } from "antd";
-import { useEffect, useRef, useState } from "react";
-import ImageGallery from "react-image-gallery";
+import { useEffect, useState } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import TextInput from "../../../components/inputs/TextInput";
 import NumberInput from "../../../components/inputs/NumberInput";
@@ -25,7 +24,7 @@ import RadioInput from "../../../components/inputs/RadioInput";
 import CheckBoxInput from "../../../components/inputs/CheckBoxInput";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -45,14 +44,13 @@ import AppService from "../home/services";
 import ProductCard from "./productCard";
 import ProductGallery from "../../../components/ProductGallery/ProductGallery";
 const { Title, Paragraph } = Typography;
-const { Meta } = Card;
 const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { getProductByIdState } = useSelector((state) => state.product);
   const { product } = getProductByIdState;
   const [expanded, setExpanded] = useState(false);
-  const { carts, addCartItemState } = useSelector((state) => state.cart);
+  const { addCartItemState } = useSelector((state) => state.cart);
   const isAuthenticated = useAuth();
 
   const calculateTotalPrice = (formValues) => {
@@ -125,6 +123,8 @@ const ProductDetail = () => {
 
   useEffect(() => {
     dispatch(getProductById(id));
+    // dispatch(resetStateProduct());
+
     window.scrollTo(0, 0);
   }, [id]);
 
@@ -277,11 +277,8 @@ const ProductDetail = () => {
       dispatch(resetStateProduct());
     }
   }, []);
-  console.log(
-    product?.image.map((e, i) => {
-      return `${import.meta.env.VITE_SERVER_URL}/${e}`;
-    })
-  );
+
+  console.log(getProductByIdState);
   return getProductByIdState.isLoading ? (
     <Row
       justify={"space-evenly"}
@@ -609,37 +606,6 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-const images = [
-  {
-    original: "https://picsum.photos/id/1018/1000/600/",
-    thumbnail: "https://picsum.photos/id/1018/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1015/1000/600/",
-    thumbnail: "https://picsum.photos/id/1015/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1019/1000/600/",
-    thumbnail: "https://picsum.photos/id/1019/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1018/1000/600/",
-    thumbnail: "https://picsum.photos/id/1018/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1015/1000/600/",
-    thumbnail: "https://picsum.photos/id/1015/250/150/",
-  },
-];
-
-const placeholderImage = [
-  {
-    original:
-      "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=1024x1024&w=is&k=20&c=Bs1RdueQnaAcO888WBIQsC6NvA7aVTzeRVzSd8sJfUg=",
-    thumbnail:
-      "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=1024x1024&w=is&k=20&c=Bs1RdueQnaAcO888WBIQsC6NvA7aVTzeRVzSd8sJfUg=",
-  },
-];
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {

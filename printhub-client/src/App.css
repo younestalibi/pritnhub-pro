@@ -33,16 +33,16 @@ body {
   line-height: 1.6;
 }
 
-p {
+/* p {
   font-size: 16px;
   line-height: 1.6;
-}
+} */
 
-.bgGray {
+/* .bgGray {
   background: #fafafa;
   margin: 0;
   padding: 0;
-}
+} */
 
 /* 
 title holder
@@ -75,7 +75,7 @@ title holder
 hero
 ---- 
 */
-.heroBlock {
+/* .heroBlock {
   background-image: url("https://livewp.site/html/copy-printing/img/content/home_page.png");
   backgroun-repeat:no-repeat;
   background-position:'center';
@@ -83,7 +83,7 @@ hero
   height: 90vh;
   display:'flex';
   justify-content:'center'
-}
+} */
 
 /* .heroBlock .container-fluid {
   display: block !important;
@@ -146,7 +146,7 @@ block
 about
 ----- 
 */
-.aboutBlock {
+/* .aboutBlock {
   display: flex;
 }
 
@@ -179,9 +179,9 @@ about
   text-align: center;
   font-size: 27px;
   margin-top: 0 !important;
-}
+} */
 
-.aboutBlock .textBlock p {
+/* .aboutBlock .textBlock p {
   color: black;
   font-size: 20px;
   font-weight: 18px;
@@ -204,7 +204,7 @@ about
     padding: 0;
     margin: 0;
   }
-}
+} */
 
 /* 
 testimonial section

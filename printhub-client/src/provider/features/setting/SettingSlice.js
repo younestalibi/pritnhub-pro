@@ -8,7 +8,6 @@ export const getSettings = createAsyncThunk(
     try {
       return await settingService.getSettings();
     } catch (error) {
-      console.log(error)
       return thunkAPI.rejectWithValue({error: 'Settings not found'});
     }
   }
@@ -48,7 +47,6 @@ export const SettingSlice = createSlice({
         state.getSettingsState.isLoading = true;
       })
       .addCase(getSettings.fulfilled, (state, action) => {
-        console.log(action);
         state.getSettingsState.isError = false;
         state.getSettingsState.isLoading = false;
         state.getSettingsState.isSuccess = true;
@@ -56,7 +54,6 @@ export const SettingSlice = createSlice({
         state.settings = action.payload.settings;
       })
       .addCase(getSettings.rejected, (state, action) => {
-        console.log(action);
         state.getSettingsState.isError = true;
         state.getSettingsState.isLoading = false;
         state.getSettingsState.isSuccess = false;
@@ -90,7 +87,6 @@ export const SettingSlice = createSlice({
         state.updateSettingState.isLoading = true;
       })
       .addCase(updateSetting.fulfilled, (state, action) => {
-        console.log(action);
         state.updateSettingState.isError = false;
         state.updateSettingState.isLoading = false;
         state.updateSettingState.isSuccess = true;
@@ -98,7 +94,6 @@ export const SettingSlice = createSlice({
         state.settings = action.payload.setting;
       })
       .addCase(updateSetting.rejected, (state, action) => {
-        console.log(action);
         state.updateSettingState.isError = true;
         state.updateSettingState.isLoading = false;
         state.updateSettingState.isSuccess = false;
