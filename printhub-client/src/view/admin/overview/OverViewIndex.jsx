@@ -71,6 +71,8 @@ const OverViewPage = () => {
           <b style={{ color: "green" }}>Confirmed</b>
         ) : orders[i].status == "cancelled" ? (
           <b style={{ color: "black" }}>Cancelled</b>
+        ) : orders[i].status == "done" ? (
+          <b style={{ color: "blue" }}>Done</b>
         ) : (
           <b style={{ color: "red" }}>Pending</b>
         ),

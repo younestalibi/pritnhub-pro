@@ -66,7 +66,6 @@ const ProductIndex = () => {
       });
     }
     dispatch(resetStateProduct());
-
   }, [deleteProductByIdState.isSuccess, deleteProductByIdState.isError]);
   const deleteRecord = (e) => {
     dispatch(deleteProductById(deleteId));
@@ -95,9 +94,18 @@ const ProductIndex = () => {
       quantity: products[i].quantity.max,
       options: (
         <Popover
-          content={products[i].options.map((option, i) => (
-            <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
-          ))}
+          content={
+            <div
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+              }}
+            >
+              {products[i].options.map((option, i) => (
+                <pre key={i}>{JSON.stringify(option, null, 2)}</pre>
+              ))}
+            </div>
+          }
           title="Form Details"
           trigger="hover"
         >

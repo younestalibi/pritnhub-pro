@@ -107,9 +107,15 @@ const calculateAdjustedPrice = (item) => {
     basePrice + customizationTotal + adjustmentQuantityPrice;
   return adjustedPrice;
 };
+const calculateTotalPrice = (items) => {
+  return items.reduce((total, item) => {
+    return total + parseFloat(item.price);
+  }, 0);
+};
 
 module.exports = {
   calculateItemTotal,
   calculateTotal,
   calculateAdjustedPrice,
+  calculateTotalPrice
 };

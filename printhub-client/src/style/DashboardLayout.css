@@ -9,10 +9,13 @@
 .btn_respond {
   padding: 70px 10px;
 }
-.demo-logo-vertical div{
-  color: white;
+.demo-logo-vertical div {
   padding: 15px;
   text-align: center;
   font-weight: bold;
   font-size: 20px;
+  cursor: "pointer";
+}
+.demo-logo-vertical div a {
+  color: white;
 }

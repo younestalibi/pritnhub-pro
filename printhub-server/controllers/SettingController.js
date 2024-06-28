@@ -88,7 +88,7 @@ exports.resetSetting = async (req, res) => {
       phone_number: "+212600000000",
       address: "Tangier, Morocco",
       contact_email: "contact@printhub-pro.com",
-      logo: "/path/to/logo.png",
+      logo: "uploads/website_logo.png",
       website_name: "Printhub-Pro",
       social_media_links: {
         facebook: "https://facebook.com/",
@@ -113,7 +113,7 @@ exports.defaultSetting = async () => {
       phone_number: "+212600000000",
       address: "Tangier, Morocco",
       contact_email: "contact@printhub-pro.com",
-      logo: "/path/to/logo.png",
+      logo: "uploads/website_logo.png",
       website_name: "Printhub-Pro", 
       social_media_links: {
         facebook: "https://facebook.com/",

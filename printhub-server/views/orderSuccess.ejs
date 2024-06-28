@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #4caf50;
+      }
+      .order-details {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 20px 0;
+      }
+      .order-details h2 {
+        margin: 0 0 10px;
+      }
+      .order-details p {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Order Confirmation</h1>
+      <p>Dear <%= name %>,</p>
+      <p>
+        Thank you for your order! We are pleased to inform you that your order
+        has been successfully created and payment has been received.
+      </p>
+      <div class="order-details">
+        <h2>Order Summary</h2>
+        <p><strong>Order Number:</strong> <%= orderNumber %></p>
+        <p><strong>Order Date:</strong> <%= orderDate %></p>
+        <h3>Items:</h3>
+        <ul>
+          <% items.forEach(item => { %>
+          <li>
+            <strong><%= item.product.name %></strong> - Quantity: <%= item.quantity %>,
+            Price: $<%= item.price %>
+          </li>
+          <% }); %>
+        </ul>
+        <p><strong>Total Amount:</strong> $<%= totalAmount %></p>
+      </div>
+      <p>
+        We are currently processing your order and will notify you once it has
+        been shipped. If you have any questions or need further assistance,
+        please do not hesitate to contact us.
+      </p>
+      <p>Best Regards,<br />PrintHub Pro</p>
+    </div>
+  </body>
+</html>

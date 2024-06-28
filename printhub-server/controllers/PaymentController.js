@@ -4,6 +4,7 @@ const {
   calculateTotal,
   calculateItemTotal,
   calculateAdjustedPrice,
+  calculateTotalPrice,
 } = require("../services/CalculationService");
 const uuid = require("uuid");
 const {
@@ -11,11 +12,13 @@ const {
   CartItem,
   Product,
   Order,
+  User,
   sequelize,
   OrderItem,
 } = require("../models");
 const { updateProductQuantity } = require("./ProductController");
 const { lockCart, unLockCart } = require("./CartController");
+const Mail = require("../services/EmailService");
 
 //==================Paypal payment==================
 const Environment =
@@ -147,6 +150,9 @@ exports.confirmOrderPaypal = async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found!" });
     }
+    const user = await User.findOne({
+      where: { id: order.user_id },
+    });
 
     const request = new paypal.orders.OrdersGetRequest(orderId);
     const paypalOrder = await paypalClient.execute(request);
@@ -174,15 +180,6 @@ exports.confirmOrderPaypal = async (req, res) => {
             );
           })
         );
-
-        // if (cart) {
-        // await Promise.all(
-        //   cart.CartItems.map(async (item) => {
-        //     await updateProductQuantity(
-        //       item.Product.id,
-        //       item.quantity,
-        //       transaction
-        //     );
         await CartItem.destroy(
           {
             where: {
@@ -191,10 +188,13 @@ exports.confirmOrderPaypal = async (req, res) => {
           },
           { transaction }
         );
-        //   })
-        // );
-        // await unLockCart(userId);
-        // }
+        await Mail.send(user?.email, `Your Order is created successfully!`, "orderSuccess.ejs", {
+          totalAmount: calculateTotalPrice(order?.OrderItems),
+          items: order?.OrderItems,
+          orderDate: order.createdAt,
+          orderNumber: order.order_payment_id,
+          name: user.name,
+        });
         await transaction.commit();
 
         res.json({
@@ -246,7 +246,7 @@ exports.cancleOrderPaypal = async (req, res) => {
 exports.getConfigBank = (req, res) => {
   res.json({
     bankRip: process.env.BANK_RIP,
-    ownerName:process.env.BANK_OWNER_NAME,
+    ownerName: process.env.BANK_OWNER_NAME,
     email: process.env.MAIL_APP,
   });
 };
@@ -311,4 +311,3 @@ exports.confirmOrderBank = async (req, res) => {
   }
 };
 //==================Cih payment==================
- 

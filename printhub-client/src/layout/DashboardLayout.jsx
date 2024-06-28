@@ -9,7 +9,7 @@ import {
   ContactsOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../style/DashboardLayout.css";
 import AvatarProfile from "../components/Avatar/AvatarProfile";
 import { useSelector } from "react-redux";
@@ -28,11 +28,13 @@ const DasbhoardLayout = () => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical">
           <div className="demo-logo-vertical">
-            {collapsed ? (
-              <span>{settings?.website_name[0] }</span>
-            ) : (
-              <span>{settings?.website_name}</span>
-            )}
+            <Link to={'/'}>
+              {collapsed ? (
+                <span>{settings?.website_name[0]}</span>
+              ) : (
+                <span>{settings?.website_name}</span>
+              )}
+            </Link>
           </div>
         </div>
         <Menu

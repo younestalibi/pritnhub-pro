@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Menu, Input, Badge, Avatar } from "antd";
+import { Menu, Input, Badge, Avatar, Image } from "antd";
 import AvatarProfile from "../../Avatar/AvatarProfile";
 import "./header.css";
 import { ShoppingCartOutlined, CaretDownOutlined } from "@ant-design/icons";
@@ -68,8 +68,17 @@ export default function AppHeader() {
         <div className="container-fluid">
           <div className="headerMain">
             <div className="logo">
-              <Link to={'/'}>
-                <strong>{settings && settings.website_name}</strong>
+              <Link to={"/"}>
+                <img
+                  alt={settings?.website_name}
+                  width={200}
+                  // height={60}
+                  style={{ objectFit: "contain" }}
+                  crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                  loading="lazy"
+                  src={`${import.meta.env.VITE_SERVER_URL}/${settings?.logo}`}
+                />
+                {/* <strong>{settings && settings.website_name}</strong> */}
               </Link>
             </div>
             <div className="SearchInput">

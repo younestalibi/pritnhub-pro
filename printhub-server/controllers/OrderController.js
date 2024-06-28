@@ -1,15 +1,19 @@
 const {
   Order,
   OrderItem,
-  Payment,
+  User,
   Cart,
   CartItem,
   Product,
   sequelize,
 } = require("../models");
 const uuid = require("uuid");
-const { calculateItemTotal } = require("../services/CalculationService");
+const {
+  calculateItemTotal,
+  calculateTotalPrice,
+} = require("../services/CalculationService");
 const { updateProductQuantity } = require("./ProductController");
+const Mail = require("../services/EmailService");
 
 // Get all orders
 exports.index = async (req, res) => {
@@ -100,6 +104,7 @@ exports.createOrder = async (req, res) => {
 // // Update order status
 exports.updateOrderStatus = async (req, res) => {
   try {
+    const userId = req.userId;
     const orderId = req.params.id;
     const { status } = req.body;
     const transaction = await sequelize.transaction();
@@ -109,6 +114,9 @@ exports.updateOrderStatus = async (req, res) => {
       include: {
         model: OrderItem,
       },
+    });
+    const user = await User.findOne({
+      where: { id: order.user_id },
     });
     const validTransitions = {
       pending: ["completed", "cancelled", "done"],
@@ -125,7 +133,7 @@ exports.updateOrderStatus = async (req, res) => {
         error: `Invalid status transition from ${order.status} to ${status}`,
       });
     }
-    
+
     try {
       if (status == "completed") {
         await Promise.all(
@@ -136,6 +144,32 @@ exports.updateOrderStatus = async (req, res) => {
               transaction
             );
           })
+        );
+        await Mail.send(
+          user?.email,
+          `Your Order is created successfully!`,
+          "orderSuccess.ejs",
+          {
+            totalAmount: calculateTotalPrice(order?.OrderItems),
+            items: order?.OrderItems,
+            orderDate: order.createdAt,
+            orderNumber: order.order_payment_id,
+            name: user.name,
+          }
+        );
+      }
+      if (status == "done") {
+        await Mail.send(
+          user?.email,
+          `Your Order is delivered successfully!`,
+          "orderDelivery.ejs",
+          {
+            totalAmount: calculateTotalPrice(order?.OrderItems),
+            items: order?.OrderItems,
+            orderDate: order.createdAt,
+            orderNumber: order.order_payment_id,
+            name: user.name,
+          }
         );
       }
       await order.update({ status }, { transaction });
@@ -178,7 +212,7 @@ exports.viewOrders = async (req, res) => {
   try {
     const userId = req.userId;
     const orders = await Order.findAll({
-      where: { user_id: userId, status: ["pending", "completed"] },
+      where: { user_id: userId, status: ["pending", "completed", "done"] },
       include: {
         model: OrderItem,
       },

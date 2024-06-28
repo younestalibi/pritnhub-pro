@@ -30,18 +30,16 @@ const OrderIndexUser = () => {
         2
       )}$`,
       items: `${userOrders[i].OrderItems.length} items`,
-      status: (
-        <b
-          style={{
-            color:
-              userOrders[i].status == "pending"
-                ? "red"
-                : userOrders[i].status == "completed" && "green",
-          }}
-        >
-          {userOrders[i].status}
-        </b>
-      ),
+      status:
+        userOrders[i].status == "completed" ? (
+          <b style={{ color: "green" }}>Confirmed</b>
+        ) : userOrders[i].status == "cancelled" ? (
+          <b style={{ color: "black" }}>Cancelled</b>
+        ) : userOrders[i].status == "done" ? (
+          <b style={{ color: "blue" }}>Done</b>
+        ) : (
+          <b style={{ color: "red" }}>Pending</b>
+        ),
       action: (
         <>
           <span
