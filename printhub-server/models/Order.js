@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       status: {
-        type: DataTypes.ENUM("pending", "completed", "cancelled"),
+        type: DataTypes.ENUM("pending", "completed", "cancelled","done"),
         allowNull: false,
         defaultValue: "pending",
       },
@@ -41,10 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "order_id",
         onDelete: "CASCADE",
       });
-      // Order.hasOne(models.Payment, {
-      //   foreignKey: "order_id",
-      //   onDelete: "CASCADE",
-      // });
+     
     };
   
     return Order;

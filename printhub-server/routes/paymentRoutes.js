@@ -4,11 +4,19 @@ const PaymentController = require("../controllers/PaymentController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 // Payment routes
+
+//--------------paypal--------------
 router.get("/config", authMiddleware, PaymentController.getConfigPaypal);
 router.post("/create-order", authMiddleware, PaymentController.createOrderPaypal);
 router.post("/confirm-order", authMiddleware, PaymentController.confirmOrderPaypal);
 router.post("/cancel-order", authMiddleware, PaymentController.cancleOrderPaypal);
-router.post("/confirm-order-cih", authMiddleware, PaymentController.confirmOrderCih);
+//--------------paypal--------------
+
+//--------------bank transfer--------------
+router.post("/confirm-order-cih", authMiddleware, PaymentController.confirmOrderBank);
+router.get("/config-bank", authMiddleware, PaymentController.getConfigBank);
+//--------------bank transfer--------------
 
 
 module.exports = router;
+ 

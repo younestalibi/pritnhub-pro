@@ -20,7 +20,7 @@ if(settings){
 }
   return (
     <Footer className="footer">
-      <Row justify="center" gutter={[16, 16]}>
+      <Row justify="center"  gutter={[100]}>
         <Col xs={24} sm={12} md={8}>
           <h3>About Us</h3>
           <p>

@@ -14,12 +14,11 @@ const { updateProductQuantity } = require("./ProductController");
 // Get all orders
 exports.index = async (req, res) => {
   try {
-    const userId = req.userId;
     const orders = await Order.findAll({
-      //   where: { user_id: userId },
       include: {
         model: OrderItem,
       },
+      order: [["id", "DESC"]],
     });
 
     if (orders) {
@@ -38,7 +37,6 @@ exports.index = async (req, res) => {
 exports.createOrder = async (req, res) => {
   try {
     const userId = req.userId;
-    const totalAmount = 1000;
     const trackingId = uuid.v4();
     const transaction = await sequelize.transaction();
     try {
@@ -78,39 +76,10 @@ exports.createOrder = async (req, res) => {
               },
               { transaction }
             );
-            // let product = await Product.findByPk(item.Product.id);
-            // let newMaxValue = String(Number(product.quantity.max)-item.quantity);
-            // let updatedQuantity = {
-            //   ...product.quantity,
-            //   max: newMaxValue,
-            // };
-
-            // // product.quantity=JSON.stringify({'test':'hi'})
-            // // JSON.parse(product.quantity).max='someth'
-            // console.log("--------");
-            // // console.log(JSON.parse(product.quantity))
-            // console.log(newMaxValue)
-            // console.log(updatedQuantity)
-            // // console.log(JSON.stringify(product.quantity))
-            // // console.log(JSON.stringify(updatedQuantity));
-            // console.log("--------");
-
-            // product.quantity = JSON.stringify({name:"younes"})
-            // await product.save();
-
-            // await CartItem.destroy({ where: { id: item.id } }, { transaction });
           })
         );
       }
 
-      // const cartItem = await CartItem.findOne({
-      //     where: { id: newCartItem.id },
-      //     include: {
-      //       model: Product,
-      //     },
-      //   });
-
-      // Commit the transaction
       await transaction.commit();
 
       res.status(201).json({
@@ -141,11 +110,24 @@ exports.updateOrderStatus = async (req, res) => {
         model: OrderItem,
       },
     });
+    const validTransitions = {
+      pending: ["completed", "cancelled", "done"],
+      completed: ["done"],
+      cancelled: [],
+      done: [],
+    };
+
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
+    if (!validTransitions[order.status].includes(status)) {
+      return res.status(400).json({
+        error: `Invalid status transition from ${order.status} to ${status}`,
+      });
+    }
+    
     try {
-      if(status=='completed'){
+      if (status == "completed") {
         await Promise.all(
           order.OrderItems?.map(async (item) => {
             await updateProductQuantity(

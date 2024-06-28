@@ -54,21 +54,17 @@ export default function AppFeature() {
         gutter={[40, 40]}
       >
         {products.length > 0 &&
-          products.slice(0, 6).map((product, index) => (
-            <Col key={index}>
-              <Fade triggerOnce direction="up">
-                <ProductCard product={product} />
-              </Fade>
-            </Col>
-          ))}
+          [...products]
+            .sort((a, b) => b.sold - a.sold)
+            .slice(0, 6)
+            .map((product, index) => (
+              <Col key={index}>
+                <Fade triggerOnce direction="up">
+                  <ProductCard product={product} />
+                </Fade>
+              </Col>
+            ))}
       </Row>
-      <Fade triggerOnce direction="up">
-        <Flex justify="center" align="center">
-          <Button size="large" type="dashed">
-            Explore all Products
-          </Button>
-        </Flex>
-      </Fade>
     </div>
   );
 }

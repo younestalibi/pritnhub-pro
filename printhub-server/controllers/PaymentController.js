@@ -243,7 +243,15 @@ exports.cancleOrderPaypal = async (req, res) => {
 //==================Paypal payment==================
 
 //==================Cih payment==================
-exports.confirmOrderCih = async (req, res) => {
+exports.getConfigBank = (req, res) => {
+  res.json({
+    bankRip: process.env.BANK_RIP,
+    ownerName:process.env.BANK_OWNER_NAME,
+    email: process.env.MAIL_APP,
+  });
+};
+
+exports.confirmOrderBank = async (req, res) => {
   const { shippingAddress, referenceId } = req.body;
   const userId = req.userId;
   try {
@@ -303,3 +311,4 @@ exports.confirmOrderCih = async (req, res) => {
   }
 };
 //==================Cih payment==================
+ 

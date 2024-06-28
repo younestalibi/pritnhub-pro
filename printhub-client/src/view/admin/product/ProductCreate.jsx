@@ -1,5 +1,6 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
+  Button,
   Flex,
   Input,
   InputNumber,
@@ -36,16 +37,18 @@ const ProductCreate = (props) => {
   const { createProductstate } = useSelector((state) => state.product);
   const [maxQantity, setMaxQantity] = useState(null);
   const [minPrice, setMinPrice] = useState(null);
+  const [priceAdjustments, setPriceAdjustments] = useState([]);
   const dispatch = useDispatch();
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
   const { articles, getArticlesState } = useSelector((state) => state.article);
+
   useEffect(() => {
     if (articles.length == 0) {
       dispatch(getArticles());
     } else {
       dispatch(resetStateArticle());
     }
-    
+
     if (catalogs.length == 0) {
       dispatch(getCatalogs());
     } else {
@@ -53,6 +56,7 @@ const ProductCreate = (props) => {
     }
     setMaxQantity(null);
     setMinPrice(null);
+    setPriceAdjustments([])
   }, []);
 
   useEffect(() => {
@@ -88,6 +92,7 @@ const ProductCreate = (props) => {
         max: null,
         min: null,
         step: null,
+        priceAdjustments: [], 
       },
       price: null,
       description: "",
@@ -177,6 +182,24 @@ const ProductCreate = (props) => {
     }
   }, [formik.values.article_id]);
 
+
+  const addPriceAdjustment = () => {
+    setPriceAdjustments([...priceAdjustments, { range: "", price: "" }]);
+  };
+
+  const handlePriceAdjustmentChange = (index, field, value) => {
+    const newAdjustments = [...priceAdjustments];
+    newAdjustments[index][field] = value;
+    setPriceAdjustments(newAdjustments);
+  };
+
+  const removePriceAdjustment = (index) => {
+    setPriceAdjustments(priceAdjustments.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    formik.setFieldValue("quantity.priceAdjustments", priceAdjustments);
+  }, [priceAdjustments]);
   return (
     <Modal
       title="Create New Product"
@@ -301,6 +324,45 @@ const ProductCreate = (props) => {
             </div>
           </Flex>
         </div>
+
+        <div>
+          <label htmlFor="quantity.priceAdjustments">
+            Quantity Price Adjustments
+          </label>
+          {priceAdjustments.map((adjustment, index) => (
+            <div key={index} style={{ display: "flex", marginBottom: "8px" }}>
+              <Input
+                placeholder="Range (e.g. 0-199)"
+                value={adjustment.range}
+                onChange={(e) =>
+                  handlePriceAdjustmentChange(index, "range", e.target.value)
+                }
+                style={{ width: "150px", marginRight: "8px" }}
+              />
+              <Input
+                placeholder="Price Adjustment"
+                value={adjustment.price}
+                onChange={(e) =>
+                  handlePriceAdjustmentChange(index, "price", e.target.value)
+                }
+                style={{ width: "100px", marginRight: "8px" }}
+              />
+              <Button
+                icon={<MinusCircleOutlined />}
+                onClick={() => removePriceAdjustment(index)}
+                type="dashed"
+              />
+            </div>
+          ))}
+          <Button
+            type="dashed"
+            onClick={addPriceAdjustment}
+            icon={<PlusOutlined />}
+          >
+            Add Price Adjustment
+          </Button>
+        </div>
+
         <div>
           <label htmlFor="price">
             Price <span>*</span>

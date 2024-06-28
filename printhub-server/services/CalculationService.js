@@ -1,7 +1,8 @@
 const calculateItemTotal = (item) => {
   const basePrice = parseFloat(item.Product.price);
   const quantity = item.quantity;
-
+  const itemQuantity = item.Product.quantity;
+  let adjustmentQuantityPrice = 0;
   const customizationTotal = Object.keys(item.customizations).reduce(
     (sum, key) => {
       const customizationValue = item.customizations[key];
@@ -31,7 +32,20 @@ const calculateItemTotal = (item) => {
     0
   );
 
-  const itemTotal = (basePrice + customizationTotal) * quantity;
+  if (itemQuantity) {
+    if (itemQuantity && itemQuantity.priceAdjustments) {
+      for (const adjustment of itemQuantity.priceAdjustments) {
+        const [min, max] = adjustment.range.split("-").map(Number);
+        if (quantity >= min && (max === undefined || quantity <= max)) {
+          adjustmentQuantityPrice += parseFloat(adjustment.price);
+          break;
+        }
+      }
+    }
+  }
+
+  const itemTotal =
+    (basePrice + customizationTotal + adjustmentQuantityPrice) * quantity;
   return itemTotal;
 };
 
@@ -45,6 +59,8 @@ const calculateTotal = (cartItems = []) => {
 const calculateAdjustedPrice = (item) => {
   const basePrice = parseFloat(item.Product.price);
   const quantity = item.quantity;
+  const itemQuantity = item.Product.quantity;
+  let adjustmentQuantityPrice = 0;
 
   const customizationTotal = Object.keys(item.customizations).reduce(
     (sum, key) => {
@@ -75,8 +91,21 @@ const calculateAdjustedPrice = (item) => {
     0
   );
 
-  const adjustedPrice = basePrice + customizationTotal;
-  return adjustedPrice; // Ensure the price is formatted to two decimal places
+  if (itemQuantity) {
+    if (itemQuantity && itemQuantity.priceAdjustments) {
+      for (const adjustment of itemQuantity.priceAdjustments) {
+        const [min, max] = adjustment.range.split("-").map(Number);
+        if (quantity >= min && (max === undefined || quantity <= max)) {
+          adjustmentQuantityPrice += parseFloat(adjustment.price);
+          break;
+        }
+      }
+    }
+  }
+
+  const adjustedPrice =
+    basePrice + customizationTotal + adjustmentQuantityPrice;
+  return adjustedPrice;
 };
 
 module.exports = {

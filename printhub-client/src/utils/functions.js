@@ -1,7 +1,8 @@
 export const calculateItemTotal = (item) => {
   const basePrice = parseFloat(item.Product.price);
   const quantity = item.quantity;
-
+  const itemQuantity = item.Product.quantity;
+  let adjustmentQuantityPrice = 0;
   const customizationTotal = Object.keys(item.customizations).reduce(
     (sum, key) => {
       const customizationValue = item.customizations[key];
@@ -31,7 +32,20 @@ export const calculateItemTotal = (item) => {
     0
   );
 
-  const itemTotal = (basePrice + customizationTotal) * quantity;
+  if (itemQuantity) {
+    if (itemQuantity && itemQuantity.priceAdjustments) {
+      for (const adjustment of itemQuantity.priceAdjustments) {
+        const [min, max] = adjustment.range.split("-").map(Number);
+        if (quantity >= min && (max === undefined || quantity <= max)) {
+          adjustmentQuantityPrice += parseFloat(adjustment.price);
+          break;
+        }
+      }
+    }
+  }
+
+  const itemTotal =
+    (basePrice + customizationTotal + adjustmentQuantityPrice) * quantity;
   return itemTotal;
 };
 

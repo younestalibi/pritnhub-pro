@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Statistic, Row, Col, Card, Table, Tag } from "antd";
+import { Typography, Statistic, Row, Col, Card, Table, Tag, Image } from "antd";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,14 +7,34 @@ import {
   resetStateOrder,
 } from "../../../provider/features/order/OrderSlice";
 import { calculateTotalPrice } from "../../../utils/functions";
+import {
+  getProducts,
+  resetStateProduct,
+} from "../../../provider/features/product/ProductSlice";
+import {
+  getContacts,
+  resetStateContact,
+} from "../../../provider/features/contact/ContactSlice";
 
 const { Title } = Typography;
 
 const OverViewPage = () => {
   const { orders, getOrdersState } = useSelector((state) => state.order);
+  const { products, getProductsState } = useSelector((state) => state.product);
   const dispatch = useDispatch();
+  const { contacts, getContactsState } = useSelector((state) => state.contact);
 
   useEffect(() => {
+    if (contacts.length === 0) {
+      dispatch(getContacts());
+    } else {
+      dispatch(resetStateContact());
+    }
+    if (products.length == 0) {
+      dispatch(getProducts());
+    } else {
+      dispatch(resetStateProduct());
+    }
     if (orders.length == 0) {
       dispatch(getOrders());
     } else {
@@ -23,14 +43,76 @@ const OverViewPage = () => {
   }, []);
 
   const totalPriceCompletedOrders = orders.reduce((total, order) => {
-    if (order.status === "completed") {
+    if (["completed", "done"].includes(order.status)) {
       return total + calculateTotalPrice(order.OrderItems);
     }
     return total;
   }, 0);
-  const completedOrdersCount = orders.filter(order => order.status === 'completed').length;
-  const pendingOrdersCount = orders.filter(order => order.status === 'pending').length;
+  const confirmedOrdersCount = orders.filter(
+    (order) => order.status === "completed"
+  ).length;
+  const completedOrdersCount = orders.filter(
+    (order) => order.status === "done"
+  ).length;
+  const pendingOrdersCount = orders.filter(
+    (order) => order.status === "pending"
+  ).length;
+  const contactCount = contacts?.length;
+  const orderData = [];
+  const productData = [];
+  for (let i = 0; i < orders.length; i++) {
+    orderData.push({
+      key: orders[i].id,
+      payment_id: orders[i].order_payment_id,
+      total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
+      items: `${orders[i].OrderItems.length} items`,
+      status:
+        orders[i].status == "completed" ? (
+          <b style={{ color: "green" }}>Confirmed</b>
+        ) : orders[i].status == "cancelled" ? (
+          <b style={{ color: "black" }}>Cancelled</b>
+        ) : (
+          <b style={{ color: "red" }}>Pending</b>
+        ),
+      created_at: new Date(orders[i].createdAt).toLocaleDateString(),
+    });
+  }
 
+  const productsCopy = [...products];
+  productsCopy.sort((a, b) => b.sold - a.sold);
+  for (let i = 0; i < productsCopy.length; i++) {
+    productData.push({
+      key: productsCopy[i].id,
+      name: productsCopy[i].name,
+      price: `${productsCopy[i].price}$`,
+      quantity: productsCopy[i].quantity.max,
+      image: (
+        <Image.PreviewGroup
+          items={productsCopy[i].image.map((image, index) => {
+            return {
+              src: `${import.meta.env.VITE_SERVER_URL}/${image}`,
+              crossOrigin: import.meta.env.VITE_CLIENT_URL,
+              loading: "lazy",
+              alt: productsCopy[i].name,
+            };
+          })}
+        >
+          <Image
+            alt={productsCopy[i].name}
+            width={60}
+            height={60}
+            style={{ objectFit: "contain" }}
+            crossOrigin={import.meta.env.VITE_CLIENT_URL}
+            loading="lazy"
+            src={`${import.meta.env.VITE_SERVER_URL}/${
+              productsCopy[i].image[0]
+            }`}
+          />
+        </Image.PreviewGroup>
+      ),
+      sold: productsCopy[i].sold,
+    });
+  }
   return (
     <div className="overview-page">
       <BreadCrumb titles={["Home", "Overview"]} />
@@ -43,9 +125,10 @@ const OverViewPage = () => {
                 title="Pending Orders"
                 value={pendingOrdersCount && pendingOrdersCount}
                 suffix="orders"
+                loading={getOrdersState.isLoading}
                 valueStyle={{
-                    color: '#cf1322',
-                  }}
+                  color: "#cf1322",
+                }}
               />
             </Card>
           </Col>
@@ -53,11 +136,22 @@ const OverViewPage = () => {
             <Card>
               <Statistic
                 title="Confirmed Orders"
+                value={confirmedOrdersCount && confirmedOrdersCount}
+                suffix="orders"
+                loading={getOrdersState.isLoading}
+                valueStyle={{
+                  color: "#3f8600",
+                }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+            <Card>
+              <Statistic
+                title="Completed Orders"
                 value={completedOrdersCount && completedOrdersCount}
                 suffix="orders"
-                valueStyle={{
-                    color: '#3f8600',
-                  }}
+                loading={getOrdersState.isLoading}
               />
             </Card>
           </Col>
@@ -69,18 +163,23 @@ const OverViewPage = () => {
                   totalPriceCompletedOrders &&
                   totalPriceCompletedOrders.toFixed(2)
                 }
+                loading={getOrdersState.isLoading}
                 suffix="$"
               />
             </Card>
           </Col>
-          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+          {/* <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
               <Statistic title="Active Users" value={312} />
             </Card>
-          </Col>
+          </Col> */}
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="New Messages" value={12} />
+              <Statistic
+                title="New Messages"
+                value={contactCount}
+                loading={getContactsState.isLoading}
+              />
             </Card>
           </Col>
         </Row>
@@ -90,48 +189,9 @@ const OverViewPage = () => {
             <Card title="Recent Orders">
               <Table
                 scroll={{ x: 1000 }}
-                dataSource={[
-                  {
-                    key: "1",
-                    orderId: "OD12348",
-                    customerName: "Alice Johnson",
-                    date: "2024-06-22",
-                    status: "completed",
-                  },
-                  {
-                    key: "2",
-                    orderId: "OD12349",
-                    customerName: "Bob Smith",
-                    date: "2024-06-21",
-                    status: "completed",
-                  },
-                  {
-                    key: "3",
-                    orderId: "OD12350",
-                    customerName: "Eve Adams",
-                    date: "2024-06-20",
-                    status: "pending",
-                  },
-                ]}
-                columns={[
-                  { title: "Order ID", dataIndex: "orderId", key: "orderId" },
-                  {
-                    title: "Customer",
-                    dataIndex: "customerName",
-                    key: "customerName",
-                  },
-                  { title: "Date", dataIndex: "date", key: "date" },
-                  {
-                    title: "Status",
-                    dataIndex: "status",
-                    key: "status",
-                    render: (status) => (
-                      <Tag color={status === "completed" ? "green" : "blue"}>
-                        {status}
-                      </Tag>
-                    ),
-                  },
-                ]}
+                dataSource={orderData}
+                columns={OrderColumns}
+                loading={getOrdersState.isLoading}
                 pagination={{ pageSize: 5 }}
               />
             </Card>
@@ -140,39 +200,9 @@ const OverViewPage = () => {
             <Card title="Popular Products">
               <Table
                 scroll={{ x: 1000 }}
-                dataSource={[
-                  {
-                    key: "1",
-                    productName: "Business Cards",
-                    price: 20.0,
-                    quantitySold: 55,
-                  },
-                  {
-                    key: "2",
-                    productName: "Brochures",
-                    price: 45.0,
-                    quantitySold: 42,
-                  },
-                  {
-                    key: "3",
-                    productName: "Posters",
-                    price: 15.0,
-                    quantitySold: 78,
-                  },
-                ]}
-                columns={[
-                  {
-                    title: "Product Name",
-                    dataIndex: "productName",
-                    key: "productName",
-                  },
-                  { title: "Price", dataIndex: "price", key: "price" },
-                  {
-                    title: "Quantity Sold",
-                    dataIndex: "quantitySold",
-                    key: "quantitySold",
-                  },
-                ]}
+                dataSource={productData}
+                columns={ProductColumns}
+                loading={getProductsState.isLoading}
                 pagination={{ pageSize: 5 }}
               />
             </Card>
@@ -184,3 +214,58 @@ const OverViewPage = () => {
 };
 
 export default OverViewPage;
+
+const OrderColumns = [
+  {
+    title: "#ID",
+    dataIndex: "key",
+  },
+  {
+    title: "Total Amount",
+    dataIndex: "total_amount",
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+  },
+  {
+    title: "Items Count",
+    dataIndex: "items",
+  },
+  {
+    title: "Payment-Id",
+    dataIndex: "payment_id",
+  },
+];
+
+const ProductColumns = [
+  {
+    title: "#ID",
+    dataIndex: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+  },
+  {
+    title: "Sold",
+    dataIndex: "sold",
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+  },
+
+  {
+    title: "Image",
+    dataIndex: "image",
+  },
+];

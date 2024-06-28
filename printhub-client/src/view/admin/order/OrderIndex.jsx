@@ -79,40 +79,51 @@ const OrderIndex = () => {
       payment_id: orders[i].order_payment_id,
       total_amount: `${calculateTotalPrice(orders[i].OrderItems).toFixed(2)}$`,
       items: `${orders[i].OrderItems.length} items`,
-      status:
-        orders[i].status == "completed" ? (
-          <b style={{ color: "green" }}>Confirmed</b>
-        ) : orders[i].status == "cancelled" ? (
-          <b style={{ color: "black" }}>Cancelled</b>
-        ) : (
-          <Select
-            defaultValue={orders[i].status}
-            loading={updateOrderStatusState.isLoading && orders[i].id == editId}
-            style={{
-              width: 120,
-            }}
-            onChange={(status) => {
-              setEditId(orders[i].id);
-              dispatch(
-                updateOrderStatus({ id: orders[i].id, status: { status } })
-              );
-            }}
-            options={[
-              {
-                value: "pending",
-                label: <b style={{ color: "red" }}>Pending</b>,
-              },
-              {
-                value: "completed",
-                label: <b style={{ color: "green" }}>Confirmed</b>,
-              },
-              {
-                value: "cancelled",
-                label: <b style={{ color: "black" }}>Cancelled</b>,
-              },
-            ]}
-          />
-        ),
+      status: (
+        // orders[i].status == "cancelled" ? (
+        //   <b style={{ color: "black" }}>Cancelled</b>
+        // ) : orders[i].status == "done" ? (
+        //   <b style={{ color: "blue" }}>Done</b>
+        // ) :
+        <Select
+          defaultValue={orders[i].status}
+          loading={updateOrderStatusState.isLoading && orders[i].id == editId}
+          style={{
+            width: 120,
+          }}
+          onChange={(status) => {
+            setEditId(orders[i].id);
+            dispatch(
+              updateOrderStatus({ id: orders[i].id, status: { status } })
+            );
+          }}
+          options={[
+            {
+              value: "pending",
+              label: <b style={{ color: "red" }}>Pending</b>,
+              disabled: ["completed", "cancelled", "done"].includes(
+                orders[i].status
+              ),
+            },
+            {
+              value: "completed",
+              label: <b style={{ color: "green" }}>Confirmed</b>,
+              disabled: ["cancelled", "done"].includes(orders[i].status),
+            },
+            {
+              value: "cancelled",
+              label: <b style={{ color: "black" }}>Cancelled</b>,
+              disabled: ["completed", "done"].includes(orders[i].status),
+            },
+            {
+              value: "done",
+              label: <b style={{ color: "blue" }}>Done</b>,
+              disabled: ["cancelled", "pending"].includes(orders[i].status),
+            },
+          ]}
+        />
+      ),
+      created_at: new Date(orders[i].createdAt).toLocaleDateString(),
       action: (
         <>
           <span
@@ -124,7 +135,7 @@ const OrderIndex = () => {
           >
             <IoEyeOutline title="view" />
           </span>
-          {!["completed", "pending"].includes(orders[i].status) && (
+          {!["completed", "pending", "done"].includes(orders[i].status) && (
             <span
               className="btn-delete"
               onClick={() => showModal(orders[i].id)}
@@ -139,7 +150,6 @@ const OrderIndex = () => {
   const start = () => {
     dispatch(getOrders());
   };
-
   return (
     <div>
       <BreadCrumb titles={["Home", "Order"]} />
@@ -266,6 +276,10 @@ const columns = [
   {
     title: "Status",
     dataIndex: "status",
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
   },
   {
     title: "Actions",

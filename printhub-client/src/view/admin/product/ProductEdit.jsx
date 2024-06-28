@@ -1,5 +1,6 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
+  Button,
   Flex,
   Input,
   InputNumber,
@@ -36,6 +37,7 @@ const ProductEdit = (props) => {
   const { updateProductstate, products } = useSelector(
     (state) => state.product
   );
+  const [priceAdjustments, setPriceAdjustments] = useState([]);
 
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
   const { articles, getArticlesState } = useSelector((state) => state.article);
@@ -64,6 +66,7 @@ const ProductEdit = (props) => {
         setArticle(articles.find((e) => e.id === foundProduct.article_id));
       }
       if (product) {
+        setPriceAdjustments(product.quantity.priceAdjustments);
         formik.setFieldValue("name", product.name);
         formik.setFieldValue("description", product.description);
         formik.setFieldValue("price", product.price);
@@ -123,6 +126,7 @@ const ProductEdit = (props) => {
         max: null,
         min: null,
         step: null,
+        priceAdjustments: [],
       },
       price: null,
       description: "",
@@ -190,7 +194,24 @@ const ProductEdit = (props) => {
       label: catalogs[i].name,
     });
   }
-  console.log(article);
+
+  const addPriceAdjustment = () => {
+    setPriceAdjustments([...priceAdjustments, { range: "", price: "" }]);
+  };
+
+  const handlePriceAdjustmentChange = (index, field, value) => {
+    const newAdjustments = [...priceAdjustments];
+    newAdjustments[index][field] = value;
+    setPriceAdjustments(newAdjustments);
+  };
+
+  const removePriceAdjustment = (index) => {
+    setPriceAdjustments(priceAdjustments.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    formik.setFieldValue("quantity.priceAdjustments", priceAdjustments);
+  }, [priceAdjustments]);
   return (
     <Modal
       title="Edit Product"
@@ -288,6 +309,45 @@ const ProductEdit = (props) => {
             </div>
           </Flex>
         </div>
+
+        <div>
+          <label htmlFor="quantity.priceAdjustments">
+            Quantity Price Adjustments
+          </label>
+          {priceAdjustments.map((adjustment, index) => (
+            <div key={index} style={{ display: "flex", marginBottom: "8px" }}>
+              <Input
+                placeholder="Range (e.g. 0-199)"
+                value={adjustment.range}
+                onChange={(e) =>
+                  handlePriceAdjustmentChange(index, "range", e.target.value)
+                }
+                style={{ width: "150px", marginRight: "8px" }}
+              />
+              <Input
+                placeholder="Price Adjustment"
+                value={adjustment.price}
+                onChange={(e) =>
+                  handlePriceAdjustmentChange(index, "price", e.target.value)
+                }
+                style={{ width: "100px", marginRight: "8px" }}
+              />
+              <Button
+                icon={<MinusCircleOutlined />}
+                onClick={() => removePriceAdjustment(index)}
+                type="dashed"
+              />
+            </div>
+          ))}
+          <Button
+            type="dashed"
+            onClick={addPriceAdjustment}
+            icon={<PlusOutlined />}
+          >
+            Add Price Adjustment
+          </Button>
+        </div>
+
         <div>
           <label htmlFor="price">
             Price <span>*</span>

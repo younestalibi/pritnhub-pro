@@ -5,9 +5,11 @@ import { Avatar, Space, Dropdown, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../provider/features/auth/AuthSlice";
 import { useNavigate, Link } from "react-router-dom";
+import useAdmin from "../../hooks/useAdmin";
 
 const AvatarProfile = () => {
   const dispatch = useDispatch();
+  const isAdmin = useAdmin();
   const { logoutState } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const handleLogOut = () => {
@@ -24,8 +26,12 @@ const AvatarProfile = () => {
       key: "0",
     },
     {
-      label: <Link to={"/order"}>My Orders</Link>,
-      key: "1",
+      label: <Link to={"/order"}>Orders</Link>,
+      key: "2",
+    },
+    isAdmin && {
+      label: <Link to={"/admin"}>Dashboard</Link>,
+      key: "3",
     },
 
     {
@@ -34,7 +40,7 @@ const AvatarProfile = () => {
     {
       label: <b onClick={handleLogOut}>Log out</b>,
       danger: true,
-      key: "2",
+      key: "4",
     },
   ];
 

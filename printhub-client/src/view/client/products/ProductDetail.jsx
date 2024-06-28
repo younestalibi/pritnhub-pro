@@ -63,15 +63,11 @@ const ProductDetail = () => {
 
     let totalPrice = parseFloat(product.price);
     let customizationTotal = 0;
-
+    const quantity = formValues["quantity"];
     if (formValues["quantity"]) {
-      // totalPrice *= formValues["quantity"];
       product.options.forEach((option) => {
         const value = formValues[option.name];
-
         if (option.type === "number") {
-          // const number = value;
-          // totalPrice *= parseFloat(number);
         } else if (option.type === "select" || option.type === "radio") {
           const choice = option.choices.find(
             (choice) => choice.value === value
@@ -91,6 +87,16 @@ const ProductDetail = () => {
           });
         }
       });
+
+      if (product.quantity && product.quantity.priceAdjustments) {
+        for (const adjustment of product.quantity.priceAdjustments) {
+          const [min, max] = adjustment.range.split("-").map(Number);
+          if (quantity >= min && (max === undefined || quantity <= max)) {
+            customizationTotal += parseFloat(adjustment.price);
+            break;
+          }
+        }
+      }
       return {
         totalPrice: (totalPrice + customizationTotal) * formValues["quantity"],
         totalUnit: totalPrice + customizationTotal,
@@ -103,6 +109,73 @@ const ProductDetail = () => {
       totalUnit: null,
     };
   };
+  // const calculateTotalPrice = (formValues) => {
+  //   if (!product) {
+  //     return {
+  //       totalPrice: "-----------",
+  //       totalUnit: "-----------",
+  //     };
+  //   }
+
+  //   let totalPrice = parseFloat(product.price);
+  //   let customizationTotal = 0;
+
+  //   if (formValues["quantity"]) {
+  //     // Calculate customization total
+  //     product.options.forEach((option) => {
+  //       const value = formValues[option.name];
+
+  //       if (option.type === "number") {
+  //         // Handle number type options
+  //       } else if (option.type === "select" || option.type === "radio") {
+  //         const choice = option.choices.find(
+  //           (choice) => choice.value === value
+  //         );
+  //         if (choice) {
+  //           customizationTotal += parseFloat(choice.priceAdjustment);
+  //         }
+  //       } else if (option.type === "checkbox") {
+  //         const selectedChoices = value || [];
+  //         selectedChoices.forEach((selectedChoice) => {
+  //           const choice = option.choices.find(
+  //             (choice) => choice.value === selectedChoice
+  //           );
+  //           if (choice) {
+  //             customizationTotal += parseFloat(choice.priceAdjustment);
+  //           }
+  //         });
+  //       }
+  //     });
+
+  //     // Calculate quantity-based price adjustment
+  //     const quantity = formValues["quantity"];
+  //     let quantityPriceAdjustment = 0;
+
+  //     if (product.quantity && product.quantity.priceAdjustments) {
+  //       for (const adjustment of product.quantity.priceAdjustments) {
+  //         const [min, max] = adjustment.range.split("-").map(Number);
+
+  //         if (quantity >= min && (max === undefined || quantity <= max)) {
+  //           quantityPriceAdjustment = parseFloat(adjustment.price);
+  //           break;
+  //         }
+  //       }
+  //     }
+
+  //     const adjustedTotalPrice =
+  //       (totalPrice + customizationTotal) * quantityPriceAdjustment;
+
+  //     return {
+  //       totalPrice: adjustedTotalPrice * quantity,
+  //       totalUnit: adjustedTotalPrice,
+  //     };
+  //   }
+
+  //   return {
+  //     totalPrice: null,
+  //     totalUnit: null,
+  //   };
+  // };
 
   const quantities = product
     ? Array.from(
@@ -121,12 +194,19 @@ const ProductDetail = () => {
       )
     : [];
 
-  useEffect(() => {
-    dispatch(getProductById(id));
-    // dispatch(resetStateProduct());
-
-    window.scrollTo(0, 0);
-  }, [id]);
+  // const rangeArray = [];
+  // if (product && product.quantity) {
+  //   const { min, max, step } = product.quantity;
+  //   for (let i = min; i < max; i += step) {
+  //     rangeArray.push(i);
+  //   }
+  //   console.log(rangeArray)
+  // }
+  console.log(getProductByIdState);
+  // useEffect(() => {
+  //   dispatch(getProductById(id));
+  //   window.scrollTo(0, 0);
+  // }, [id]);
 
   ////
   const formik = useFormik({
@@ -277,8 +357,11 @@ const ProductDetail = () => {
       dispatch(resetStateProduct());
     }
   }, []);
-
-  console.log(getProductByIdState);
+  
+  useEffect(() => {
+    dispatch(getProductById(id));
+    window.scrollTo(0, 0);
+  }, [id]);
   return getProductByIdState.isLoading ? (
     <Row
       justify={"space-evenly"}
@@ -390,7 +473,7 @@ const ProductDetail = () => {
             </Paragraph>
 
             <form onSubmit={formik.handleSubmit}>
-              <RadioInput
+              <SelectInput
                 value={formik.values["quantity"]}
                 setFormValues={formik.setFieldValue}
                 error={formik.touched["quantity"] && formik.errors["quantity"]}

@@ -60,6 +60,12 @@ function ProductCustomization({ onSave, options }) {
       ...prevOption,
       [name]: value,
     }));
+    if (name == "label") {
+      setNewOption((prevOption) => ({
+        ...prevOption,
+        ['name']: value.toLowerCase().replace(/[.' ]/g, "_"),
+      }));
+    }
   };
 
   const handleTypeChange = (value) => {
@@ -120,7 +126,7 @@ function ProductCustomization({ onSave, options }) {
       setCustomizationOptions([]);
     }
   }, [options]);
-console.log(customizationOptions)
+  console.log(customizationOptions);
   return (
     <>
       <div>
@@ -143,7 +149,7 @@ console.log(customizationOptions)
         />
         {newOption.type && (
           <div>
-            <label htmlFor="name">Input Name:</label>
+            {/* <label htmlFor="name">Input Name:</label>
             <Input
               type="text"
               id="name"
@@ -151,7 +157,7 @@ console.log(customizationOptions)
               value={newOption.name}
               onChange={handleInputChange}
             />
-            <br />
+            <br /> */}
             <label htmlFor="label">Input Label:</label>
             <Input
               type="text"
@@ -228,7 +234,7 @@ console.log(customizationOptions)
               <pre
                 style={{
                   maxHeight: "200px",
-                  overflowY:'auto'
+                  overflowY: "auto",
                 }}
               >
                 {JSON.stringify(option, null, 2)}
@@ -238,7 +244,7 @@ console.log(customizationOptions)
             trigger="hover"
           >
             <Tag
-              style={{ marginTop: "10px",cursor:'pointer' }}
+              style={{ marginTop: "10px", cursor: "pointer" }}
               closable
               onClose={() => {
                 setCustomizationOptions(

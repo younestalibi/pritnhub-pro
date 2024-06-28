@@ -34,7 +34,7 @@ const createOrder = async (order) => {
 };
 const updateOrderStatus = async ({id,status}) => {
   try {
-    const response = await axiosHttp.put(`/order/update/${id}`,status);
+    const response = await axiosHttp.post(`/order/update/${id}`,status);
     return response.data;
   } catch (error) {
     throw error.response.data;

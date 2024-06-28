@@ -56,7 +56,7 @@ export default function AppCategory() {
         gutter={[40, 40]}
       >
         {catalogs.length > 0 &&
-          catalogs.slice(0, 6).map((catalog, index) => (
+          catalogs.slice(0, 8).map((catalog, index) => (
             <Col key={index}>
               <Fade triggerOnce direction="up">
                 <Link to={`/category/${catalog.id}`}>
@@ -93,13 +93,13 @@ export default function AppCategory() {
             </Col>
           ))}
       </Row>
-      <Fade triggerOnce direction="up">
+      {/* <Fade triggerOnce direction="up">
         <Flex justify="center" align="center">
           <Button size="large" type="dashed">
             Explore all categories
           </Button>
         </Flex>
-      </Fade>
+      </Fade> */}
     </div>
   );
 }
