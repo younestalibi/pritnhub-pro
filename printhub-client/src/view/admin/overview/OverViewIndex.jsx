@@ -52,7 +52,7 @@ const OverViewPage = () => {
     (order) => order.status === "completed"
   ).length;
   const completedOrdersCount = orders.filter(
-    (order) => order.status === "done"
+    (order) => order.status === "delivered"
   ).length;
   const pendingOrdersCount = orders.filter(
     (order) => order.status === "pending"
@@ -70,9 +70,13 @@ const OverViewPage = () => {
         orders[i].status == "completed" ? (
           <b style={{ color: "green" }}>Confirmed</b>
         ) : orders[i].status == "cancelled" ? (
-          <b style={{ color: "black" }}>Cancelled</b>
-        ) : orders[i].status == "done" ? (
-          <b style={{ color: "blue" }}>Done</b>
+          <b>Cancelled</b>
+        ) : orders[i].status == "processing" ? (
+          <b>Processing</b>
+        ) : orders[i].status == "shipped" ? (
+          <b>Shipped</b>
+        ) : orders[i].status == "delivered" ? (
+          <b>Delivered</b>
         ) : (
           <b style={{ color: "red" }}>Pending</b>
         ),
@@ -101,8 +105,8 @@ const OverViewPage = () => {
         >
           <Image
             alt={productsCopy[i].name}
-            width={60}
-            height={60}
+            width={30}
+            height={30}
             style={{ objectFit: "contain" }}
             crossOrigin={import.meta.env.VITE_CLIENT_URL}
             loading="lazy"
@@ -150,7 +154,7 @@ const OverViewPage = () => {
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
               <Statistic
-                title="Completed Orders"
+                title="Delivered Orders"
                 value={completedOrdersCount && completedOrdersCount}
                 suffix="orders"
                 loading={getOrdersState.isLoading}
@@ -201,6 +205,9 @@ const OverViewPage = () => {
           <Col xs={24} lg={12}>
             <Card title="Popular Products">
               <Table
+              style={{ 
+                padding:'0px'
+               }}
                 scroll={{ x: 1000 }}
                 dataSource={productData}
                 columns={ProductColumns}

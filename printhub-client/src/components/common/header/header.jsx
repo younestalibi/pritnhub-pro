@@ -81,7 +81,7 @@ export default function AppHeader() {
                 {/* <strong>{settings && settings.website_name}</strong> */}
               </Link>
             </div>
-            <div className="SearchInput">
+            {/* <div className="SearchInput">
               <Search
                 size="large"
                 placeholder="search product"
@@ -89,7 +89,7 @@ export default function AppHeader() {
                 enterButton
                 style={{ flex: 2, minWidth: 0 }}
               />
-            </div>
+            </div> */}
             <div className="header-user-actions">
               <Link to={"contact"}>
                 <i className="fa-solid fa-headset headset-icon"></i>

@@ -104,7 +104,6 @@ exports.createOrder = async (req, res) => {
 // // Update order status
 exports.updateOrderStatus = async (req, res) => {
   try {
-    const userId = req.userId;
     const orderId = req.params.id;
     const { status } = req.body;
     const transaction = await sequelize.transaction();
@@ -119,10 +118,12 @@ exports.updateOrderStatus = async (req, res) => {
       where: { id: order.user_id },
     });
     const validTransitions = {
-      pending: ["completed", "cancelled", "done"],
-      completed: ["done"],
+      pending: ["completed", "cancelled"],
+      completed: ["processing"],
       cancelled: [],
-      done: [],
+      processing: ["shipped"],
+      shipped: ["delivered"],
+      delivere: [],
     };
 
     if (!order) {
@@ -158,20 +159,20 @@ exports.updateOrderStatus = async (req, res) => {
           }
         );
       }
-      if (status == "done") {
-        await Mail.send(
-          user?.email,
-          `Your Order is delivered successfully!`,
-          "orderDelivery.ejs",
-          {
-            totalAmount: calculateTotalPrice(order?.OrderItems),
-            items: order?.OrderItems,
-            orderDate: order.createdAt,
-            orderNumber: order.order_payment_id,
-            name: user.name,
-          }
-        );
-      }
+      await Mail.send(
+        user?.email,
+        `New Update about your order!`,
+        "orderStatus.ejs",
+        {
+          status,
+          totalAmount: calculateTotalPrice(order?.OrderItems),
+          items: order?.OrderItems,
+          orderDate: order.createdAt,
+          orderNumber: order.order_payment_id,
+          name: user.name,
+        }
+      );
+
       await order.update({ status }, { transaction });
       await transaction.commit();
     } catch (error) {
@@ -212,7 +213,10 @@ exports.viewOrders = async (req, res) => {
   try {
     const userId = req.userId;
     const orders = await Order.findAll({
-      where: { user_id: userId, status: ["pending", "completed", "done"] },
+      where: {
+        user_id: userId,
+        status: ["pending", "completed", "processing", "shipped", "delivered"],
+      },
       include: {
         model: OrderItem,
       },

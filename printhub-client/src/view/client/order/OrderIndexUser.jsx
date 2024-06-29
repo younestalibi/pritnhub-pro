@@ -34,12 +34,17 @@ const OrderIndexUser = () => {
         userOrders[i].status == "completed" ? (
           <b style={{ color: "green" }}>Confirmed</b>
         ) : userOrders[i].status == "cancelled" ? (
-          <b style={{ color: "black" }}>Cancelled</b>
-        ) : userOrders[i].status == "done" ? (
-          <b style={{ color: "blue" }}>Done</b>
+          <b>Cancelled</b>
+        ) : userOrders[i].status == "processing" ? (
+          <b>Processing</b>
+        ) : userOrders[i].status == "shipped" ? (
+          <b>Shipped</b>
+        ) : userOrders[i].status == "delivered" ? (
+          <b>Delivered</b>
         ) : (
           <b style={{ color: "red" }}>Pending</b>
         ),
+     
       action: (
         <>
           <span

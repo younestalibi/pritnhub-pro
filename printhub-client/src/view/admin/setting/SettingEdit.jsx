@@ -99,7 +99,7 @@ const SettingEdit = (props) => {
           .required("Instagram link is required*"),
       }),
       whatsapp_chat_url: Yup.string().required(
-        "WhatsApp chat URL is required*"
+        "WhatsApp chat number is required*"
       ),
     }),
     onSubmit: (values) => {
@@ -249,7 +249,7 @@ const SettingEdit = (props) => {
 
         <div>
           <label htmlFor="whatsapp_chat_url">
-            WhatsApp Chat URL <span>*</span>
+            WhatsApp Chat Number <span>*</span>
           </label>
           <Input
             id="whatsapp_chat_url"

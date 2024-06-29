@@ -17,9 +17,6 @@ const upload = multer({ storage });
 exports.index = async (req, res) => {
   try {
     const settings = await Setting.findByPk(1);
-    console.log("==================");
-    console.log(settings);
-    console.log("==================");
     if (settings) {
       return res
         .status(200)
@@ -95,7 +92,7 @@ exports.resetSetting = async (req, res) => {
         twitter: "https://twitter.com/",
         instagram: "https://instagram.com/",
       },
-      whatsapp_chat_url: "https://wa.me/+2126000000000",
+      whatsapp_chat_url: "+2126000000000",
     };
 
     await setting.update(newSetting);
@@ -120,7 +117,7 @@ exports.defaultSetting = async () => {
         twitter: "https://twitter.com/",
         instagram: "https://instagram.com/", 
       },
-      whatsapp_chat_url: "https://wa.me/+2126000000000",
+      whatsapp_chat_url: "+2126000000000",
     };
     await Setting.create(newSetting);
   }

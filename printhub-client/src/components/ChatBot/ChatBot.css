@@ -1,0 +1,34 @@
+.custom-chatbot .rsc-footer {
+  display: none;
+}
+.custom-chatbot .rsc-content {
+  height: 90%;
+}
+.custom-chatbot .rsc-header {
+  height: 10%;
+  background-color: #1677ff;
+}
+.custom-chatbot .rsc-container {
+  z-index: 0;
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+}
+.custom-chatbot .rsc-ts-user .rsc-ts-bubble {
+  max-width: 70%;
+  background-color: white;
+}
+.custom-chatbot .rsc-ts-bot .rsc-ts-bubble {
+  max-width: 70%;
+  background-color: #1677ff;
+}
+.custom-chatbot .rsc-os-option button {
+  background-color: white;
+  color: #1677ff;
+  cursor: pointer;
+}
+.custom-chatbot .rsc-os-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

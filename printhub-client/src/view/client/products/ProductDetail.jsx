@@ -16,7 +16,7 @@ import {
   notification,
 } from "antd";
 import { useEffect, useState } from "react";
-import "react-image-gallery/styles/css/image-gallery.css";
+// import "react-image-gallery/styles/css/image-gallery.css";
 import TextInput from "../../../components/inputs/TextInput";
 import NumberInput from "../../../components/inputs/NumberInput";
 import SelectInput from "../../../components/inputs/SelectInput";
@@ -357,7 +357,7 @@ const ProductDetail = () => {
       dispatch(resetStateProduct());
     }
   }, []);
-  
+
   useEffect(() => {
     dispatch(getProductById(id));
     window.scrollTo(0, 0);

@@ -1,5 +1,7 @@
 import { Carousel, Button, Row, Col, Flex } from "antd";
 import { Link } from "react-router-dom";
+// import SimpleChatbotComponent from "../../../ChatBot";
+import ChatbotComponent from "../../../components/ChatBot/ChatBot";
 
 export default function AppHero() {
   return (

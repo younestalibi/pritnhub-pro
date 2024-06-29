@@ -101,24 +101,63 @@ const OrderIndex = () => {
             {
               value: "pending",
               label: <b style={{ color: "red" }}>Pending</b>,
-              disabled: ["completed", "cancelled", "done"].includes(
-                orders[i].status
-              ),
+              disabled: [
+                "completed",
+                "cancelled",
+                "processing",
+                "shipped",
+                "delivered",
+              ].includes(orders[i].status),
             },
             {
               value: "completed",
               label: <b style={{ color: "green" }}>Confirmed</b>,
-              disabled: ["cancelled", "done"].includes(orders[i].status),
+              disabled: [
+                "cancelled",
+                "processing",
+                "shipped",
+                "delivered",
+              ].includes(orders[i].status),
             },
             {
               value: "cancelled",
-              label: <b style={{ color: "black" }}>Cancelled</b>,
-              disabled: ["completed", "done"].includes(orders[i].status),
+              label: <b>Cancelled</b>,
+              disabled: [
+                "completed",
+                "processing",
+                "shipped",
+                "delivered",
+              ].includes(orders[i].status),
             },
             {
-              value: "done",
-              label: <b style={{ color: "blue" }}>Done</b>,
-              disabled: ["cancelled", "pending"].includes(orders[i].status),
+              value: "processing",
+              label: <b>Processing</b>,
+              disabled: [
+                "cancelled",
+                "shipped",
+                "pending",
+                "delivered",
+              ].includes(orders[i].status),
+            },
+            {
+              value: "shipped",
+              label: <b>Shipped</b>,
+              disabled: [
+                "cancelled",
+                "pending",
+                "completed",
+                "delivered",
+              ].includes(orders[i].status),
+            },
+            {
+              value: "delivered",
+              label: <b>Delivered</b>,
+              disabled: [
+                "cancelled",
+                "pending",
+                "completed",
+                "processing",
+              ].includes(orders[i].status),
             },
           ]}
         />
