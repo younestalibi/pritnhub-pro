@@ -28,6 +28,7 @@ import PayPal from "./components/PaymentMethods/Paypal";
 import CheckoutSuccess from "./view/client/checkout/CheckoutSuccess";
 import OrderIndexUser from "./view/client/order/OrderIndexUser";
 import OverViewIndex from "./view/admin/overview/OverViewIndex";
+import UserIndex from "./view/admin/user/UserIndex";
 
 function App() {
   const { getUserState } = useSelector((state) => state.auth);
@@ -48,6 +49,7 @@ function App() {
       { path: "contact", element: <ContactIndex /> },
       { path: "order", element: <OrderIndex /> },
       { path: "setting", element: <SettingIndex /> },
+      { path: "user", element: <UserIndex /> },
       { path: '', element: <OverViewIndex /> },
     ];
 

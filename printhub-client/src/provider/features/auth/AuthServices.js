@@ -31,9 +31,25 @@ const getUser = async () => {
     throw error.response.data;
   }
 };
+const getAllUser = async () => {
+  try {
+    const response = await axiosHttp.get(`auth/users`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+const deleteUserById = async (id) => {
+  try {
+    const response = await axiosHttp.delete(`auth/user/${id && id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
 const updateProfile = async (profile) => {
   try {
-    const response = await axiosHttp.put(`auth/update`,profile);
+    const response = await axiosHttp.put(`auth/update`, profile);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -41,7 +57,7 @@ const updateProfile = async (profile) => {
 };
 const updatePassword = async (password) => {
   try {
-    const response = await axiosHttp.put(`auth/update/password`,password);
+    const response = await axiosHttp.put(`auth/update/password`, password);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -54,7 +70,9 @@ const authService = {
   register,
   logout,
   updateProfile,
-  updatePassword
+  updatePassword,
+  getAllUser,
+  deleteUserById
 };
 
 export default authService;

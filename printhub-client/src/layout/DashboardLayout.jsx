@@ -28,7 +28,7 @@ const DasbhoardLayout = () => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical">
           <div className="demo-logo-vertical">
-            <Link to={'/'}>
+            <Link to={"/"}>
               {collapsed ? (
                 <span>{settings?.website_name[0]}</span>
               ) : (
@@ -71,6 +71,7 @@ const DasbhoardLayout = () => {
               label: "Contact",
             },
             { key: "order", icon: <StockOutlined />, label: "Order" },
+            { key: "user", icon: <StockOutlined />, label: "User" },
             { key: "setting", icon: <StockOutlined />, label: "Settings" },
           ]}
         />

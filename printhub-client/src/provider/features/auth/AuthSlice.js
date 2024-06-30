@@ -31,13 +31,36 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   }
 });
 
-export const getUser = createAsyncThunk("auth/get-user", async (_,thunkAPI) => {
-  try {
-    return await authService.getUser();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getUser = createAsyncThunk(
+  "auth/get-user",
+  async (_, thunkAPI) => {
+    try {
+      return await authService.getUser();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
+export const deleteUserById = createAsyncThunk(
+  "auth/delete-one-user",
+  async (id=null, thunkAPI) => {
+    try {
+      return await authService.deleteUserById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const getAllUser = createAsyncThunk(
+  "auth/get-users",
+  async (_, thunkAPI) => {
+    try {
+      return await authService.getAllUser();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const updateProfile = createAsyncThunk(
   "auth/update-profile",
   async (profile, thunkAPI) => {
@@ -147,10 +170,31 @@ export const authSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.getUserState.isError = true;
         state.getUserState.isSuccess = false;
-        state.getUserState.message = action.payload?.error||'User not found';
+        state.getUserState.message = action.payload?.error || "User not found";
         state.getUserState.isLoading = false;
       })
       // getUser
+      //   ----------------------
+      // getAllUser
+      .addCase(getAllUser.pending, (state) => {
+        resetAuthState(state);
+        state.getAllUsersState.isLoading = true;
+      })
+      .addCase(getAllUser.fulfilled, (state, action) => {
+        state.getAllUsersState.isError = false;
+        state.getAllUsersState.isLoading = false;
+        state.getAllUsersState.isSuccess = true;
+        state.getAllUsersState.message = action.payload.message;
+        state.users = action.payload.users;
+      })
+      .addCase(getAllUser.rejected, (state, action) => {
+        state.getAllUsersState.isError = true;
+        state.getAllUsersState.isSuccess = false;
+        state.getAllUsersState.message =
+          action.payload?.error || "Users not found";
+        state.getAllUsersState.isLoading = false;
+      })
+      // getAllUser
       //   ----------------------
       // update-profile
       .addCase(updateProfile.pending, (state) => {
@@ -184,13 +228,37 @@ export const authSlice = createSlice({
         state.updatePasswordState.isSuccess = true;
         state.updatePasswordState.message = action.payload.message;
       })
-      .addCase(updatePassword.rejected, (state, action) => { 
+      .addCase(updatePassword.rejected, (state, action) => {
         state.updatePasswordState.isError = true;
         state.updatePasswordState.isSuccess = false;
         state.updatePasswordState.message = action.payload.error;
         state.updatePasswordState.isLoading = false;
       })
       // update-password
+      //   =========================================================================
+      // delete-one-by-id
+      .addCase(deleteUserById.pending, (state) => {
+        resetAuthState(state);
+        state.deleteUserByIdState.isLoading = true;
+      })
+      .addCase(deleteUserById.fulfilled, (state, action) => {
+        console.log(action)
+        state.deleteUserByIdState.isError = false;
+        state.deleteUserByIdState.isLoading = false;
+        state.deleteUserByIdState.isSuccess = true;
+        state.deleteUserByIdState.message = action.payload.message;
+        state.users = state.users.filter((user) => {
+          return user.id != action.payload.id;
+        });
+      })
+      .addCase(deleteUserById.rejected, (state, action) => {
+        console.log(action)
+        state.deleteUserByIdState.isError = true;
+        state.deleteUserByIdState.isLoading = false;
+        state.deleteUserByIdState.isSuccess = false;
+        state.deleteUserByIdState.message = action.payload.error;
+      })
+      // delete-one-by-id
       //   ----------------------
       // reset-state-user
       .addCase(resetStateUser, (state) => {

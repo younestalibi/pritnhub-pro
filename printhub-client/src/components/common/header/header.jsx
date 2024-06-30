@@ -18,7 +18,7 @@ import {
 } from "../../../provider/features/catalog/CatalogSlice";
 
 export default function AppHeader() {
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState(null);
   const { carts, addCartItemState } = useSelector((state) => state.cart);
   const { catalogs, getCatalogsState } = useSelector((state) => state.catalog);
   const dispatch = useDispatch();
@@ -33,11 +33,11 @@ export default function AppHeader() {
   };
   for (let i = 0; i < catalogs.length; i++) {
     items.push({
-      key: catalogs[i].id,
+      key: `${catalogs[i].name} ${i}`,
       label: catalogs[i].name,
-      children: catalogs[i].Products.map((product) => {
+      children: catalogs[i].Products.map((product, index) => {
         return {
-          key: product.id,
+          key: `${product.name} ${index}`,
           label: <Link to={`/product/${product.id}`}>{product.name}</Link>,
         };
       }),
@@ -72,13 +72,11 @@ export default function AppHeader() {
                 <img
                   alt={settings?.website_name}
                   width={200}
-                  // height={60}
                   style={{ objectFit: "contain" }}
                   crossOrigin={import.meta.env.VITE_CLIENT_URL}
                   loading="lazy"
                   src={`${import.meta.env.VITE_SERVER_URL}/${settings?.logo}`}
                 />
-                {/* <strong>{settings && settings.website_name}</strong> */}
               </Link>
             </div>
             {/* <div className="SearchInput">

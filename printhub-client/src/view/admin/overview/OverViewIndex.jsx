@@ -15,6 +15,10 @@ import {
   getContacts,
   resetStateContact,
 } from "../../../provider/features/contact/ContactSlice";
+import {
+  getAllUser,
+  resetStateUser,
+} from "../../../provider/features/auth/AuthSlice";
 
 const { Title } = Typography;
 
@@ -23,8 +27,14 @@ const OverViewPage = () => {
   const { products, getProductsState } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const { contacts, getContactsState } = useSelector((state) => state.contact);
+  const { users, getAllUsersState } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    if (users.length == 0) {
+      dispatch(getAllUser());
+    } else {
+      dispatch(resetStateUser());
+    }
     if (contacts.length === 0) {
       dispatch(getContacts());
     } else {
@@ -58,6 +68,7 @@ const OverViewPage = () => {
     (order) => order.status === "pending"
   ).length;
   const contactCount = contacts?.length;
+  const usersCount = users?.length;
   const orderData = [];
   const productData = [];
   for (let i = 0; i < orders.length; i++) {
@@ -174,16 +185,17 @@ const OverViewPage = () => {
               />
             </Card>
           </Col>
-          {/* <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="Active Users" value={312} />
+              <Statistic title="Active Users" suffix="users" loading={getAllUsersState.isLoading} value={usersCount} />
             </Card>
-          </Col> */}
+          </Col>
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
               <Statistic
                 title="New Messages"
                 value={contactCount}
+                suffix="messages"
                 loading={getContactsState.isLoading}
               />
             </Card>
@@ -205,9 +217,9 @@ const OverViewPage = () => {
           <Col xs={24} lg={12}>
             <Card title="Popular Products">
               <Table
-              style={{ 
-                padding:'0px'
-               }}
+                style={{
+                  padding: "0px",
+                }}
                 scroll={{ x: 1000 }}
                 dataSource={productData}
                 columns={ProductColumns}

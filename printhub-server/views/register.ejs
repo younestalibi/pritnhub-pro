@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to PrintHub Pro</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #4caf50;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to PrintHub Pro!</h1>
+      <p>Dear <%= name %>,</p>
+      <p>
+        We are excited to have you as a part of our community. At PrintHub Pro,
+        we are committed to providing you with the best printing solutions and
+        services to meet all your needs.
+      </p>
+      <p>Here are some of the things you can do as a member of PrintHub Pro:</p>
+      <ul>
+        <li>Explore a wide range of printing products and services.</li>
+        <li>Customize your products to match your unique requirements.</li>
+        <li>
+          Take advantage of our fast shipping and excellent customer service.
+        </li>
+        <li>Track your orders and manage your account easily.</li>
+      </ul>
+      <p>
+        If you have any questions or need assistance, feel free to contact our
+        support team
+      </p>
+      <p>
+        Thank you for choosing PrintHub Pro. We look forward to serving you and
+        helping you achieve your printing goals.
+      </p>
+      <p>Best Regards,<br />The PrintHub Pro Team</p>
+      <div class="footer">
+        <p>
+          &copy; <%= new Date().getFullYear() %> PrintHub Pro. All rights
+          reserved.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

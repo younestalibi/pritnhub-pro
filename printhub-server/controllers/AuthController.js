@@ -5,6 +5,21 @@ const secretKey = "your-secret-key";
 const { validationResult } = require("express-validator");
 const Mail = require("../services/EmailService");
 
+// Get users
+exports.getAllUser = async (req, res) => {
+  try {
+    const users = await User.findAll({ include: "profile" });
+
+    if (users) {
+      res.status(200).json({ message: "Returned Users successfully", users });
+    } else {
+      res.status(404).json({ error: "Users not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Register a new user
 exports.register = async (req, res) => {
   const errors = validationResult(req);
@@ -25,7 +40,7 @@ exports.register = async (req, res) => {
     });
 
     const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "5h" });
-    // await Mail.send(email, "Welcome to Printhub-Pro", "welcome.ejs");
+    await Mail.send(email, "Welcome to Printhub-Pro", "register.ejs", { name });
 
     res
       .status(201)
@@ -85,13 +100,16 @@ exports.logout = (req, res) => {
 
 // Delete a user
 exports.deleteUser = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.params.id || req.userId;
 
   try {
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
     const user = await User.destroy({ where: { id: userId } });
 
     if (user) {
-      res.json({ message: "User deleted successfully" });
+      res.json({ message: "User deleted successfully", id: userId });
     } else {
       res.status(404).json({ error: "User not found" });
     }
