@@ -61,3 +61,7 @@ export const calculateTotalPrice = (items) => {
     return total + parseFloat(item.price);
   }, 0);
 };
+
+export const goUp = () => {
+  window.scrollTo(0, 0);
+};

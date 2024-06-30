@@ -1,8 +1,13 @@
 import React from "react";
 import { Button, Result } from "antd";
 import { Link, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { goUp } from "../../../utils/functions";
 const CheckoutSuccess = () => {
   const location = useLocation();
+  useEffect(()=>{
+    goUp()
+  },[])
   if (!location.state || !location.state.success) {
     return <Navigate to="/" />;
   }

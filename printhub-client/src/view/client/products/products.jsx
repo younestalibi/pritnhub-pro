@@ -12,6 +12,7 @@ import {
   resetStateCatalog,
 } from "../../../provider/features/catalog/CatalogSlice";
 import { Fade } from "react-awesome-reveal";
+import { goUp } from "../../../utils/functions";
 const { Meta } = Card;
 const items = [
   {
@@ -119,10 +120,11 @@ export default function ProductList() {
     } else {
       dispatch(resetStateCatalog());
     }
+    goUp();
   }, []);
   const { category } = useParams();
   const categoryItem = catalogs?.find((item) => item.id == category);
-  console.log(categoryItem);
+
   if (
     !categoryItem ||
     !categoryItem.Products ||
