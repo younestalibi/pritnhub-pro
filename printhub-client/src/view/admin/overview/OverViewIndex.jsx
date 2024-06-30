@@ -141,7 +141,7 @@ const OverViewPage = () => {
               <Statistic
                 title="Pending Orders"
                 value={pendingOrdersCount && pendingOrdersCount}
-                suffix="orders"
+                suffix="pending"
                 loading={getOrdersState.isLoading}
                 valueStyle={{
                   color: "#cf1322",
@@ -154,7 +154,7 @@ const OverViewPage = () => {
               <Statistic
                 title="Confirmed Orders"
                 value={confirmedOrdersCount && confirmedOrdersCount}
-                suffix="orders"
+                suffix="confirmed"
                 loading={getOrdersState.isLoading}
                 valueStyle={{
                   color: "#3f8600",
@@ -167,7 +167,7 @@ const OverViewPage = () => {
               <Statistic
                 title="Delivered Orders"
                 value={completedOrdersCount && completedOrdersCount}
-                suffix="orders"
+                suffix="delivered"
                 loading={getOrdersState.isLoading}
               />
             </Card>

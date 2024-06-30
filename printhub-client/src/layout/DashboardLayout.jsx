@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
   StockOutlined,
   ContactsOutlined,
 } from "@ant-design/icons";
@@ -13,6 +10,11 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../style/DashboardLayout.css";
 import AvatarProfile from "../components/Avatar/AvatarProfile";
 import { useSelector } from "react-redux";
+import { IoSettingsOutline } from "react-icons/io5";
+import { LuUsers2 } from "react-icons/lu";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { MdOutlineCategory } from "react-icons/md";
+import { SiBlueprint } from "react-icons/si";
 
 const { Header, Sider, Content } = Layout;
 const DasbhoardLayout = () => {
@@ -47,17 +49,17 @@ const DasbhoardLayout = () => {
           items={[
             {
               key: "",
-              icon: <UserOutlined />,
+              icon: <AiOutlineDashboard />,
               label: "OverView",
             },
             {
               key: "catalog",
-              icon: <VideoCameraOutlined />,
+              icon: <MdOutlineCategory />,
               label: "Catalog",
             },
             {
               key: "product",
-              icon: <UploadOutlined />,
+              icon: <SiBlueprint />,
               label: "Product",
             },
             {
@@ -71,8 +73,8 @@ const DasbhoardLayout = () => {
               label: "Contact",
             },
             { key: "order", icon: <StockOutlined />, label: "Order" },
-            { key: "user", icon: <StockOutlined />, label: "User" },
-            { key: "setting", icon: <StockOutlined />, label: "Settings" },
+            { key: "user", icon: <LuUsers2 />, label: "User" },
+            { key: "setting", icon: <IoSettingsOutline />, label: "Settings" },
           ]}
         />
       </Sider>
