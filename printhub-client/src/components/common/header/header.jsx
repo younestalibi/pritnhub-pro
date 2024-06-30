@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Menu, Input, Badge, Avatar, Image } from "antd";
+import { Menu, Input, Badge, Avatar, Image, AutoComplete } from "antd";
 import AvatarProfile from "../../Avatar/AvatarProfile";
 import "./header.css";
 import { ShoppingCartOutlined, CaretDownOutlined } from "@ant-design/icons";
@@ -16,6 +16,10 @@ import {
   getCatalogs,
   resetStateCatalog,
 } from "../../../provider/features/catalog/CatalogSlice";
+import {
+  getProducts,
+  resetStateProduct,
+} from "../../../provider/features/product/ProductSlice";
 
 export default function AppHeader() {
   const [current, setCurrent] = useState(null);
@@ -27,6 +31,7 @@ export default function AppHeader() {
   const isAuthenticated = useAuth();
   const [open, setOpen] = useState(false);
   const items = [];
+  const { products, getProductsState } = useSelector((state) => state.product);
 
   const onClick = (e) => {
     setCurrent(e.key);
@@ -58,8 +63,37 @@ export default function AppHeader() {
     }
   }, []);
 
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState([]);
+  const [showOptions, setShowOptions] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (products.length === 0) {
+      dispatch(getProducts());
+    } else {
+      dispatch(resetStateProduct());
+    }
+  }, []);
   const onSearch = (e) => {
-    console.log(e);
+    setSearchValue(e);
+
+    if (!e) {
+      setFilteredOptions([]);
+      return;
+    }
+
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(e.toLowerCase())
+    );
+    setFilteredOptions(filtered);
+    setShowOptions(true);
+  };
+
+  const handleSelect = (id) => {
+    setSearchValue("");
+    setShowOptions(false);
+    navigate(`/product/${id}`);
   };
 
   return (
@@ -79,15 +113,39 @@ export default function AppHeader() {
                 />
               </Link>
             </div>
-            {/* <div className="SearchInput">
-              <Search
-                size="large"
-                placeholder="search product"
-                onSearch={onSearch}
-                enterButton
-                style={{ flex: 2, minWidth: 0 }}
+
+            <div className="autocomplete-container">
+              <input
+                type="text"
+                className="autocomplete-input"
+                value={searchValue}
+                onChange={(e) => onSearch(e.target.value)}
+                placeholder="Search products"
               />
-            </div> */}
+              {showOptions && searchValue && (
+                <ul className="autocomplete-options">
+                  {filteredOptions.map((product) => (
+                    <li
+                      key={product.id}
+                      className="autocomplete-option"
+                      onClick={() => handleSelect(product.id)}
+                    >
+                      <span>{product.name}</span>
+                      <img
+                        width={40}
+                        height={40}
+                        style={{ objectFit:'contain' }}
+                        crossOrigin={import.meta.env.VITE_CLIENT_URL}
+                        src={`${import.meta.env.VITE_SERVER_URL}/${
+                          product.image[0]
+                        }`}
+                        alt=""
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
             <div className="header-user-actions">
               <Link to={"contact"}>
                 <i className="fa-solid fa-headset headset-icon"></i>

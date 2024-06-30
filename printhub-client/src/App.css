@@ -210,7 +210,7 @@ about
 testimonial section
 ------
 */
-
+/* 
 .testimonial-section {
   display: flex;
   justify-content: center;
@@ -265,7 +265,7 @@ testimonial section
   font-size: 18px;
   line-height: 1.5;
   text-align: center;
-}
+} */
 /* .test{
   display: flex;
   justify-content: left;
@@ -275,19 +275,19 @@ testimonial section
     flex-direction: row;
 } */
 
-.mobileVisible {
+/* .mobileVisible {
   display: none;
 }
 
 .mobileHidden {
   display: block;
-}
+} */
 
 /* 
 responsive
 ----------
 */
-@media only screen and (max-width: 991px) {
+/* @media only screen and (max-width: 991px) {
   .pricingBlock .ant-row > div:nth-child(2) .ant-list-item {
     transform: scale(1.14);
   }
@@ -335,12 +335,12 @@ responsive
   border: 1px dashed black;
   border-radius: 10px;
   object-fit: contain;
-}
+} */
 /* /////product-detail///// */
-.custom-input-label {
+/* .custom-input-label {
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 5px;
-}
+} */
 /* /////product-detail///// */

@@ -1,8 +1,11 @@
 import { Col, Row, Typography } from "antd";
 import image1 from "../../../assets/images/about.jpg";
-import { Fade, Slide } from "react-awesome-reveal";
-const { Text, Paragraph } = Typography;
+import { Fade } from "react-awesome-reveal";
+import { useSelector } from "react-redux";
+const { Paragraph } = Typography;
 export default function AppAbout() {
+  const { settings } = useSelector((state) => state.setting);
+
   return (
     <Row
       style={{
@@ -36,8 +39,8 @@ export default function AppAbout() {
               fontSize: "23px",
             }}
           >
-            Welcome to PrintHub Pro! We provide top-notch printing solutions for
-            everyone.
+            Welcome to {settings?.website_name}! We provide top-notch printing
+            solutions for everyone.
           </Paragraph>
           <Paragraph
             style={{

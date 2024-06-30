@@ -17,8 +17,8 @@ function DefaultLayout() {
     setShowChat(!showChat);
   };
   return (
-    <Layout className="mainLayout">
-      <Header style={{ display: "flex", alignItems: "center" }}>
+    <Layout className="mainLayout" style={{ overflowX:'hidden' }}>
+      <Header style={{ display: "flex", alignItems: "center",zIndex:'0px' }}>
         <AppHeader />
       </Header>
 

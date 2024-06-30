@@ -176,3 +176,48 @@ header
   right: 5%;
   opacity: 1;
 }
+/* /////////// */
+@media (max-width: 768px) {
+  .autocomplete-container {
+    display: none !important;
+  }
+}
+
+.autocomplete-container {
+  position: relative;
+  width: 60%;
+}
+
+.autocomplete-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.autocomplete-options {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0px;
+}
+
+.autocomplete-option {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.autocomplete-option:hover {
+  background-color: #f0f0f0;
+}
