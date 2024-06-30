@@ -305,7 +305,7 @@ responsive
   .mobileHidden {
     display: none;
   }
-}
+} */
 .btn-edit,
 .btn-delete,
 .btn-view {
@@ -335,12 +335,12 @@ responsive
   border: 1px dashed black;
   border-radius: 10px;
   object-fit: contain;
-} */
+}
 /* /////product-detail///// */
-/* .custom-input-label {
+.custom-input-label {
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 5px;
-} */
+}
 /* /////product-detail///// */
