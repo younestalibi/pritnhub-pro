@@ -26,7 +26,7 @@ const UserIndex = () => {
       dispatch(resetStateUser());
     }
   }, []);
-
+  console.log(users);
   useEffect(() => {
     if (deleteUserByIdState.isSuccess) {
       setOpen(false);
@@ -66,9 +66,13 @@ const UserIndex = () => {
       website_link: users[i]?.profile?.website || "-------",
       action: (
         <>
-          <span className="btn-delete" onClick={() => showModal(users[i].id)}>
-            <AiFillDelete />
-          </span>
+          {users[i].role !== "admin" ? (
+            <span className="btn-delete" onClick={() => showModal(users[i].id)}>
+              <AiFillDelete />
+            </span>
+          ) : (
+            <span>{users[i].role}</span>
+          )}
         </>
       ),
     });

@@ -40,7 +40,7 @@ export default function AppHeader() {
     items.push({
       key: `${catalogs[i].name} ${i}`,
       label: catalogs[i].name,
-      children: catalogs[i].Products.map((product, index) => {
+      children: catalogs[i]?.Products.map((product, index) => {
         return {
           key: `${product.name} ${index}`,
           label: <Link to={`/product/${product.id}`}>{product.name}</Link>,

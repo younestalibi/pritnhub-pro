@@ -276,7 +276,7 @@ const ProductDetail = () => {
       dispatch(addCartItem(formData));
     },
   });
-
+console.log(formik.errors)
   const customization = product
     ? [
         ...product.options.map((option, index) => ({

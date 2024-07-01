@@ -143,7 +143,7 @@ const OrderView = (props) => {
           </Card>
 
           <Card title="Order Items">
-            {order.OrderItems.map((item, index) => (
+            {order?.OrderItems.map((item, index) => (
               <>
                 <Divider orientation="left">{item.product.name}</Divider>
                 <Descriptions
@@ -166,7 +166,7 @@ const OrderView = (props) => {
                       children: (
                         <Flex justify="space-around" align="center">
                           <Image.PreviewGroup
-                            items={item.image.map((image, index) => {
+                            items={item?.image.map((image, index) => {
                               return {
                                 src: `${
                                   import.meta.env.VITE_SERVER_URL

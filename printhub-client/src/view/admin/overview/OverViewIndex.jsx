@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Statistic, Row, Col, Card, Table, Tag, Image } from "antd";
+import {
+  Typography,
+  Statistic,
+  Row,
+  Col,
+  Card,
+  Table,
+  Tag,
+  Image,
+  Button,
+} from "antd";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrum";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -105,7 +115,7 @@ const OverViewPage = () => {
       quantity: productsCopy[i].quantity.max,
       image: (
         <Image.PreviewGroup
-          items={productsCopy[i].image.map((image, index) => {
+          items={productsCopy[i]?.image.map((image, index) => {
             return {
               src: `${import.meta.env.VITE_SERVER_URL}/${image}`,
               crossOrigin: import.meta.env.VITE_CLIENT_URL,
@@ -130,10 +140,28 @@ const OverViewPage = () => {
       sold: productsCopy[i].sold,
     });
   }
+
+  const start = () => {
+    dispatch(getAllUser());
+    dispatch(getContacts());
+    dispatch(getProducts());
+    dispatch(getOrders());
+  };
   return (
     <div className="overview-page">
       <BreadCrumb titles={["Home", "Overview"]} />
       <Title level={2}>Overview</Title>
+      <div
+        style={{
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button type="dashed" onClick={start}>
+          Refresh Overview
+        </Button>
+      </div>
       <div className="site-layout-content">
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>
@@ -187,7 +215,12 @@ const OverViewPage = () => {
           </Col>
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <Card>
-              <Statistic title="Active Users" suffix="users" loading={getAllUsersState.isLoading} value={usersCount} />
+              <Statistic
+                title="Active Users"
+                suffix="users"
+                loading={getAllUsersState.isLoading}
+                value={usersCount}
+              />
             </Card>
           </Col>
           <Col xs={24} sm={12} md={6} lg={6} xl={6}>

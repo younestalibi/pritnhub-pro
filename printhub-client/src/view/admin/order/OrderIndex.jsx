@@ -174,7 +174,14 @@ const OrderIndex = () => {
           >
             <IoEyeOutline title="view" />
           </span>
-          {!["completed", "pending", "done"].includes(orders[i].status) && (
+          {![
+            "completed",
+            "pending",
+            "done",
+            "processing",
+            "shipped",
+            "delivered",
+          ].includes(orders[i].status) && (
             <span
               className="btn-delete"
               onClick={() => showModal(orders[i].id)}
