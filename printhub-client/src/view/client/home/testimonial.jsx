@@ -5,24 +5,24 @@ import { Fade } from "react-awesome-reveal";
 const items = [
   {
     key: "1",
-    name: "John Doe",
-    position: "Marketing Manager, ABC Printers",
+    name: "Emily White",
+    position: "Marketing Director, Creative Ventures",
     description:
-      "We've been using ABC Printers for years now, and their service has always been exceptional. From business cards to large banners, they deliver top-notch quality and always meet our deadlines.",
+      "We've been partnering with PrintHub for all our printing needs, and their service is outstanding. From high-quality business cards to stunning large-format banners, they consistently deliver excellence and meet our tight deadlines.",
   },
   {
     key: "2",
-    name: "Jane Smith",
-    position: "Owner, XYZ Designs",
+    name: "Alex Turner",
+    position: "Owner, Design Hub",
     description:
-      "Working with XYZ Designs, we need reliable printing partners. ABC Printers has been our go-to for all our printing needs. Their attention to detail and customer service are second to none.",
+      "PrintHub is our go-to printing partner. Their attention to detail and exceptional customer service make them stand out. Whether it's brochures, flyers, or custom prints, PrintHub always exceeds our expectations.",
   },
   {
     key: "3",
-    name: "Michael Johnson",
-    position: "Creative Director, Print Solutions Inc.",
+    name: "Sarah Brown",
+    position: "Creative Lead, BrandMasters Inc.",
     description:
-      "Print Solutions Inc. has trusted ABC Printers with our projects for years. Their ability to handle complex printing jobs with precision and their commitment to quality make them a valuable partner.",
+      "BrandMasters Inc. relies on PrintHub for all our printing projects. Their ability to handle intricate designs with precision and their unwavering commitment to quality make them an invaluable partner. We highly recommend their services.",
   },
 ];
 
