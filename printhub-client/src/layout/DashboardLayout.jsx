@@ -58,22 +58,22 @@ const DasbhoardLayout = () => {
               label: "Catalog",
             },
             {
-              key: "product",
-              icon: <SiBlueprint />,
-              label: "Product",
-            },
-            {
               key: "article",
               icon: <StockOutlined />,
               label: "Article",
+            },
+            {
+              key: "product",
+              icon: <SiBlueprint />,
+              label: "Product",
             },
             {
               key: "contact",
               icon: <ContactsOutlined />,
               label: "Contact",
             },
-            { key: "order", icon: <StockOutlined />, label: "Order" },
             { key: "user", icon: <LuUsers2 />, label: "User" },
+            { key: "order", icon: <StockOutlined />, label: "Order" },
             { key: "setting", icon: <IoSettingsOutline />, label: "Settings" },
           ]}
         />
